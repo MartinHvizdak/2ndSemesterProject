@@ -25,7 +25,7 @@ city varchar(30) NOT NULL,
 street varchar(50) NOT NULL,
 street_number varchar(10) NOT NULL,
 name varchar(50) NOT NULL,
-phone_no int NOT NULL,
+phone_number int NOT NULL,
 primary key(email)
 );
 
