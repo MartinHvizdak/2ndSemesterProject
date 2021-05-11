@@ -6,11 +6,14 @@ public class Customer {
 	private String email;
 	private int phoneNumber;
 	
-	public Customer(String name, String address, String email, int phoneNumber) {
-		this.name=name; 
-		this.address=address;
-		this.email=email;
-		this.phoneNumber=phoneNumber;
+	public Customer() {
+		
+	}
+	public Customer(int phoneNumber, String name, String address, String email) {
+		this.name = name;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
+		this.email = email;
 	}
 
 	public String getName() {
