@@ -7,9 +7,9 @@ primary key(name)
 
 create table Order_lines(
 order_id int NOT NULL,
-service_name varchar(50) NOT NULL,
+service_name unique varchar(50) NOT NULL,
 quantity int NOT NULL,
-primary key(order_id)
+primary key(order_id, service_name)
 );
 
 create table Orders(
@@ -24,6 +24,7 @@ email varchar(100) NOT NULL,
 city varchar(30) NOT NULL,
 street varchar(50) NOT NULL,
 street_number varchar(10) NOT NULL,
+zip_code varchar(10) NOT NULL,
 name varchar(50) NOT NULL,
 phone_number int NOT NULL,
 primary key(email)

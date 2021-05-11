@@ -3,10 +3,10 @@ package model;
 public class Service {
 	private String name;
 	private String description; 
-	private float price;
+	private double price;
 
 
-	public Service(String name, String description, float price) {
+	public Service(String name, String description, double price) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
@@ -28,11 +28,11 @@ public class Service {
 		this.description = description;
 	}
 
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
