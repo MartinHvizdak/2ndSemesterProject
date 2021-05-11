@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-public class LTD {
+public class LTD extends Customer{
  private ArrayList<CustomerEmployee> employees = new ArrayList<CustomerEmployee>();
  private ArrayList<Owner> owners = new ArrayList<Owner>();
  private int marketRegisterNumber;
@@ -10,6 +10,7 @@ public class LTD {
  private boolean arePayers;
  
 public LTD(ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, int marketRegisterNumber, int marketNumber, boolean arePayers) {
+	
 	this.employees = employees;
 	this.owners = owners;
 	this.marketRegisterNumber = marketRegisterNumber;
