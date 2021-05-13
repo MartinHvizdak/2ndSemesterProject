@@ -19,7 +19,7 @@ public class MainMenu {
             System.out.println((menuOptions.indexOf(option)+1) + ". " + option);
     }
 
-    public void openMenu(String login){
+    public void openMenu(){
         boolean quit = false;
         while(!quit){
             displayMenu();

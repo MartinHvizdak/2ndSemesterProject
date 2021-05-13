@@ -1,13 +1,14 @@
 package ui;
-import java.security.Provider;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import controller.CustomerController;
 import controller.OrderController;
 import controller.OrderLineController;
 import controller.ServiceController;
+import db.DBException;
 import model.Customer;
 import model.Order;
 import model.OrderLine;
@@ -30,6 +31,9 @@ public class OrderMenu {
         inputValidation = new InputValidation();
         menuOptions = new ArrayList<String>();
         menuOptions.add("Create order");
+        menuOptions.add("Show order");
+        menuOptions.add("Update order");
+        menuOptions.add("Delete order");
 
         serviceController = new ServiceController();
         customerController = new CustomerController();
@@ -37,150 +41,141 @@ public class OrderMenu {
     }
 
     private void createOrder() {
-        ArrayList<Integer> orderLines = new ArrayList<Integer>();
+        HashMap<Service, Integer> servicesAndQuantity = new HashMap<>();
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\tCreate order:");
 
         System.out.println("Enter email of customer: ");
         String customerEmail = scanner.next();
-        Customer customer = customerController.getCustomer(customerEmail);
-        Order order = orderController.createOrder(customer);
 
-        ArrayList<Service> services = new ArrayList<Service>();
-        services = serviceController.getAllServicesFromDB();
-        HashMap<String, Integer> enteredServices =  new HashMap<>();
+        System.out.println("Available services: ");
+        ArrayList<Service> services = null;
+        try {
+            services = serviceController.getAllServicesFromDB();
+        } catch (DBException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         while (true){
             for (Service service : services)
                 System.out.println((services.indexOf(service)+1) + ". " + serviceController.getName(service));
             int chosenServiceNumber = inputValidation.getIntFromUser("Enter number of chosen service: ");
             int quantity = inputValidation.getIntFromUser("Enter quantity of service");
-            enteredServices.put(serviceName, quantity);
-            Service service = services.get(chosenServiceNumber - 1);
-            OrderLine orderLine = orderLineController.createOrderLine(service, quantity);
-            orderController.addOrderLine(order, orderLine);
+            servicesAndQuantity.put(services.get(chosenServiceNumber-1), quantity);
 
             System.out.println("Press '1' to add next service or any other key to end adding");
-            if (scanner.next().toLowerCase().equals("y"))
+            if (!scanner.next().equals("1"))
                 break;
         }
 
-        Date payday = null;
-        System.out.println("Enter payday date(dd/mm/yyy): ");
-        String paydayString = scanner.next();
-        try {
-            payday = new SimpleDateFormat("dd/mm/yyy").parse(paydayString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        orderController.setPayday(order,payday);
 
-        System.out.println("\n\tEnter 'c' to confirm  and save an order or any other key to decline with such data: ");
+        System.out.println("Enter payday date(dd-mm-yyy): ");
+        String paydayString = scanner.next();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        formatter = formatter.withLocale( Locale.UK );
+        LocalDate payday = LocalDate.parse(paydayString, formatter);
+
+        System.out.println("\n\tEnter 'c' to confirm  and save an order or any other key to cancel: ");
         System.out.println("Customer email: '" + customerEmail + "'");
         System.out.println("Added services and their quantity: ");
-        for (String service : enteredServices.keySet())
-            System.out.println("\t" + service + " : " + enteredServices.get(service));
+        for (Service service : servicesAndQuantity.keySet())
+            System.out.println("\t" + serviceController.getName(service) + " x" + servicesAndQuantity.get(service));
         System.out.println("Payday: " + paydayString);
 
-        if (!scanner.next().toLowerCase().equals("c"))
-            orderController.saveOrderInDB(order);
+        if (scanner.next().toLowerCase().equals("c")) {
+            try {
+                int id = orderController.saveOrderWithUserInputInDB(customerEmail, servicesAndQuantity, payday);
+                System.out.println("Order got id number: " + id);
+            } catch (DBException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+        }
         else
             System.out.println("Order declined");
     }
 
     private void showOrder() {
-        HashMap<String, ArrayList<String> > orderInformation = new HashMap<>();
-        Scanner scanner =  new Scanner(System.in);
         System.out.println("\tOrder details:");
         int id = inputValidation.getIntFromUser("Enter id of order: ");
-        Order order = orderController.getOrder(id);
+        Order<Customer> order = null;
+        try {
+            order = orderController.getOrderFromDB(id);
+        } catch (DBException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
         System.out.println("\n\tOrder information:");
         System.out.println("Customer email: " + customerController.getEmail(orderController.getCustomer(order)));
         for(OrderLine orderLine : orderController.getOrderLines(order)){
             System.out.println("Service name and quantity: "+ serviceController.getName(orderLineController.getService(orderLine)) + " x" + orderLineController.getQuantity(orderLine));
         }
-        System.out.println("Order payday: " + orderController.getPayDay(order));
+        System.out.println("Order payday: " + orderController.getPayday(order));
     }
 
-    private void updateCustomer(){
-        Scanner  scanner =  new Scanner(System.in);
-        System.out.println("\tUpdate order customer:");
-        int id = inputValidation.getIntFromUser("Enter id of an order: ");
-        Order order = orderController.getOrder(id);
+    private void updateOrder() {
+        Scanner scanner =  new Scanner(System.in);
+        System.out.println("\tUpdate order:");
+        int id = inputValidation.getIntFromUser("Enter id of order: ");
+        Order<Customer> order = null;
+        try {
+            order = orderController.getOrderFromDB(id);
+        } catch (DBException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
+        System.out.println("\n\tCurrent order information:");
+        System.out.println("Customer email: " + customerController.getEmail(orderController.getCustomer(order)));
+        for(OrderLine orderLine : orderController.getOrderLines(order)){
+            System.out.println("Service name and quantity: "+ serviceController.getName(orderLineController.getService(orderLine)) + " x" + orderLineController.getQuantity(orderLine));
+        }
+        System.out.println("Order payday: " + orderController.getPayday(order));
+
+        System.out.println("Enter new information for order:");
         System.out.println("Enter email of a new customer: ");
         String customerEmail = scanner.next();
-        Custoer newCustomer = customerController.getCustomer(customerEmail);
 
+        System.out.println("Enter new payday date(dd-mm-yyyy): ");
+        String paydayString = scanner.next();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        formatter = formatter.withLocale( Locale.UK );
+        LocalDate payday = LocalDate.parse(paydayString, formatter);
 
-        System.out.println("\n\tEnter 'c' to confirm changing customer in order with id" + id + ": ");
-        if (!scanner.next().toLowerCase().equals("c"))
-            orderController.setCustomer(order, newCustomer);
-        else
-            System.out.println("Service was not added");
-    }
-
-    private void updatePayday(){
-        Scanner  scanner =  new Scanner(System.in);
-        System.out.println("\tUpdate order payday:");
-        int id = inputValidation.getIntFromUser("Enter id of an order: ");
-        Order order = orderController.getOrder(id);
-        System.out.println("Enter new payday date(dd/mm/yyyy): ");
-        Date payday = null;
+        ArrayList<Service> services = null;
         try {
-            payday = new SimpleDateFormat("dd/mm/yyy").parse(scanner.next());
-        } catch (ParseException e) {
-            e.printStackTrace();
+            services = serviceController.getAllServicesFromDB();
+        } catch (DBException e) {
+            System.out.println(e.getMessage());
+            return;
         }
 
+        System.out.println("\tChoose services for order:");
+        HashMap<Service, Integer> serviceQuantity = new HashMap<>();
+        while (true){
+            System.out.println("\tAll services available:");
+            for (Service service : services)
+                System.out.println((services.indexOf(service)+1) + ". " + serviceController.getName(service));
+            int chosenServiceNumber = inputValidation.getIntFromUser("Enter number of chosen service: ");
+            int quantity = inputValidation.getIntFromUser("Enter quantity of service");
 
-        System.out.println("\n\tEnter 'c' to confirm changing payday in order with id" + id + ": ");
-        if (!scanner.next().toLowerCase().equals("c"))
-            orderController.setPayday(order, payday);
+            serviceQuantity.put(services.get(chosenServiceNumber - 1), quantity);
+            System.out.println("Press '1' to add next service or any other key to end adding");
+            if (!scanner.next().equals("1"))
+                break;
+        }
+
+        System.out.println("\n\tEnter 'c' to confirm changing the order with id" + id + ": ");
+        if (scanner.next().toLowerCase().equals("c")) {
+            try {
+                orderController.updateOrderWithUserInput(order, customerEmail, serviceQuantity, payday);
+            } catch (DBException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+        }
         else
-            System.out.println("Service was not added");
-
-    }
-
-    private void addOrderLine(String serViceName){
-        Scanner scanner =  new Scanner(System.in);
-        System.out.println("\tAdd service and quantity to the order:");
-        int id = inputValidation.getIntFromUser("Enter id of an order: ");
-        Order order = orderController.getOrder(id);
-        System.out.println("\tAll services available:");
-        ArrayList<Service> services = serviceController.getAllServicesFromDB();
-        for (Service service : services)
-            System.out.println((services.indexOf(service)+1) + ". " + serviceController.getName(service));
-        int chosenServiceNumber = inputValidation.getIntFromUser("Enter number of chosen service: ");
-        Service service = services.get(chosenServiceNumber - 1);
-        int quantity = inputValidation.getIntFromUser("Enter quantity of service");
-        OrderLine orderLine =  orderLineController.createOrderLine(service, quantity);
-
-
-        System.out.println("\n\tEnter 'c' to confirm adding service nr." + chosenServiceNumber + " from order with id" + id + ": ");
-        if (!scanner.next().toLowerCase().equals("c"))
-            orderController.addOrderLine(order, orderLine);
-        else
-            System.out.println("Service was not added");
-    }
-
-    private void removeOrderLine(){
-        Scanner scanner =  new Scanner(System.in);
-        System.out.println("\tRemove service with quantity from the order:");
-        int id = inputValidation.getIntFromUser("Enter id of an order: ");
-        Order order = orderController.getOrder(id);
-        System.out.println("\tAll services in the order:");
-        ArrayList<OrderLine> orderLines = orderController.getOrderLines(order);
-        for (OrderLine orderLine : orderLines)
-            System.out.println((orderLines.indexOf(orderLine)+1) + ". " + serviceController.getName(orderLineController.getService(orderLine)) + " x" + orderLineController.getQuantity(orderLine));
-        int chosenOrderLineNumber = inputValidation.getIntFromUser("Enter number of service which you want to remove: ");
-        OrderLine orderLine = orderLines.get(chosenOrderLineNumber - 1);
-
-        System.out.println("\n\tEnter 'c' to confirm removing service nr." + chosenOrderLineNumber + " from order with id" + id + ": ");
-        if (!scanner.next().toLowerCase().equals("c"))
-            orderController.removeOrderLine(order, orderLine);
-        else
-            System.out.println("Service was not deleted");
-
+            System.out.println("Changes declined");
     }
 
     private void deleteOrder() {
@@ -190,20 +185,31 @@ public class OrderMenu {
         int id =  inputValidation.getIntFromUser("Enter id the order");
 
         System.out.println("\n\tEnter 'c' to confirm deleting the order with id" + id + ": ");
-        if (!scanner.next().toLowerCase().equals("c"))
-            orderController.deleteOrderFromDB(id);
+        if (scanner.next().toLowerCase().equals("c")) {
+            try {
+                orderController.deleteOrderFromDBByID(id);
+            } catch (DBException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+        }
         else
             System.out.println("Order declined");
     }
 
+    private void displayMenu(){
+        System.out.println("\n\t Main Menu:");
+        for(String option : menuOptions)
+            System.out.println((menuOptions.indexOf(option)+1) + ". " + option);
+    }
 
-    public void mainOrderMenu(String access) {
+    public void openMenu() {
         boolean quit = false;
         while(!quit) {
-            displayOrderMenu(access);
-            getChoiceFromUser();
+            displayMenu();
+            int choice = inputValidation.getIntFromUser("Choose an option: ");
 
-            switch (options.get(choice)) {
+            switch (choice) {
                 case 1:
                     createOrder();
                     break;
@@ -211,31 +217,16 @@ public class OrderMenu {
                     showOrder();
                     break;
                 case 3:
-                    updateCustomer();
+                    updateOrder();
                     break;
                 case 4:
-                    updateDiscount();
-                    break;
-                case 5:
-                    addProduct();
-                    break;
-                case 6:
-                    removeProduct();
-                    break;
-                case 7:
-                    confirmOrder();
-                    break;
-                case 8:
                     deleteOrder();
                     break;
-                case 9:
-                    addDispatchNote();
-                    break;
-                case 10:
-                    addDeliveryNote();
-                    break;
-                case 11:
+                case 5:
                     quit = true;
+                    break;
+                default:
+                    System.out.println("Wrong Choice!");
                     break;
             }
         }

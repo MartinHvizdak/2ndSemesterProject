@@ -19,7 +19,7 @@ public class InputValidation {
         int choice;
         do {
             System.out.print("\nChoose an option: ");
-            choice = getIntFromUser();
+            choice = getIntFromUser("");
             if (choice > numberOfChoices || choice <= 0)
                 System.out.println("Wrong choice!");
         }while(choice > numberOfChoices || choice <= 0);
