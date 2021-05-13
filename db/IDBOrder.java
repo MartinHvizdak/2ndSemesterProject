@@ -1,13 +1,18 @@
 package db;
 
-// Eventually will change to model.Order and model.Customer
-import model.*;
+import model.Customer;
+import model.Order;
+
+import java.time.LocalDate;
+import java.util.Currency;
 
 public interface IDBOrder {
 
-	public void saveOrder(Order order) throws DBException;
+	void saveOrder(Order<Customer> order) throws DBException;
 	
-	public Order retrieveOrderByID(int id) throws DBException;
+	Order retrieveOrderByID(int id) throws DBException;
 	
-	public void deleteOrderByID(int id) throws DBException;
+	void deleteOrderByID(int id) throws DBException;
+
+	void updateOrder(Order<Customer> order) throws DBException;
 }
