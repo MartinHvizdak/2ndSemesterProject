@@ -1,10 +1,11 @@
 package model;
 
-public class SelfEmployeed {
+public class SelfEmployeed extends Customer{
 	private String vat; 
 	private String marketNumber;
 	
-	public SelfEmployeed(String vat, String marketNumber) {
+	public SelfEmployeed(String email, String name, String phoneNumber, String city, String zipCode, String street, String streetNumber, String vat, String marketNumber) {
+		super(email, name, phoneNumber, city, zipCode, street, streetNumber);
 		this.vat=vat;
 		this.marketNumber = marketNumber;
 	}

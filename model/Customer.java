@@ -2,22 +2,24 @@ package model;
 
 public class Customer {
 	private String name;
+	private String city;
 	private String street;
 	private String streetNumber;
 	private String zipCode;
 	private String email;
-	private int phoneNumber;
+	private String phoneNumber;
 	
 	public Customer() {
 		
 	}
-	public Customer(int phoneNumber, String name, String street, String streetNumber, String zipCode, String email) {
+	public Customer(String email, String name, String phoneNumber, String city, String zipCode, String street, String streetNumber) {
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.street = street;
 		this.streetNumber = streetNumber;
 		this.zipCode = zipCode;
 		this.email = email;
+		this.city = city;
 	}
 
 	public String getName() {
@@ -28,6 +30,10 @@ public class Customer {
 		this.name = name;
 	}
 
+	public void setCity(String city) {this.city = city;}
+
+	public String getCity() {return this.city;}
+
 	public String getStreet(){
 		return street;
 	}
@@ -37,7 +43,7 @@ public class Customer {
 	}
 
 	public String getStreetNumber(){
-		return streetName;
+		return streetNumber;
 	}
 
 	public void setStreetNumber(String streetNumber){
@@ -60,11 +66,11 @@ public class Customer {
 		this.email = email;
 	}
 
-	public int getPhoneNumber() {
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(int phoneNumber) {
+	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 

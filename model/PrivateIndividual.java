@@ -1,9 +1,10 @@
 package model;
 
-public class PrivateIndividual {
+public class PrivateIndividual extends Customer{
 	private String id;
 	private String vat;
-	public PrivateIndividual(String id, String vat) {
+	public PrivateIndividual(String email, String name, String phoneNumber, String city, String zipCode, String street, String streetNumber, String id, String vat) {
+		super(email, name, phoneNumber, city, zipCode, street, streetNumber);
 		this.id = id;
 		this.vat = vat;
 	}

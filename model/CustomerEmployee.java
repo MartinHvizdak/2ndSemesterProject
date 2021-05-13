@@ -3,10 +3,10 @@ package model;
 public class CustomerEmployee {
 	private String id;
 	private String name;
-	private float salary;
-	private float income;
+	private double salary;
+	private double income;
 	
-	public CustomerEmployee(String id, String name, float salary, float income) {
+	public CustomerEmployee(String id, String name, double salary, double income) {
 		this.id = id;
 		this.name = name;
 		this.salary = salary;
@@ -29,7 +29,7 @@ public class CustomerEmployee {
 		this.name = name;
 	}
 
-	public float getSalary() {
+	public double getSalary() {
 		return salary;
 	}
 
@@ -37,7 +37,7 @@ public class CustomerEmployee {
 		this.salary = salary;
 	}
 
-	public float getIncome() {
+	public double getIncome() {
 		return income;
 	}
 
