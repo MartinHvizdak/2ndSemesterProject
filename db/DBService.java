@@ -1,10 +1,9 @@
 package db;
 
-import model.OrderLine;
-import model.Service;
-
 import java.sql.*;
 import java.util.ArrayList;
+
+import model.Service;
 
 public class DBService implements IDBService{
 
@@ -17,7 +16,6 @@ public class DBService implements IDBService{
         try {
 
             PreparedStatement stmt = con.prepareStatement(select);
-            stmt = con.prepareStatement(select);
             stmt.setQueryTimeout(5);
             ResultSet rs = stmt.executeQuery();
 
@@ -29,8 +27,14 @@ public class DBService implements IDBService{
                services.add(service);
             }
 
+            if(services.isEmpty())
+                throw new DBException("There are no services available");
+
+
             stmt.close();
 
+        } catch (DBException ex) {
+            throw ex;
         } catch (SQLException ex) {
             DBException de = new DBException("Error retrieving data");
             de.setStackTrace(ex.getStackTrace());

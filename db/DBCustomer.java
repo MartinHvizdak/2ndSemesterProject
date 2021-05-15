@@ -10,6 +10,45 @@ import model.*;
 
 public class DBCustomer implements IDBCustomer {
 
+	@Override
+	public String getCustomerType(String customerEmail) throws DBException {
+		Connection con = DBConnection.getInstance().getDBcon();
+		String customerType = "";
+
+		String select = "select customer_type from Customers where Customers.email = ?";
+		try{
+			PreparedStatement stmt = con.prepareStatement(select);
+			stmt.setString(1, customerEmail);
+			stmt.setQueryTimeout(5);
+			ResultSet rs = stmt.executeQuery();
+
+			if(!rs.next())
+				throw new DBException("Customer with this email does not exist");
+
+			customerType = rs.getString("customer_type");
+
+			stmt.close();
+		} catch (DBException ex) {
+			throw ex;
+		} catch (SQLException ex) {
+			DBException de = new DBException("Error retrieving data");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} catch (NullPointerException ex) {
+			DBException de = new DBException("Null pointer exception - possibly Connection object");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} catch (Exception ex) {
+			DBException de = new DBException("Data not retrieved! Technical error");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return customerType;
+	}
+
+	@Override
 	public Customer retrieveCustomerByEmail(String customerEmail) throws DBException {
 		Connection con = DBConnection.getInstance().getDBcon();
 		Customer customer = null;
@@ -28,7 +67,7 @@ public class DBCustomer implements IDBCustomer {
 			ResultSet rs = stmt.executeQuery();
 
 			if(!rs.next())
-				throw new DBException("Customer with this id does not exist");
+				throw new DBException("Customer with this email does not exist");
 
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
@@ -36,6 +75,8 @@ public class DBCustomer implements IDBCustomer {
 			String customerName = rs.getString("name");
 			String customerPhoneNumber = rs.getString("phone_number");
 			String customerZipCode = rs.getString("zip_code");
+
+			customer = new Customer(customerEmail, customerName, customerPhoneNumber, customerCity, customerZipCode, customerStreet, customerStreetNumber);
 
 			stmt.close();
 		} catch (DBException ex) {
@@ -95,7 +136,7 @@ public class DBCustomer implements IDBCustomer {
 			ResultSet rs = stmt.executeQuery();
 
 			if(!rs.next())
-				throw new DBException("Customer with this id does not exist");
+				throw new DBException("Customer with this email not exist");
 
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
@@ -202,7 +243,7 @@ public class DBCustomer implements IDBCustomer {
 			ResultSet rs = stmt.executeQuery();
 
 			if(!rs.next())
-				throw new DBException("Customer with this id does not exist");
+				throw new DBException("Customer with this email does not exist");
 
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
@@ -273,7 +314,7 @@ public class DBCustomer implements IDBCustomer {
 			ResultSet rs = stmt.executeQuery();
 
 			if(!rs.next())
-				throw new DBException("Customer with this id does not exist");
+				throw new DBException("Customer with this email does not exist");
 
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");

@@ -1,16 +1,16 @@
 package db;
 
-import model.*;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import model.*;
 
 
 public class DBOrder implements IDBOrder{
 
 	@Override
-	public void saveOrder(Order<Customer> order) throws DBException {
+	public boolean saveOrder(Order<Customer> order) throws DBException {
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Orders (id, customer_email, payday) values (?, ?, ?)";
@@ -39,11 +39,11 @@ public class DBOrder implements IDBOrder{
 		} catch (SQLException ex) {
 			DBException de = new DBException("Error inserting data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
 			de.setStackTrace(ex.getStackTrace());
+			ex.printStackTrace();
 			throw de;
 		} catch (Exception ex) {
 			DBException de = new DBException("Data not inserted! Technical error");
@@ -52,12 +52,13 @@ public class DBOrder implements IDBOrder{
 		} finally {
 			DBConnection.closeConnection();
 		}
+
+		return true;
 	}
 	
 	@Override
 	public Order retrieveOrderByID(int id) throws DBException {
 		Connection con = DBConnection.getInstance().getDBcon();
-
 		Order order = null;
 		
 		try {
@@ -72,7 +73,9 @@ public class DBOrder implements IDBOrder{
 			stmt.setInt(1, id);
 			stmt.setQueryTimeout(5);
 			ResultSet rs = stmt.executeQuery();
-			rs.next();
+
+			if(!rs.next())
+				throw new DBException("Order with this id does not exist");
 
 			int orderID = rs.getInt("id");
 			LocalDate orderPayday = rs.getDate("payday").toLocalDate();
@@ -125,7 +128,7 @@ public class DBOrder implements IDBOrder{
 				PrivateIndividual privateIndividual =
 						new PrivateIndividual(customerEmail, customerName, customerPhoneNumber, customerCity,
 								customerZipCode, customerStreet, customerStreetNumber, individualID, individualVAT);
-				order =  new Order<PrivateIndividual>(privateIndividual, orderLines, orderPayday, orderID);
+				return  new Order<PrivateIndividual>(privateIndividual, orderLines, orderPayday, orderID);
 
 			}else if(customerType.equals("Self_employeed")){
 				String select3 = "Select *\n" +
@@ -144,7 +147,7 @@ public class DBOrder implements IDBOrder{
 				SelfEmployeed selfEmployeed =
 						new SelfEmployeed(customerEmail, customerName, customerPhoneNumber, customerCity,
 								customerZipCode, customerStreet, customerStreetNumber, marketNumber, vat);
-				order =  new Order<SelfEmployeed>(selfEmployeed, orderLines, orderPayday, orderID);
+				return  new Order<SelfEmployeed>(selfEmployeed, orderLines, orderPayday, orderID);
 			}else if(customerType.equals("LTD")){
 				String select3 = "Select *\n" +
 						"from LTDs \n" +
@@ -208,14 +211,10 @@ public class DBOrder implements IDBOrder{
 				order =  new Order<LTD>(ltd, orderLines, orderPayday, orderID);
 			}
 
-			
+		} catch (DBException ex) {
+			throw ex;
 		} catch (SQLException ex) {
-			DBException de = null;
-			if(ex.getMessage().equals("The result set has no current row.")){
-				de = new DBException("Order with this id does not exist");
-			}else {
-				de = new DBException("Error retrieving data");
-			}
+			DBException de = new DBException("Error retrieving data");
 			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
@@ -234,22 +233,22 @@ public class DBOrder implements IDBOrder{
 	}
 
 	@Override
-	public void deleteOrderByID(int id) throws DBException {
+	public boolean deleteOrderByID(int id) throws DBException {
 		Connection con = DBConnection.getInstance().getDBcon();
 		
 		String delete = "delete from Orders where id=?";
 		
 		try {
-			
 			PreparedStatement stmt = con.prepareStatement(delete);
 			stmt.setInt(1, id);
 			stmt.setQueryTimeout(5);
-			stmt.execute();
-			
+			if(stmt.executeUpdate() == 0)
+				throw new DBException("Order with with id does not exist");
 			stmt.close();
-			
+		} catch (DBException ex) {
+			throw ex;
 		} catch (SQLException ex) {
-			DBException de = new DBException(ex.getMessage());
+			DBException de = new DBException("Error retrieving data");
 			de.setStackTrace(ex.getStackTrace());
 			throw de;
 		} catch (NullPointerException ex) {
@@ -264,91 +263,14 @@ public class DBOrder implements IDBOrder{
 			DBConnection.closeConnection();
 		}
 		
-		
+		return true;
 	}
 
 	@Override
-	public void updateOrder(Order<Customer> order) throws DBException {
+	public boolean updateOrder(Order<Customer> order) throws DBException {
 		deleteOrderByID(order.getId());
 		saveOrder(order);
+		return true;
 	}
 
-	/*
-	@Override
-	public void updatePayday(int orderID, LocalDate payday) throws DBException{
-		Connection con = DBConnection.getInstance().getDBcon();
-
-		String update = String.format("update Orders\n" +
-				"set Orders.payday= ?\n" +
-				"where Orders.id = ?", payday);
-
-		try {
-
-			PreparedStatement stmt = con.prepareStatement(update);
-			stmt.setDate(1, Date.valueOf(payday));
-			stmt.setInt(2, orderID);
-			stmt.setQueryTimeout(5);
-			stmt.execute();
-
-			stmt.close();
-
-		} catch (SQLException ex) {
-			DBException de = new DBException(ex.getMessage());
-			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
-			throw de;
-		} catch (NullPointerException ex) {
-			DBException de = new DBException("Null pointer exception - possibly Connection object");
-			de.setStackTrace(ex.getStackTrace());
-			throw de;
-		} catch (Exception ex) {
-			DBException de = new DBException("Data not inserted! Technical error");
-			de.setStackTrace(ex.getStackTrace());
-			throw de;
-		} finally {
-			DBConnection.closeConnection();
-		}
-	}
-
-	@Override
-	public void updateCustomerByEmail(int orderID, String customerEmail) throws DBException{
-		Connection con = DBConnection.getInstance().getDBcon();
-
-		String update = String.format("update Orders\n" +
-				"set Orders.customer_email= ?\n" +
-				"where Orders.id = ?", customerEmail);
-
-		try {
-
-			PreparedStatement stmt = con.prepareStatement(update);
-			stmt.setString(1, customerEmail);
-			stmt.setInt(2, orderID);
-			stmt.setQueryTimeout(5);
-			if(stmt.executeUpdate() == 0)
-				throw new SQLException("This order id does not exist");
-
-			stmt.close();
-
-		} catch (SQLException ex) {
-			DBException de;
-			if(ex.getMessage().equals("This order id does not exist")){
-				de = new DBException(ex.getMessage());
-			}else {
-				de = new DBException("Error retrieving data");
-			}
-			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
-			throw de;
-		} catch (NullPointerException ex) {
-			DBException de = new DBException("Null pointer exception - possibly Connection object");
-			de.setStackTrace(ex.getStackTrace());
-			throw de;
-		} catch (Exception ex) {
-			DBException de = new DBException("Data not inserted! Technical error");
-			de.setStackTrace(ex.getStackTrace());
-			throw de;
-		} finally {
-			DBConnection.closeConnection();
-		}
-	}*/
 }
