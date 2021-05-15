@@ -1,13 +1,14 @@
 package controller;
 
-import db.DBException;
-import db.DBOrder;
-import model.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import db.DBException;
+import db.DBOrder;
+import model.*;
 
 public class OrderController {
 
@@ -52,8 +53,10 @@ public class OrderController {
 	public int saveOrderWithUserInputInDB(String customerEmail, HashMap<Service, Integer> servicesAndQuantity, LocalDate payday) throws DBException {
 		Customer customer = customerController.getCustomer(customerEmail);
 		ArrayList<OrderLine> orderlines =  new ArrayList<>();
-		for(Service service : servicesAndQuantity.keySet())
-			orderlines.add(orderLineController.createOrderLine(service, servicesAndQuantity.get(service)));
+		for(Service service : servicesAndQuantity.keySet()) {
+			int quantity = servicesAndQuantity.get(service);
+			orderlines.add(orderLineController.createOrderLine(service, quantity));
+		}
 		String idString = "" + Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + Calendar.getInstance().get(Calendar.YEAR) % 2000 +
 				(int)(Math.random() * 1000);
 		while (idString.length()<10)
