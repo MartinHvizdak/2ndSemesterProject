@@ -144,14 +144,16 @@ public class CustomerMenu {
         	while(scanner.next().equals("y")) {
         		System.out.println("Write employee's ID: ");
         		String idEmployee = scanner.next();
-        		System.out.println("Write employee's Name: ");
-        		String nameEmployee = scanner.next();
+        		System.out.println("Write employee's First Name: ");
+        		String firstNameEmployee = scanner.next();
+        		System.out.println("Write employee's Second Name: ");
+        		String secondNameEmployee = scanner.next();
         		System.out.println("Write employee's Salary: ");
         		Double salaryEmployee = scanner.nextDouble();
         		System.out.println("Write employee's Total generated income: ");
         		Double generatedIncomeEmployee = scanner.nextDouble();
         		
-        		employees.add(new CustomerEmployee(idEmployee, nameEmployee, salaryEmployee, generatedIncomeEmployee));
+        		employees.add(new CustomerEmployee(idEmployee, firstNameEmployee, secondNameEmployee, salaryEmployee, generatedIncomeEmployee));
         		
 
             	System.out.println("Press 'y' to add another employee: ");
@@ -186,16 +188,6 @@ public class CustomerMenu {
         	System.out.println("You Have Chosen invalid Customer type");
         }
 
-        System.out.println("Enter payday date(dd-mm-yyy): ");
-        String paydayString = scanner.next();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        formatter = formatter.withLocale( Locale.UK );
-        LocalDate payday = LocalDate.parse(paydayString, formatter);
-
-        System.out.println("\n\tEnter 'c' to confirm  and save an order or any other key to cancel: ");
-        //System.out.println("Customer email: '" + customerEmail + "'");
-        System.out.println("Added services and their quantity: ");
-     
     }
         private void displayMenu(){
             System.out.println("\n\t Main Menu:");

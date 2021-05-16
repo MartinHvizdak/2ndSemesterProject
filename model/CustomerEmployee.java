@@ -2,13 +2,15 @@ package model;
 
 public class CustomerEmployee {
 	private String id;
-	private String name;
+	private String firstName;
+	private String secondName;
 	private double salary;
 	private double income;
 	
-	public CustomerEmployee(String id, String name, double salary, double income) {
+	public CustomerEmployee(String id, String firstName, String secondName, double salary, double income) {
 		this.id = id;
-		this.name = name;
+		this.firstName = firstName;
+		this.secondName = secondName;
 		this.salary = salary;
 		this.income = income;
 	}
@@ -21,12 +23,20 @@ public class CustomerEmployee {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	public String getSecondName() {
+		return secondName;
+	}
+	
+	public void setSecondName(String secondName) {
+		this.secondName = secondName;
 	}
 
 	public double getSalary() {

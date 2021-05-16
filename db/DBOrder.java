@@ -175,11 +175,12 @@ public class DBOrder implements IDBOrder{
 				ArrayList<CustomerEmployee> employees = new ArrayList<>();
 				while(rs.next()) {
 					String employeeID = rs.getString("id");
-					String name = rs.getString("first_name") + " " + rs.getString("second_name");
+					String firstName = rs.getString("first_name");
+					String secondName = rs.getString("second_name");
 					double salary = rs.getDouble("salary");
 					double generatedIncome = rs.getDouble("generated_income");
 
-					CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, name, salary, generatedIncome);
+					CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, firstName, secondName, salary, generatedIncome);
 					employees.add(customerEmployee);
 				}
 
