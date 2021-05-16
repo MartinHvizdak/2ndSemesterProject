@@ -24,10 +24,11 @@ primary key(id)
 
 create table Customers(
 email varchar(100) NOT NULL,
+city varchar(50) NOT NULL,
 street varchar(50) NOT NULL,
 street_number varchar(10) NOT NULL,
 name varchar(50) NOT NULL,
-phone_number int NOT NULL,
+phone_number varchar(15) NOT NULL,
 zip_code varchar(10) NOT NULL,
 customer_type varchar(100) NOT NULL,
 primary key(email)
@@ -46,7 +47,7 @@ vat_identificator varchar(30) NOT NULL,
 primary key(customer_email)
 );
 
-create table Self_employeed(
+create table Self_employed(
 customer_email varchar(100) NOT NULL,
 market_number varchar(15) NOT NULL,
 vat_identificator varchar(30) NOT NULL,
@@ -86,12 +87,25 @@ primary key(id)
 );
 
 alter table Customers add foreign key(zip_code) references Cities(zip_code);
-alter table order_lines add foreign key(order_id) references Orders(id) on delete cascade;
-alter table order_lines add foreign key(service_name) references Services(name);
+alter table Order_lines add foreign key(order_id) references Orders(id) on delete cascade;
+alter table Order_lines add foreign key(service_name) references Services(name);
 alter table Orders add foreign key(customer_email) references Customers(email);
-alter table private_individuals add foreign key(customer_email) references Customers(email);
-alter table self_employeed add foreign key(customer_email) references Customers(email);
+alter table Private_individuals add foreign key(customer_email) references Customers(email);
+alter table Self_employed add foreign key(customer_email) references Customers(email);
 alter table LTDs add foreign key(customer_email) references Customers(email);
 alter table LTD_employees add foreign key(LTD_email) references LTDs(customer_email);
 alter table LTD_ownerships add foreign key(LTD_email) references LTDs(customer_email);
 alter table LTD_ownerships add foreign key(owner_id) references LTD_owners(id);
+
+--drop table LTD_ownerships;
+--drop table LTD_employees;
+--drop table LTDs;
+--drop table Self_employed;
+--drop table Private_individuals;
+--drop table Orders;
+--drop table Order_lines;
+--drop table Customers;
+--drop table Cities;
+--drop table LTD_owners;
+--drop table Services;
+
