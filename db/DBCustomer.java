@@ -1,6 +1,7 @@
 package db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -362,4 +363,204 @@ public class DBCustomer implements IDBCustomer {
 		return selfEmployed;
 
 	}
+
+	@Override
+	public boolean savePrivateIndividualWithUserInputInDB(PrivateIndividual privateIndividual) throws DBException {
+		
+		Connection con = DBConnection.getInstance().getDBcon();
+
+		String insert1 = "insert into Customers (email, city, street, street_number, zip_code, name, phone_number) values (?, ?, ?, ?, ?, ?, ?)";
+		String insert2 = "insert into Private_individuals (customer_email, id, vat_identificator) values (?, ?, ?)";
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement(insert1);
+
+			stmt.setString(1, privateIndividual.getEmail());
+			stmt.setString(2, privateIndividual.getCity());
+			stmt.setString(3, privateIndividual.getStreet());
+			stmt.setString(4, privateIndividual.getStreetNumber());
+			stmt.setString(5, privateIndividual.getZipCode());
+			stmt.setString(6, privateIndividual.getName());
+			stmt.setString(7, privateIndividual.getPhoneNumber());
+			
+			stmt.setQueryTimeout(5);
+			stmt.execute();
+
+			
+			
+			stmt = con.prepareStatement(insert2);
+
+			stmt.setString(1, privateIndividual.getEmail());
+			stmt.setString(2, privateIndividual.getId());
+			stmt.setString(3, privateIndividual.getVat());
+			
+			stmt.setQueryTimeout(5);
+			stmt.execute();
+			stmt.close();
+			
+		} catch (SQLException ex) {
+			DBException de = new DBException("Error inserting data");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} catch (NullPointerException ex) {
+			DBException de = new DBException("Null pointer exception - possibly Connection object");
+			de.setStackTrace(ex.getStackTrace());
+			ex.printStackTrace();
+			throw de;
+		} catch (Exception ex) {
+			DBException de = new DBException("Data not inserted! Technical error");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} finally {
+			DBConnection.closeConnection();
+		}
+
+		return true;
+		
+	}
+
+	@Override
+	public boolean saveSelfEmployedWithUserInputInDB(SelfEmployeed selfEmployed) throws DBException {
+		// TODO Auto-generated method stub
+		
+		Connection con = DBConnection.getInstance().getDBcon();
+
+		String insert1 = "insert into Customers (email, city, street, street_number, zip_code, name, phone_number) values (?, ?, ?, ?, ?, ?, ?)";
+		String insert2 = "insert into Self_employeed (customer_email, market_number, vat_identificator) values (?, ?, ?)";
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement(insert1);
+
+			stmt.setString(1, selfEmployed.getEmail());
+			stmt.setString(2, selfEmployed.getCity());
+			stmt.setString(3, selfEmployed.getStreet());
+			stmt.setString(4, selfEmployed.getStreetNumber());
+			stmt.setString(5, selfEmployed.getZipCode());
+			stmt.setString(6, selfEmployed.getName());
+			stmt.setString(7, selfEmployed.getPhoneNumber());
+			
+			stmt.setQueryTimeout(5);
+			stmt.execute();
+
+			
+			
+			stmt = con.prepareStatement(insert2);
+
+			stmt.setString(1, selfEmployed.getEmail());
+			stmt.setString(2, selfEmployed.getMarketNumber());
+			stmt.setString(3, selfEmployed.getVat());
+			
+			stmt.setQueryTimeout(5);
+			stmt.execute();
+			stmt.close();
+			
+		} catch (SQLException ex) {
+			DBException de = new DBException("Error inserting data");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} catch (NullPointerException ex) {
+			DBException de = new DBException("Null pointer exception - possibly Connection object");
+			de.setStackTrace(ex.getStackTrace());
+			ex.printStackTrace();
+			throw de;
+		} catch (Exception ex) {
+			DBException de = new DBException("Data not inserted! Technical error");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} finally {
+			DBConnection.closeConnection();
+		}
+
+		return true;
+		
+	}
+
+	@Override
+	public boolean saveLTDUserInputInDB(LTD ltd) throws DBException {
+		// TODO Auto-generated method stub
+		
+		
+		Connection con = DBConnection.getInstance().getDBcon();
+
+		String insert1 = "insert into Customers (email, city, street, street_number, zip_code, name, phone_number) values (?, ?, ?, ?, ?, ?, ?)";
+		
+		String insert2 = "insert into LTD_employees (id, first_name, second_name, salary, generated_income, LTD_email) values (?, ?, ?, ?, ?, ?)";
+		String insert3 = "insert into LTD_owners (id, first_name, second_name, relation) values (?, ?, ?, ?)";
+		String insert4 = "insert into LTDs (customer_email, market_register_number, market_number, are_payers) values (?, ?, ?, ?)";
+		
+		try {
+			PreparedStatement stmt = con.prepareStatement(insert1);
+
+			stmt.setString(1, ltd.getEmail());
+			stmt.setString(2, ltd.getCity());
+			stmt.setString(3, ltd.getStreet());
+			stmt.setString(4, ltd.getStreetNumber());
+			stmt.setString(5, ltd.getZipCode());
+			stmt.setString(6, ltd.getName());
+			stmt.setString(7, ltd.getPhoneNumber());
+			
+			stmt.setQueryTimeout(5);
+			stmt.execute();
+			
+			stmt = con.prepareStatement(insert4);
+
+			stmt.setString(1, ltd.getEmail());
+			stmt.setString(2, ltd.getMarketRegisterNumber());
+			stmt.setString(3, ltd.getMarketNumber());
+			stmt.setBoolean(4, ltd.arePayers());
+			stmt.setQueryTimeout(5);
+			stmt.execute();
+
+			
+			for(CustomerEmployee customerEmployee : ltd.getEmployees()) {
+				stmt = con.prepareStatement(insert2);
+				
+				stmt.setString(1, customerEmployee.getId());
+				stmt.setString(2, customerEmployee.getName());
+				stmt.setString(3, customerEmployee.getName());
+				stmt.setDouble(4, customerEmployee.getSalary());
+				stmt.setDouble(5, customerEmployee.getIncome());
+				
+				stmt.setString(6, ltd.getEmail());
+				stmt.setQueryTimeout(5);
+				stmt.execute();
+			}
+			
+			for(Owner owner : ltd.getOwners()) {
+				stmt = con.prepareStatement(insert3);
+				
+				stmt.setString(1, owner.getId());
+				stmt.setString(2, owner.getName());
+				stmt.setString(3, owner.getName());
+				stmt.setString(4, owner.getRelation());
+				
+				stmt.setQueryTimeout(5);
+				stmt.execute();
+			}
+			
+			
+			stmt.close();
+			
+		} catch (SQLException ex) {
+			DBException de = new DBException("Error inserting data");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} catch (NullPointerException ex) {
+			DBException de = new DBException("Null pointer exception - possibly Connection object");
+			de.setStackTrace(ex.getStackTrace());
+			ex.printStackTrace();
+			throw de;
+		} catch (Exception ex) {
+			DBException de = new DBException("Data not inserted! Technical error");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} finally {
+			DBConnection.closeConnection();
+		}
+
+		return true;
+	}
+	
+	
+	
 }
