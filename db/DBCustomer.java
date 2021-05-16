@@ -294,9 +294,9 @@ public class DBCustomer implements IDBCustomer {
 	}
 
 	@Override
-	public SelfEmployeed retrieveSelfEmployedByEmail(String customerEmail) throws DBException {
+	public SelfEmployed retrieveSelfEmployedByEmail(String customerEmail) throws DBException {
 		Connection con = DBConnection.getInstance().getDBcon();
-		SelfEmployeed selfEmployed = null;
+		SelfEmployed selfEmployed = null;
 
 		String select1 = "select *\n" +
 				"from Customers \n" +
@@ -304,8 +304,8 @@ public class DBCustomer implements IDBCustomer {
 				"where Customers.email = ?";
 
 		String select2 = "Select *\n" +
-				"from Self_employeed \n" +
-				"where Self_employeed.customer_email = ?";
+				"from Self_employed \n" +
+				"where Self_employed.customer_email = ?";
 
 
 		try {
@@ -335,7 +335,7 @@ public class DBCustomer implements IDBCustomer {
 			String vat = rs.getString("vat_identificator");
 
 			selfEmployed =
-					new SelfEmployeed(customerEmail, customerName, customerPhoneNumber, customerCity,
+					new SelfEmployed(customerEmail, customerName, customerPhoneNumber, customerCity,
 							customerZipCode, customerStreet, customerStreetNumber, marketNumber, vat);
 
 			stmt.close();
@@ -420,13 +420,13 @@ public class DBCustomer implements IDBCustomer {
 	}
 
 	@Override
-	public boolean saveSelfEmployedWithUserInputInDB(SelfEmployeed selfEmployed) throws DBException {
+	public boolean saveSelfEmployedWithUserInputInDB(SelfEmployed selfEmployed) throws DBException {
 		// TODO Auto-generated method stub
 		
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Customers (email, city, street, street_number, zip_code, name, phone_number) values (?, ?, ?, ?, ?, ?, ?)";
-		String insert2 = "insert into Self_employeed (customer_email, market_number, vat_identificator) values (?, ?, ?)";
+		String insert2 = "insert into Self_employed (customer_email, market_number, vat_identificator) values (?, ?, ?)";
 		
 		try {
 			PreparedStatement stmt = con.prepareStatement(insert1);

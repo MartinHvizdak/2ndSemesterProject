@@ -130,10 +130,10 @@ public class DBOrder implements IDBOrder{
 								customerZipCode, customerStreet, customerStreetNumber, individualID, individualVAT);
 				return  new Order<PrivateIndividual>(privateIndividual, orderLines, orderPayday, orderID);
 
-			}else if(customerType.equals("Self_employeed")){
+			}else if(customerType.equals("Self_employed")){
 				String select3 = "Select *\n" +
-						"from Self_employeed \n" +
-						"where Self_employeed.customer_email = ?";
+						"from Self_employed \n" +
+						"where Self_employed.customer_email = ?";
 
 				stmt = con.prepareStatement(select3);
 				stmt.setString(1, customerEmail);
@@ -144,10 +144,10 @@ public class DBOrder implements IDBOrder{
 				String marketNumber = rs.getString("market_number");
 				String vat = rs.getString("vat_identificator");
 
-				SelfEmployeed selfEmployeed =
-						new SelfEmployeed(customerEmail, customerName, customerPhoneNumber, customerCity,
+				SelfEmployed selfEmployed =
+						new SelfEmployed(customerEmail, customerName, customerPhoneNumber, customerCity,
 								customerZipCode, customerStreet, customerStreetNumber, marketNumber, vat);
-				return  new Order<SelfEmployeed>(selfEmployeed, orderLines, orderPayday, orderID);
+				return  new Order<SelfEmployed>(selfEmployed, orderLines, orderPayday, orderID);
 			}else if(customerType.equals("LTD")){
 				String select3 = "Select *\n" +
 						"from LTDs \n" +

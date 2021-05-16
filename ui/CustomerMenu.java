@@ -113,7 +113,7 @@ public class CustomerMenu {
             System.out.println("Enter VAT number: ");
             vatSelfEmpl	 = scanner.next();
             System.out.println("Enter market number: ");
-            marketNumber	 = scanner.next();
+            marketNumber = scanner.next();
             
             try {
 				if (customerController.saveSelfEmployedWithUserInputInDB(customerName, customerCity, customerStreet, customerNumber, customerZip, customerEmail, customerPhone, vatSelfEmpl, marketNumber) == true) {

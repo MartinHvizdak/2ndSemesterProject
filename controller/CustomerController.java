@@ -6,7 +6,7 @@ import model.CustomerEmployee;
 import model.LTD;
 import model.Owner;
 import model.PrivateIndividual;
-import model.SelfEmployeed;
+import model.SelfEmployed;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,7 @@ public class CustomerController {
      }
     
 	 public boolean saveSelfEmployedWithUserInputInDB(String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String VAT, String marketNumber) throws DBException{
-	    SelfEmployeed selfEmployed = new SelfEmployeed(email, name, phoneNumber, city, zipCode, street, streetNumber, VAT, marketNumber);
+	    SelfEmployed selfEmployed = new SelfEmployed(email, name, phoneNumber, city, zipCode, street, streetNumber, VAT, marketNumber);
 	    
 
     	return dbCustomer.saveSelfEmployedWithUserInputInDB(selfEmployed);
