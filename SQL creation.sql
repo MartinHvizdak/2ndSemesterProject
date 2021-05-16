@@ -1,4 +1,3 @@
-use SecondSemesterProject;
 
 
 create table Services(
@@ -102,10 +101,10 @@ alter table LTD_ownerships add foreign key(owner_id) references LTD_owners(id);
 --drop table LTDs;
 --drop table Self_employed;
 --drop table Private_individuals;
---drop table Orders;
 --drop table Order_lines;
+--drop table Orders;
+--drop table LTD_owners;
 --drop table Customers;
 --drop table Cities;
---drop table LTD_owners;
 --drop table Services;
 

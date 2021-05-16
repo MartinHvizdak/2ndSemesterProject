@@ -1,3 +1,5 @@
+
+
 insert into Cities
 values
 ('1000', 'Copenhagen'),
