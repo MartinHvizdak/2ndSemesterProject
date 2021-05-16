@@ -57,6 +57,12 @@ insert into LTD_ownerships
 values
 ('customer3@gmail.com', '123')
 
-select * from Customers;
+select * from Customers order by Customers.customer_type;
 
 select * from Orders;
+
+select * from LTD_owners;
+
+select * from LTD_employees;
+
+select * from LTDs;
