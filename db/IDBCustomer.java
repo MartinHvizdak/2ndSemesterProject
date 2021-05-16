@@ -15,4 +15,10 @@ public interface IDBCustomer {
 	public SelfEmployeed retrieveSelfEmployedByEmail(String customerEmail) throws DBException;
 
 	public PrivateIndividual retrievePrivateIndividualByEmail(String customerEmail) throws DBException;
+	
+	public boolean savePrivateIndividualWithUserInputInDB(PrivateIndividual privateIndividual) throws DBException;
+	
+	public boolean saveSelfEmployedWithUserInputInDB(SelfEmployeed selfEmployed) throws DBException;
+
+	public boolean saveLTDUserInputInDB(LTD ltd) throws DBException;
 }
