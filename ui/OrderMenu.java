@@ -37,7 +37,8 @@ public class OrderMenu {
         menuOptions.add("Show order");
         menuOptions.add("Update order");
         menuOptions.add("Delete order");
-
+        menuOptions.add("Go to main menu");
+        
         serviceController = new ServiceController();
         customerController = new CustomerController();
         orderController = new OrderController();
@@ -74,7 +75,7 @@ public class OrderMenu {
         }
 
 
-        System.out.println("Enter payday date(dd-mm-yyy): ");
+        System.out.println("Enter payday date(dd-mm-yyyy): ");
         String paydayString = scanner.next();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         formatter = formatter.withLocale( Locale.UK );
@@ -192,7 +193,8 @@ public class OrderMenu {
         System.out.println("\n\tEnter 'c' to confirm deleting the order with id" + orderID + ": ");
         if (scanner.next().toLowerCase().equals("c")) {
             try {
-                orderController.deleteOrderFromDBByID(orderID);           } catch (DBException e) {
+                orderController.deleteOrderFromDBByID(orderID);           
+            } catch (DBException e) {
                 System.out.println(e.getMessage());
                 return;
             }

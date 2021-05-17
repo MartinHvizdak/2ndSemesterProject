@@ -43,7 +43,7 @@ public class CustomerEmployee {
 		return salary;
 	}
 
-	public void setSalary(float salary) {
+	public void setSalary(double salary) {
 		this.salary = salary;
 	}
 
@@ -51,7 +51,7 @@ public class CustomerEmployee {
 		return income;
 	}
 
-	public void setIncome(float income) {
+	public void setIncome(double income) {
 		this.income = income;
 	}
 

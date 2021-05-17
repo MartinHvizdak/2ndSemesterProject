@@ -26,6 +26,18 @@ public class CustomerController {
     public Customer getCustomer(String customerEmail) throws DBException {
         return dbCustomer.retrieveCustomerByEmail(customerEmail);
     }
+    
+    public LTD getLTDByEmailFromDB(String customerEmail) throws DBException {
+        return dbCustomer.retrieveLTDByEmail(customerEmail);
+    }
+
+    public PrivateIndividual getPrivateIndividual(String customerEmail) throws DBException {
+        return dbCustomer.retrievePrivateIndividualByEmail(customerEmail);
+    }
+
+    public SelfEmployed getSelfEmployeed(String customerEmail) throws DBException {
+        return dbCustomer.retrieveSelfEmployedByEmail(customerEmail);
+    }
 
     public Customer createCustomer(){
         return new Customer();

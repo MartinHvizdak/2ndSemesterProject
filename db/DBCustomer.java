@@ -541,8 +541,7 @@ public class DBCustomer implements IDBCustomer {
 				stmt.setQueryTimeout(5);
 				stmt.execute();
 			}
-			
-			
+						
 			stmt.close();
 			
 		} catch (SQLException ex) {
@@ -564,7 +563,5 @@ public class DBCustomer implements IDBCustomer {
 
 		return true;
 	}
-	
-	
 	
 }
