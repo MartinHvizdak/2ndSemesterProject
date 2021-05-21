@@ -15,11 +15,13 @@ public class OrderController {
 	private DBOrder dbOrder;
 	private CustomerController customerController;
 	private OrderLineController orderLineController;
+	private ServiceController serviceController;
 	
 	public OrderController () {
 		dbOrder = new DBOrder();
 		customerController =  new CustomerController();
 		orderLineController = new OrderLineController();
+		serviceController =  new ServiceController();
 	}
 	
 	public Customer getCustomer(Order order) {
@@ -51,7 +53,7 @@ public class OrderController {
 	}
 
 	public int saveOrderWithUserInputInDB(String customerEmail, HashMap<Service, Integer> servicesAndQuantity, LocalDate payday) throws DBException {
-		Customer customer = customerController.getCustomer(customerEmail);
+		Customer customer = customerController.getCustomerByEmailFromDB(customerEmail);
 		ArrayList<OrderLine> orderlines =  new ArrayList<>();
 		for(Service service : servicesAndQuantity.keySet()) {
 			int quantity = servicesAndQuantity.get(service);
@@ -69,7 +71,7 @@ public class OrderController {
 	}
 
 	public void updateOrderWithUserInput(Order order, String customerEmail, HashMap<Service, Integer> serviceQuantity, LocalDate payday) throws DBException{
-		Customer customer = customerController.getCustomer(customerEmail);
+		Customer customer = customerController.getCustomerByEmailFromDB(customerEmail);
 		order.setCustomer(customer);
 
 		ArrayList<OrderLine> orderlines =  new ArrayList<>();

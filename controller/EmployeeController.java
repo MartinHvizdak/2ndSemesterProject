@@ -1,7 +1,9 @@
 package controller;
 
+import db.DBCustomer;
 import db.DBCustomerEmployee;
 import db.DBException;
+import model.Customer;
 import model.CustomerEmployee;
 import model.LTD;
 
@@ -16,14 +18,14 @@ public class EmployeeController {
 
     public String getID(CustomerEmployee employee){return employee.getId();}
 
-    public String getName(CustomerEmployee employee){return employee.getFirstName() + " " + employee.getSecondName();}
-    
+    public String getFirstName(CustomerEmployee employee){return employee.getFirstName();}
+
     public double getSalary(CustomerEmployee employee){return employee.getSalary();}
 
     public double getGeneratedIncome(CustomerEmployee employee){return employee.getIncome();}
 
-    public boolean saveEmployeeWithUserInputInDB(String employeePersonalID, String employeeFirstName, String employeeSecondName, double employeeSalary, double employeeGeneratedIncome, String employeeLtdEmail) throws DBException {
-        CustomerEmployee employee =  new CustomerEmployee(employeePersonalID, employeeFirstName, employeeSecondName, employeeSalary, employeeGeneratedIncome);
+    public boolean saveEmployeeWithUserInputInDB(String employeePersonalID, String employeeFirstName, String employeeLastName, double employeeSalary, double employeeGeneratedIncome, String employeeLtdEmail) throws DBException {
+        CustomerEmployee employee =  new CustomerEmployee(employeePersonalID, employeeFirstName, employeeLastName, employeeSalary, employeeGeneratedIncome);
         LTD ltd =  customerController.getLTDByEmailFromDB(employeeLtdEmail);
         return dbCustomerEmployee.saveEmployee(employee, ltd);
     }
@@ -32,11 +34,11 @@ public class EmployeeController {
         return dbCustomerEmployee.retrieveEmployeeByID(employeePersonalID);
     }
 
-    public boolean updateEmployeeWithUserInputInDB(CustomerEmployee employee, String newEmployeePersonalID, String newEmployeeFirstName, String newEmployeeSecondName, double newEmployeeSalary, double newEmployeeGeneratedIncome, String newEmployeeLtdEmail) throws DBException {
+    public boolean updateEmployeeWithUserInputInDB(CustomerEmployee employee, String newEmployeePersonalID, String newEmployeeFirstName, String newEmployeeLastName, double newEmployeeSalary, double newEmployeeGeneratedIncome, String newEmployeeLtdEmail) throws DBException {
         String oldPersonalID = employee.getId();
         employee.setId(newEmployeePersonalID);
         employee.setFirstName(newEmployeeFirstName);
-        employee.setSecondName(newEmployeeSecondName);
+        employee.setSecondName(newEmployeeLastName);
         employee.setSalary(newEmployeeSalary);
         employee.setIncome(newEmployeeGeneratedIncome);
         LTD ltd =  customerController.getLTDByEmailFromDB(newEmployeeLtdEmail);
