@@ -36,9 +36,15 @@ public class DBOrder implements IDBOrder{
 			
 			stmt.close();
 			
-		} catch (SQLException ex) {
-			DBException de = new DBException("Error inserting data");
+		}catch (SQLException ex) {
+			DBException de = null;
+			if(ex.getMessage().startsWith("Violation of PRIMARY KEY"))
+				de = new DBException("Error: Order with given new id already exists");
+			else
+				de = new DBException("Error retrieving data");
 			de.setStackTrace(ex.getStackTrace());
+			de.printStackTrace();
+			System.out.println(ex.getMessage());
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
@@ -130,10 +136,10 @@ public class DBOrder implements IDBOrder{
 								customerZipCode, customerStreet, customerStreetNumber, individualID, individualVAT);
 				return  new Order<PrivateIndividual>(privateIndividual, orderLines, orderPayday, orderID);
 
-			}else if(customerType.equals("Self_employed")){
+			}else if(customerType.equals("Self_employeed")){
 				String select3 = "Select *\n" +
-						"from Self_employed \n" +
-						"where Self_employed.customer_email = ?";
+						"from Self_employeed \n" +
+						"where Self_employeed.customer_email = ?";
 
 				stmt = con.prepareStatement(select3);
 				stmt.setString(1, customerEmail);
@@ -144,10 +150,10 @@ public class DBOrder implements IDBOrder{
 				String marketNumber = rs.getString("market_number");
 				String vat = rs.getString("vat_identificator");
 
-				SelfEmployed selfEmployed =
+				SelfEmployed selfEmployeed =
 						new SelfEmployed(customerEmail, customerName, customerPhoneNumber, customerCity,
 								customerZipCode, customerStreet, customerStreetNumber, marketNumber, vat);
-				return  new Order<SelfEmployed>(selfEmployed, orderLines, orderPayday, orderID);
+				return  new Order<SelfEmployed>(selfEmployeed, orderLines, orderPayday, orderID);
 			}else if(customerType.equals("LTD")){
 				String select3 = "Select *\n" +
 						"from LTDs \n" +
@@ -176,11 +182,11 @@ public class DBOrder implements IDBOrder{
 				while(rs.next()) {
 					String employeeID = rs.getString("id");
 					String firstName = rs.getString("first_name");
-					String secondName = rs.getString("second_name");
+					String lastName = rs.getString("second_name");
 					double salary = rs.getDouble("salary");
 					double generatedIncome = rs.getDouble("generated_income");
 
-					CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, firstName, secondName, salary, generatedIncome);
+					CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, firstName, lastName, salary, generatedIncome);
 					employees.add(customerEmployee);
 				}
 
@@ -244,7 +250,7 @@ public class DBOrder implements IDBOrder{
 			stmt.setInt(1, id);
 			stmt.setQueryTimeout(5);
 			if(stmt.executeUpdate() == 0)
-				throw new DBException("Order with with id does not exist");
+				throw new DBException("Error: Order with this id does not exist");
 			stmt.close();
 		} catch (DBException ex) {
 			throw ex;
@@ -269,8 +275,63 @@ public class DBOrder implements IDBOrder{
 
 	@Override
 	public boolean updateOrder(Order<Customer> order) throws DBException {
-		deleteOrderByID(order.getId());
-		saveOrder(order);
+		Connection con = DBConnection.getInstance().getDBcon();
+
+		String update = "update Orders set customer_email=?, payday=? where id=?";
+		String delete = "delete from Order_lines where order_id=?";
+		String insert = "insert into Order_lines (order_id, service_name, quantity) values (?, ?, ?)";
+
+		try {
+			PreparedStatement stmt = con.prepareStatement(update);
+			stmt.setString(1, order.getCustomer().getEmail());
+			stmt.setDate(2, Date.valueOf(order.getPayday()));
+			stmt.setDouble(3, order.getId());
+			stmt.setQueryTimeout(5);
+			if(stmt.executeUpdate() == 0)
+				throw new DBException("Error: Order with with this id does not exist");
+			stmt.close();
+
+			stmt = con.prepareStatement(delete);
+			stmt.setInt(1, order.getId());
+			stmt.setQueryTimeout(5);
+			stmt.executeUpdate();
+			stmt.close();
+
+
+			for(OrderLine orderLine : order.getOrderLines()) {
+				stmt = con.prepareStatement(insert);
+				stmt.setInt(1, order.getId());
+				stmt.setString(2, orderLine.getService().getName());
+				stmt.setInt(3, orderLine.getQuantity());
+				stmt.setQueryTimeout(5);
+				stmt.execute();
+				stmt.close();
+			}
+
+
+		} catch (DBException ex) {
+			throw ex;
+		}catch (SQLException ex) {
+			DBException de = null;
+			if(ex.getMessage().startsWith("Violation of PRIMARY KEY"))
+				de = new DBException("Error: Order with with given new id already exists");
+			else
+				de = new DBException("Error retrieving data");
+			de.setStackTrace(ex.getStackTrace());
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
+			throw de;
+		} catch (NullPointerException ex) {
+			DBException de = new DBException("Null pointer exception - possibly Connection object");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} catch (Exception ex) {
+			DBException de = new DBException("Data not updated! Technical error");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} finally {
+			DBConnection.closeConnection();
+		}
 		return true;
 	}
 

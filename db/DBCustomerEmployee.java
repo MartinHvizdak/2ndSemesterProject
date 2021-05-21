@@ -16,14 +16,11 @@ public class DBCustomerEmployee implements IDBCustomerEmployee{
         String select = "insert into LTD_employees (id, first_name, second_name, salary, generated_income, LTD_email) values (?, ?, ?, ?, ?, ?)";
 
         try {
-        	
-            String firstName = employee.getFirstName();
-            String secondName = employee.getSecondName();
 
             PreparedStatement stmt = con.prepareStatement(select);
             stmt.setString(1, employee.getId());
-            stmt.setString(2, firstName);
-            stmt.setString(3, secondName);
+            stmt.setString(2, employee.getFirstName());
+            stmt.setString(3, employee.getSecondName());
             stmt.setDouble(4, employee.getSalary());
             stmt.setDouble(5, employee.getIncome());
             stmt.setString(6, ltd.getEmail());
@@ -71,7 +68,7 @@ public class DBCustomerEmployee implements IDBCustomerEmployee{
                 throw new DBException("Error: Employee with this id does not exist");
 
             String employeeFirstName =  rs.getString("first_name");
-            String employeeSecondName = rs.getString("second_name");
+            String employeeSecondName =  rs.getString("second_name");
             double employeeSalary =  rs.getDouble("salary");
             double employeeGeneratedIncome =  rs.getDouble("generated_income");
 
@@ -108,12 +105,10 @@ public class DBCustomerEmployee implements IDBCustomerEmployee{
 
         try {
             PreparedStatement stmt = con.prepareStatement(select);
-            String firstName = employee.getFirstName();
-            String secondName = employee.getSecondName();
 
             stmt.setString(1, employee.getId());
-            stmt.setString(2, firstName);
-            stmt.setString(3, secondName);
+            stmt.setString(2, employee.getFirstName());
+            stmt.setString(3, employee.getSecondName());
             stmt.setDouble(4, employee.getSalary());
             stmt.setDouble(5, employee.getIncome());
             stmt.setString(6, ltd.getEmail());

@@ -1,7 +1,6 @@
 package db;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -137,7 +136,7 @@ public class DBCustomer implements IDBCustomer {
 			ResultSet rs = stmt.executeQuery();
 
 			if(!rs.next())
-				throw new DBException("Customer with this email not exist");
+				throw new DBException("Customer with this email does not exist");
 
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
@@ -151,7 +150,8 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(1, customerEmail);
 			stmt.setQueryTimeout(5);
 			rs = stmt.executeQuery();
-			rs.next();
+			if(!rs.next())
+				throw new DBException("LTD with this email does not exist");
 
 			String marketRegistrationNumber = rs.getString("market_registration_number");
 			String marketNumber = rs.getString("market_number");
@@ -167,12 +167,11 @@ public class DBCustomer implements IDBCustomer {
 			while(rs.next()) {
 				String employeeID = rs.getString("id");
 				String firstName = rs.getString("first_name");
-				String secondName = rs.getString("second_name");
-				
+				String lastName = rs.getString("second_name");
 				double salary = rs.getDouble("salary");
 				double generatedIncome = rs.getDouble("generated_income");
 
-				CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, firstName, secondName, salary, generatedIncome);
+				CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, firstName, lastName, salary, generatedIncome);
 				employees.add(customerEmployee);
 			}
 
@@ -205,6 +204,7 @@ public class DBCustomer implements IDBCustomer {
 			ltd = null;
 			DBException de = new DBException("Error retrieving data");
 			de.setStackTrace(ex.getStackTrace());
+			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
 			ltd = null;
@@ -246,7 +246,7 @@ public class DBCustomer implements IDBCustomer {
 			ResultSet rs = stmt.executeQuery();
 
 			if(!rs.next())
-				throw new DBException("Customer with this email does not exist");
+				throw new DBException("Private individual with this email does not exist");
 
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
@@ -306,8 +306,8 @@ public class DBCustomer implements IDBCustomer {
 				"where Customers.email = ?";
 
 		String select2 = "Select *\n" +
-				"from Self_employed \n" +
-				"where Self_employed.customer_email = ?";
+				"from Self_employeed \n" +
+				"where Self_employeed.customer_email = ?";
 
 
 		try {
@@ -317,7 +317,7 @@ public class DBCustomer implements IDBCustomer {
 			ResultSet rs = stmt.executeQuery();
 
 			if(!rs.next())
-				throw new DBException("Customer with this email does not exist");
+				throw new DBException("Self employed with this email does not exist");
 
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
@@ -368,12 +368,12 @@ public class DBCustomer implements IDBCustomer {
 
 	@Override
 	public boolean savePrivateIndividualWithUserInputInDB(PrivateIndividual privateIndividual) throws DBException {
-		
+
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Customers (email, city, street, street_number, name, phone_number, zip_code, customer_type) values (?, ?, ?, ?, ?, ?, ?, ?)";
 		String insert2 = "insert into Private_individuals (customer_email, id, vat_identificator) values (?, ?, ?)";
-		
+
 		try {
 			PreparedStatement stmt = con.prepareStatement(insert1);
 
@@ -385,21 +385,21 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(6, privateIndividual.getPhoneNumber());
 			stmt.setString(7, privateIndividual.getZipCode());
 			stmt.setString(8, "Private_individual");
-			
+
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
-			
+
 			stmt = con.prepareStatement(insert2);
 
 			stmt.setString(1, privateIndividual.getEmail());
 			stmt.setString(2, privateIndividual.getId());
 			stmt.setString(3, privateIndividual.getVat());
-			
+
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 			stmt.close();
-			
+
 		} catch (SQLException ex) {
 			DBException de = new DBException("Error inserting data");
 			de.setStackTrace(ex.getStackTrace());
@@ -418,18 +418,18 @@ public class DBCustomer implements IDBCustomer {
 		}
 
 		return true;
-		
+
 	}
 
 	@Override
 	public boolean saveSelfEmployedWithUserInputInDB(SelfEmployed selfEmployed) throws DBException {
 		// TODO Auto-generated method stub
-		
+
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Customers (email, city, street, street_number, name, phone_number, zip_code, customer_type) values (?, ?, ?, ?, ?, ?, ?, ?)";
 		String insert2 = "insert into Self_employed (customer_email, market_number, vat_identificator) values (?, ?, ?)";
-		
+
 		try {
 			PreparedStatement stmt = con.prepareStatement(insert1);
 
@@ -441,22 +441,22 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(6, selfEmployed.getPhoneNumber());
 			stmt.setString(7, selfEmployed.getZipCode());
 			stmt.setString(8, "Self_employed");
-			
+
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
-			
-			
+
+
 			stmt = con.prepareStatement(insert2);
 
 			stmt.setString(1, selfEmployed.getEmail());
 			stmt.setString(2, selfEmployed.getMarketNumber());
 			stmt.setString(3, selfEmployed.getVat());
-			
+
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 			stmt.close();
-			
+
 		} catch (SQLException ex) {
 			DBException de = new DBException("Error inserting data");
 			de.setStackTrace(ex.getStackTrace());
@@ -475,22 +475,22 @@ public class DBCustomer implements IDBCustomer {
 		}
 
 		return true;
-		
+
 	}
 
 	@Override
 	public boolean saveLTDUserInputInDB(LTD ltd) throws DBException {
 		// TODO Auto-generated method stub
-		
-		
+
+
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Customers (email, city, street, street_number, name, phone_number, zip_code, customer_type) values (?, ?, ?, ?, ?, ?, ?, ?)";
-		
+
 		String insert2 = "insert into LTD_employees (id, first_name, second_name, salary, generated_income, LTD_email) values (?, ?, ?, ?, ?, ?)";
 		String insert3 = "insert into LTD_owners (id, first_name, second_name, relation) values (?, ?, ?, ?)";
 		String insert4 = "insert into LTDs (customer_email, market_registration_number, market_number, are_payers) values (?, ?, ?, ?)";
-		
+
 		try {
 			PreparedStatement stmt = con.prepareStatement(insert1);
 
@@ -502,10 +502,10 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(6, ltd.getPhoneNumber());
 			stmt.setString(7, ltd.getZipCode());
 			stmt.setString(8, "LTD");
-			
+
 			stmt.setQueryTimeout(5);
 			stmt.execute();
-			
+
 			stmt = con.prepareStatement(insert4);
 
 			stmt.setString(1, ltd.getEmail());
@@ -515,35 +515,35 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
-			
+
 			for(CustomerEmployee customerEmployee : ltd.getEmployees()) {
 				stmt = con.prepareStatement(insert2);
-				
+
 				stmt.setString(1, customerEmployee.getId());
 				stmt.setString(2, customerEmployee.getFirstName());
 				stmt.setString(3, customerEmployee.getSecondName());
 				stmt.setDouble(4, customerEmployee.getSalary());
 				stmt.setDouble(5, customerEmployee.getIncome());
-				
+
 				stmt.setString(6, ltd.getEmail());
 				stmt.setQueryTimeout(5);
 				stmt.execute();
 			}
-			
+
 			for(Owner owner : ltd.getOwners()) {
 				stmt = con.prepareStatement(insert3);
-				
+
 				stmt.setString(1, owner.getId());
 				stmt.setString(2, owner.getName());
 				stmt.setString(3, owner.getName());
 				stmt.setString(4, owner.getRelation());
-				
+
 				stmt.setQueryTimeout(5);
 				stmt.execute();
 			}
-						
+
 			stmt.close();
-			
+
 		} catch (SQLException ex) {
 			DBException de = new DBException("Error inserting data");
 			de.setStackTrace(ex.getStackTrace());
@@ -563,5 +563,4 @@ public class DBCustomer implements IDBCustomer {
 
 		return true;
 	}
-	
 }
