@@ -6,7 +6,7 @@ public class CustomerEmployee {
 	private String secondName;
 	private double salary;
 	private double income;
-	
+
 	public CustomerEmployee(String id, String firstName, String secondName, double salary, double income) {
 		this.id = id;
 		this.firstName = firstName;
@@ -14,7 +14,7 @@ public class CustomerEmployee {
 		this.salary = salary;
 		this.income = income;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -30,11 +30,11 @@ public class CustomerEmployee {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	
+
 	public String getSecondName() {
 		return secondName;
 	}
-	
+
 	public void setSecondName(String secondName) {
 		this.secondName = secondName;
 	}
@@ -54,5 +54,4 @@ public class CustomerEmployee {
 	public void setIncome(double income) {
 		this.income = income;
 	}
-
 }

@@ -5,17 +5,17 @@ import java.util.ArrayList;
 public class LTD extends Customer{
  private ArrayList<CustomerEmployee> employees;
  private ArrayList<Owner> owners;
- private String marketRegistrationNumber;
+ private String marketRegisterNumber;
  private String marketNumber;
  private boolean arePayers;
  
 public LTD(String email, String name, String phoneNumber, String city, String zipCode, String street, String streetNumber,
-		   ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegistrationNumber,
+		   ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegisterNumber,
 		   String marketNumber, boolean arePayers) {
 	super(email, name, phoneNumber, city, zipCode, street, streetNumber);
 	this.employees = employees;
 	this.owners = owners;
-	this.marketRegistrationNumber = marketRegistrationNumber;
+	this.marketRegisterNumber = marketRegisterNumber;
 	this.marketNumber = marketNumber;
 	this.arePayers = arePayers;
 }
@@ -37,11 +37,11 @@ public void setOwners(ArrayList<Owner> owners) {
 }
 
 public String getMarketRegistrationNumber() {
-	return marketRegistrationNumber;
+	return marketRegisterNumber;
 }
 
-public void setMarketRegistrationNumber(String marketRegistrationNumber) {
-	this.marketRegistrationNumber = marketRegistrationNumber;
+public void setMarketRegisterNumber(String marketRegisterNumber) {
+	this.marketRegisterNumber = marketRegisterNumber;
 }
 
 public String getMarketNumber() {
