@@ -30,7 +30,6 @@ public class OrderMenu {
         orderLineController = new OrderLineController();
         orderController = new OrderController();
         customerController = new CustomerController();
-        serviceController =  new ServiceController();
         inputValidation = new InputValidation();
         menuOptions = new ArrayList<String>();
         menuOptions.add("Create order");
@@ -38,7 +37,7 @@ public class OrderMenu {
         menuOptions.add("Update order");
         menuOptions.add("Delete order");
         menuOptions.add("Go to main menu");
-        
+
         serviceController = new ServiceController();
         customerController = new CustomerController();
         orderController = new OrderController();
@@ -75,7 +74,7 @@ public class OrderMenu {
         }
 
 
-        System.out.println("Enter payday date(dd-mm-yyyy): ");
+        System.out.println("Enter payday date(dd-mm-yyy): ");
         String paydayString = scanner.next();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         formatter = formatter.withLocale( Locale.UK );
@@ -156,7 +155,7 @@ public class OrderMenu {
         }
 
         System.out.println("\tChoose services for order:");
-        HashMap<Service, Integer> newServiceQuantity = new HashMap<>();
+        HashMap<Service, Integer> newServiceAndQuantity = new HashMap<>();
         while (true){
             System.out.println("\tAll services available:");
             for (Service service : services)
@@ -165,7 +164,7 @@ public class OrderMenu {
             int quantity = inputValidation.getIntFromUser("Enter quantity of service");
             Service chosenService = services.get(chosenServiceNumber - 1);
 
-            newServiceQuantity.put(chosenService, quantity);
+            newServiceAndQuantity.put(chosenService, quantity);
             System.out.println("Press '1' to add next service or any other key to end adding");
             if (!scanner.next().equals("1"))
                 break;
@@ -174,7 +173,7 @@ public class OrderMenu {
         System.out.println("\n\tEnter 'c' to confirm changing the order with id" + id + ": ");
         if (scanner.next().toLowerCase().equals("c")) {
             try {
-                orderController.updateOrderWithUserInput(order, newCustomerEmail, newServiceQuantity, newPayday);
+                orderController.updateOrderWithUserInput(order, newCustomerEmail, newServiceAndQuantity, newPayday);
             } catch (DBException e) {
                 System.out.println(e.getMessage());
                 return;
@@ -188,13 +187,12 @@ public class OrderMenu {
         Scanner scanner =  new Scanner(System.in);
 
         System.out.println("\tDelete order:");
-        int orderID =  inputValidation.getIntFromUser("Enter id the order");
+        int orderID =  inputValidation.getIntFromUser("Enter id of the order");
 
         System.out.println("\n\tEnter 'c' to confirm deleting the order with id" + orderID + ": ");
         if (scanner.next().toLowerCase().equals("c")) {
             try {
-                orderController.deleteOrderFromDBByID(orderID);           
-            } catch (DBException e) {
+                orderController.deleteOrderFromDBByID(orderID);           } catch (DBException e) {
                 System.out.println(e.getMessage());
                 return;
             }
@@ -204,7 +202,7 @@ public class OrderMenu {
     }
 
     private void displayMenu(){
-        System.out.println("\n\t Main Menu:");
+        System.out.println("\n\t Order Menu:");
         for(String option : menuOptions)
             System.out.println((menuOptions.indexOf(option)+1) + ". " + option);
     }

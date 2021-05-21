@@ -38,7 +38,7 @@ public class EmployeeMenu {
         String employeeFirstName = scanner.next();
 
         System.out.println("Enter employee second name: ");
-        String employeeSecondName = scanner.next();
+        String employeeLastName = scanner.next();
 
         System.out.println("Enter employee salary: ");
         double employeeSalary = scanner.nextDouble();
@@ -49,20 +49,16 @@ public class EmployeeMenu {
         System.out.println("Enter employee's ltd email: ");
         String employeeLtdEmail = scanner.next();
 
-
         System.out.println("\n\tEnter 'c' to confirm  and save an order or any other key to cancel: ");
         System.out.println("Employee personal ID: '" + employeePersonalID + "'");
-        
-        System.out.println("First name: " + employeeFirstName);
-        System.out.println("Second name: " + employeeSecondName);
-        
+        System.out.println("Name: " + employeeFirstName);
         System.out.println("Salary: " + employeeSalary);
         System.out.println("Generated income: " + employeeGeneratedIncome);
         System.out.println("=Employee's ltd email: " + employeeLtdEmail);
 
         if (scanner.next().toLowerCase().equals("c")) {
             try {
-                employeeController.saveEmployeeWithUserInputInDB(employeePersonalID, employeeFirstName, employeeSecondName, employeeSalary, employeeGeneratedIncome, employeeLtdEmail);
+                employeeController.saveEmployeeWithUserInputInDB(employeePersonalID, employeeFirstName, employeeLastName, employeeSalary, employeeGeneratedIncome, employeeLtdEmail);
             } catch (DBException e) {
                 System.out.println(e.getMessage());
                 return;
@@ -86,7 +82,7 @@ public class EmployeeMenu {
             return;
         }
         System.out.println("Employee personal ID: '" + employeeController.getID(employee) + "'");
-        System.out.println("Name: " + employeeController.getName(employee));
+        System.out.println("Name: " + employee.getFirstName()+ employee.getSecondName());
         System.out.println("Salary: " + employeeController.getSalary(employee));
         System.out.println("Generated income: " + employeeController.getGeneratedIncome(employee));
     }
@@ -106,7 +102,7 @@ public class EmployeeMenu {
         }
         System.out.println("\n\tService information:");
         System.out.println("Employee personal ID: '" + employeeController.getID(employee) + "'");
-        System.out.println("Name: " + employeeController.getName(employee));
+        System.out.println("Name: " + employeeController.getFirstName(employee));
         System.out.println("Salary: " + employeeController.getSalary(employee));
         System.out.println("Generated income: " + employeeController.getGeneratedIncome(employee));
 
@@ -131,8 +127,7 @@ public class EmployeeMenu {
 
         System.out.println("\n\tEnter 'c' to confirm  and save an employee or any other key to cancel: ");
         System.out.println("Employee personal ID: '" + newEmployeePersonalID + "'");
-        System.out.println("First name: " + newEmployeeFirstName);
-        System.out.println("Second name: " + newEmployeeSecondName);
+        System.out.println("Name: " + newEmployeeFirstName + newEmployeeSecondName);
         System.out.println("Salary: " + newEmployeeSalary);
         System.out.println("Generated income: " + newEmployeeGeneratedIncome);
 
