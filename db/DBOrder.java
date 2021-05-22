@@ -3,6 +3,7 @@ package db;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.*;
 
@@ -333,6 +334,48 @@ public class DBOrder implements IDBOrder{
 			DBConnection.closeConnection();
 		}
 		return true;
+	}
+
+	@Override
+	public List<Order> retrieveOrdersByEmailAndPeriod(String email, LocalDate startDate, LocalDate endDate)
+			throws DBException {
+		Connection con = DBConnection.getInstance().getDBcon();
+		Order order = null;
+		List<Order> orders = new ArrayList<Order>();
+		
+		String select = "select id from Orders where customer_email = ?";
+		
+		try {
+			
+			PreparedStatement stmt = con.prepareStatement(select);
+			stmt.setString(1, email);
+			ResultSet rs;
+			rs = stmt.executeQuery();
+			int id;
+			while(rs.next()) {
+				id = rs.getInt("id");
+				order = retrieveOrderByID(id);
+				if(startDate.compareTo(order.getPayday()) <= 0 & endDate.compareTo(order.getPayday()) >= 0) {
+					orders.add(order);
+				}
+			}
+			
+		} catch (SQLException ex) {
+			DBException de = new DBException("Error retrieving data");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} catch (NullPointerException ex) {
+			DBException de = new DBException("Null pointer exception - possibly Connection object");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} catch (Exception ex) {
+			DBException de = new DBException("Data not inserted! Technical error");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return orders;
 	}
 
 }
