@@ -2,8 +2,6 @@ package ui;
 
 import controller.OrderController;
 import db.DBException;
-import model.Service;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
@@ -11,19 +9,10 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-
-import controller.ServiceController;
 
 public class DeleteOrder extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
-    private ServiceController serviceController =  new ServiceController();
     private OrderController orderController = new OrderController();
 
 
@@ -51,27 +40,27 @@ public class DeleteOrder extends JDialog {
         buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
         getContentPane().add(buttonPane, BorderLayout.SOUTH);
         {
-            JButton okButton = new JButton("Delete");
-            okButton.addActionListener(new ActionListener() {
+            JButton deleteButton = new JButton("Delete");
+            deleteButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (orderID.getText().equals("")){
-                        JOptionPane.showMessageDialog(null, "Please Fill In All Fields");
+                    if (orderID.getText().trim().equals("")){
+                        JOptionPane.showMessageDialog(null, "Please Enter Order ID");
                     }else {
                         try {
-                            orderController.deleteOrderFromDBByID(Integer.parseInt(orderID.getText()));
+                            orderController.deleteOrderFromDBByID(Integer.parseInt(orderID.getText().trim()));
                             dispose();
                             JOptionPane.showMessageDialog(null, "Order deleted");
                         } catch (NumberFormatException ex) {
-                            JOptionPane.showMessageDialog(null, "ID has to be a number");
+                            JOptionPane.showMessageDialog(null, "ID Has To Be Max 10 Digit Integer");
                         } catch (DBException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage());
                         }
                     }
                 }
             });
-            okButton.setActionCommand("OK");
-            buttonPane.add(okButton);
-            getRootPane().setDefaultButton(okButton);
+            deleteButton.setActionCommand("OK");
+            buttonPane.add(deleteButton);
+            getRootPane().setDefaultButton(deleteButton);
         }
         {
             JButton cancelButton = new JButton("Cancel");

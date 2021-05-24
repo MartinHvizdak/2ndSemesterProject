@@ -28,7 +28,7 @@ public class UpdateOrder extends JDialog {
     private final JPanel contentPanel = new JPanel();
     private ServiceController serviceController =  new ServiceController();
     private OrderController orderController = new OrderController();
-    private Order<Customer> order = null;
+    private ArrayList<Service> servicesInDB =  null;
 
 
     public UpdateOrder() {
@@ -47,31 +47,26 @@ public class UpdateOrder extends JDialog {
 
         JLabel emailLbl = new JLabel("Customer email:");
         emailLbl.setBounds(30, 60, 200, 20);
-        emailLbl.setVisible(false);
         emailLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(emailLbl);
 
         JLabel dateLbl = new JLabel("Payday (dd-mm-yyy):");
         dateLbl.setBounds(30, 100, 200, 20);
-        dateLbl.setVisible(false);
         dateLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(dateLbl);
 
         JLabel servicesInDBLbl = new JLabel("Services in DB:");
         servicesInDBLbl.setBounds(30, 140, 200, 20);
-        servicesInDBLbl.setVisible(false);
         servicesInDBLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(servicesInDBLbl);
 
         JLabel serviceQuantityLbl = new JLabel("Service quantity:");
         serviceQuantityLbl.setBounds(440, 140, 100, 20);
-        serviceQuantityLbl.setVisible(false);
         serviceQuantityLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(serviceQuantityLbl);
 
         JLabel addedServicesWithQuantityLbl = new JLabel("Added services with quantity:");
         addedServicesWithQuantityLbl.setBounds(30, 180, 200, 20);
-        addedServicesWithQuantityLbl.setVisible(false);
         addedServicesWithQuantityLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(addedServicesWithQuantityLbl);
 
@@ -81,67 +76,62 @@ public class UpdateOrder extends JDialog {
         contentPanel.add(orderID);
 
         JTextField customerEmail = new JTextField();
-        customerEmail.setVisible(false);
         customerEmail.setBounds(240, 60, 200, 20);
         contentPanel.add(customerEmail);
 
         JTextField paydayTxt = new JTextField();
-        paydayTxt.setVisible(false);
         paydayTxt.setBounds(240, 100, 200, 20);
         contentPanel.add(paydayTxt);
 
-        ArrayList<Service> services =  null;
         try {
-            services = serviceController.getAllServicesFromDB();
+            servicesInDB = serviceController.getAllServicesFromDB();
         } catch (DBException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
             dispose();
         }
 
         JComboBox servicesInDBBox = new JComboBox();
-        servicesInDBBox.setVisible(false);
-        for (Service service : services){
+        for (Service service : servicesInDB){
             servicesInDBBox.addItem(service.getName());
         }
         servicesInDBBox.setBounds(240, 140, 200, 20);
         contentPanel.add(servicesInDBBox);
 
         JComboBox quantityBox = new JComboBox();
-        quantityBox.setVisible(false);
         for (int i=1; i<10000; i++){
             quantityBox.addItem(i);
         }
         quantityBox.setBounds(550, 140, 80, 20);
         contentPanel.add(quantityBox);
 
-        HashMap<Service, Integer> servicesAndQuantity =  new HashMap<>();
+        HashMap<Service, Integer> addedServicesAndQuantity =  new HashMap<>();
 
         JComboBox addedServicesWithQuantityBox = new JComboBox();
-        addedServicesWithQuantityBox.setVisible(false);
         addedServicesWithQuantityBox.setBounds(240, 180, 250, 20);
         contentPanel.add(addedServicesWithQuantityBox);
 
-        ArrayList<Service> finalServices = services;
 
         JButton removeServiceBtn = new JButton();
         removeServiceBtn.setText("Remove");
-        removeServiceBtn.setVisible(false);
         removeServiceBtn.setBounds(500, 180, 80, 20);
         removeServiceBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (addedServicesWithQuantityBox.getItemCount() > 0) {
-                    for (Service service : finalServices) {
+                    for (Service service : addedServicesAndQuantity.keySet()) {
                         if (addedServicesWithQuantityBox.getSelectedItem().toString().startsWith(service.getName())) {
                             System.out.println(addedServicesWithQuantityBox.getSelectedItem().toString() + "  " + service.getName());
-                            servicesAndQuantity.remove(service);
+                            System.out.println(service.getName());
+                            addedServicesAndQuantity.remove(service);
                         }
                     }
 
                     addedServicesWithQuantityBox.removeAllItems();
-                    for (Service service : servicesAndQuantity.keySet()) {
-                        addedServicesWithQuantityBox.addItem(service.getName() + " x" + servicesAndQuantity.get(service));
+                    for (Service service : addedServicesAndQuantity.keySet()) {
+                        addedServicesWithQuantityBox.addItem(service.getName() + " x" + addedServicesAndQuantity.get(service));
                     }
+                    System.out.println(addedServicesWithQuantityBox.getItemCount());
+                    System.out.println(addedServicesAndQuantity.size());
                 }
             }
         });
@@ -149,53 +139,46 @@ public class UpdateOrder extends JDialog {
 
         JButton addServiceBtn = new JButton();
         addServiceBtn.setText("Add");
-        addServiceBtn.setVisible(false);
         addServiceBtn.setBounds(640, 140, 80, 20);
         addServiceBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                servicesAndQuantity.put(finalServices.get(servicesInDBBox.getSelectedIndex()), quantityBox.getSelectedIndex() + 1);
+                addedServicesAndQuantity.put(servicesInDB.get(servicesInDBBox.getSelectedIndex()), quantityBox.getSelectedIndex() + 1);
 
                 addedServicesWithQuantityBox.removeAllItems();
-                for (Service service : servicesAndQuantity.keySet()){
-                    addedServicesWithQuantityBox.addItem(service.getName() + " x" + servicesAndQuantity.get(service));
+                for (Service service : addedServicesAndQuantity.keySet()){
+                    addedServicesWithQuantityBox.addItem(service.getName() + " x" + addedServicesAndQuantity.get(service));
                 }
             }
         });
         contentPanel.add(addServiceBtn);
 
 
-        JButton button = new JButton("Show order");
+        JButton button = new JButton("Show");
         button.setBounds(440, 20, 120, 20);
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (orderID.getText().equals("")){
+                if (orderID.getText().trim().equals("")){
                     JOptionPane.showMessageDialog(null, "Please Fill In All Fields");
                 }else {
                     try {
-                        order = orderController.getOrderFromDB(Integer.parseInt(orderID.getText()));
+                        Order<Customer> order = orderController.getOrderFromDB(Integer.parseInt(orderID.getText().trim()));
                         customerEmail.setText(order.getCustomer().getEmail());
                         paydayTxt.setText(order.getPayday().toString());
 
+                        addedServicesAndQuantity.clear();
+                        addedServicesWithQuantityBox.removeAllItems();
                         for (OrderLine ol : order.getOrderLines()){
-                            addedServicesWithQuantityBox.addItem(ol.getService().getName() + "  x" + ol.getQuantity());
+                            for(Service service : servicesInDB) {
+                                if(service.getID() == ol.getService().getID()) {
+                                    addedServicesWithQuantityBox.addItem(service.getName() + "  x" + ol.getQuantity());
+                                    addedServicesAndQuantity.put(service, ol.getQuantity());
+                                }
+                            }
                         }
 
-                        emailLbl.setVisible(true);
-                        dateLbl.setVisible(true);
-                        servicesInDBLbl.setVisible(true);
-                        serviceQuantityLbl.setVisible(true);
-                        addedServicesWithQuantityLbl.setVisible(true);
-                        customerEmail.setVisible(true);
-                        paydayTxt.setVisible(true);
-                        addServiceBtn.setVisible(true);
-                        removeServiceBtn.setVisible(true);
-                        addedServicesWithQuantityBox.setVisible(true);
-                        quantityBox.setVisible(true);
-                        servicesInDBBox.setVisible(true);
-
                     } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "ID has to be a number");
+                        JOptionPane.showMessageDialog(null, "ID Has To Be Max 10 Digit Integer");
                     } catch (DBException ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage());
                     }
@@ -204,35 +187,56 @@ public class UpdateOrder extends JDialog {
         });
         contentPanel.add(button);
 
-        // Section with OK and Cancel buttons:
+        // Section with Update and Cancel buttons:
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
         getContentPane().add(buttonPane, BorderLayout.SOUTH);
         {
-            JButton okButton = new JButton("Update");
-            okButton.addActionListener(new ActionListener() {
+            JButton updateButton = new JButton("Update");
+            updateButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (customerEmail.getText().equals("") || paydayTxt.getText().equals("") || addedServicesWithQuantityBox.getItemCount() == 0){
-                        JOptionPane.showMessageDialog(null, "Please Fill In All Fields");
+                    if (customerEmail.getText().trim().equals("") || paydayTxt.getText().trim().equals("") || addedServicesWithQuantityBox.getItemCount() == 0){
+                        JOptionPane.showMessageDialog(null, "Please Fill In All Necessary Fields");
                     }else {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                         formatter = formatter.withLocale(Locale.UK);
                         try {
-                            LocalDate payday = LocalDate.parse(paydayTxt.getText(), formatter);
-                            orderController.updateOrderWithUserInput(order ,customerEmail.getText(), servicesAndQuantity, payday);
+                            LocalDate payday = LocalDate.parse(paydayTxt.getText().trim(), formatter);
+                            Order<Customer> order = orderController.getOrderFromDB(Integer.parseInt(orderID.getText().trim()));
+                            orderController.updateOrderWithUserInput(order ,customerEmail.getText().trim(), addedServicesAndQuantity, payday);
                             dispose();
                             JOptionPane.showMessageDialog(null, "Order updated");
                         } catch (DateTimeParseException ex) {
                             JOptionPane.showMessageDialog(null, "Please Enter Valid Date");
+                        } catch (NumberFormatException ex){
+                            JOptionPane.showMessageDialog(null, "ID Has To Be Max 10 Digit Integer");
                         } catch (DBException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage());
+
+                            if(ex.getMessage().startsWith("Service with id")){
+                                try {
+                                    servicesInDB = serviceController.getAllServicesFromDB();
+
+                                    addedServicesAndQuantity.clear();
+                                    servicesInDBBox.removeAllItems();
+                                    for (Service service : servicesInDB){
+                                        servicesInDBBox.addItem(service.getName());
+                                    }
+                                    addedServicesWithQuantityBox.removeAllItems();
+
+                                } catch (DBException exception) {
+                                    JOptionPane.showMessageDialog(null, exception.getMessage());
+                                    dispose();
+                                    return;
+                                }
+                            }
                         }
                     }
                 }
             });
-            okButton.setActionCommand("OK");
-            buttonPane.add(okButton);
-            getRootPane().setDefaultButton(okButton);
+            updateButton.setActionCommand("OK");
+            buttonPane.add(updateButton);
+            getRootPane().setDefaultButton(updateButton);
         }
         {
             JButton cancelButton = new JButton("Cancel");

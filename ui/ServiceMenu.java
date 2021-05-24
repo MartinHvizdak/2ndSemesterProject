@@ -46,7 +46,7 @@ public class ServiceMenu {
 
         if (scanner.next().toLowerCase().equals("c")) {
             try {
-                serviceController.saveServiceWithUserInputInDB(serviceName, serviceDescription, servicePrice);
+                serviceController.saveServiceWithUserInputInDB(4 ,serviceName, serviceDescription, servicePrice);
             } catch (DBException e) {
                 System.out.println(e.getMessage());
                 return;
@@ -57,6 +57,7 @@ public class ServiceMenu {
     }
 
     private void showService() {
+        /*
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\tService details:");
@@ -73,9 +74,11 @@ public class ServiceMenu {
         System.out.println("Service name: " + serviceController.getName(service));
         System.out.println("Description: '" + serviceController.getDescription(service) + "'");
         System.out.println("Price: " + serviceController.getPrice(service));
+        */
     }
 
     private void updateService() {
+        /*
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\tService details:");
@@ -117,9 +120,12 @@ public class ServiceMenu {
         }
         else
             System.out.println("Service changes declined");
+
+         */
     }
 
     private void deleteService() {
+        /*
         Scanner scanner =  new Scanner(System.in);
 
         System.out.println("Enter new service name: ");
@@ -136,6 +142,8 @@ public class ServiceMenu {
         }
         else
             System.out.println("Removal declined");
+
+         */
     }
 
     private void displayMenu(){

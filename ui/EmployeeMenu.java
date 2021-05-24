@@ -82,7 +82,7 @@ public class EmployeeMenu {
             return;
         }
         System.out.println("Employee personal ID: '" + employeeController.getID(employee) + "'");
-        System.out.println("Name: " + employee.getFirstName()+ employee.getSecondName());
+        System.out.println("Name: " + employee.getFirstName()+ employee.getSurName());
         System.out.println("Salary: " + employeeController.getSalary(employee));
         System.out.println("Generated income: " + employeeController.getGeneratedIncome(employee));
     }

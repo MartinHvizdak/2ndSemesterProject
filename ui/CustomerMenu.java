@@ -164,12 +164,14 @@ public class CustomerMenu {
                 System.out.println("Write owner's ID: ");
                 String idOwner = scanner.next();
                 System.out.println("Write owner's name: ");
-                String nameOwner = scanner.next();
+                String firstNameOwner = scanner.next();
+                System.out.println("Write owner's name: ");
+                String surnameOwner = scanner.next();
                 System.out.println("Write owner's relation: ");
                 String relationOwner = scanner.next();
 
 
-                owners.add(new Owner(idOwner, nameOwner, relationOwner));
+                owners.add(new Owner(idOwner, firstNameOwner, surnameOwner, relationOwner));
 
 
                 System.out.println("Press 'y' to add another owner: ");

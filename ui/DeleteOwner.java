@@ -1,7 +1,6 @@
 package ui;
 
-import controller.EmployeeController;
-
+import controller.OwnerController;
 import db.DBException;
 
 import java.awt.BorderLayout;
@@ -12,19 +11,21 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class DeleteEmployee extends JDialog {
+public class DeleteOwner extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
-    private EmployeeController employeeController =  new EmployeeController();
+    private OwnerController ownerController;
 
 
-    public DeleteEmployee() {
-        super(null,"Delete employee",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 600, 200);
+    public DeleteOwner() {
+        super(null,"Delete owner",ModalityType.APPLICATION_MODAL);
+        setBounds(100, 100, 430, 200);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
+
+        ownerController =  new OwnerController();
 
         //Labels
         JLabel personalIDLbl = new JLabel("Personal ID:");
@@ -46,12 +47,12 @@ public class DeleteEmployee extends JDialog {
             deleteButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (personalIDTxt.getText().trim().equals("")){
-                        JOptionPane.showMessageDialog(null, "Please Enter Personal ID");
+                        JOptionPane.showMessageDialog(null, "Please Enter ID");
                     }else {
                         try {
-                            employeeController.deleteEmployeeByIDFromDB(personalIDTxt.getText().trim());
+                            ownerController.deleteOwnerByIDFromDB(personalIDTxt.getText().trim());
                             dispose();
-                            JOptionPane.showMessageDialog(null, "Employee deleted");
+                            JOptionPane.showMessageDialog(null, "Owner deleted");
                         } catch (DBException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage());
                         }
@@ -67,7 +68,7 @@ public class DeleteEmployee extends JDialog {
             cancelButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     dispose();
-                    JOptionPane.showMessageDialog(null, "Employee not deleted");
+                    JOptionPane.showMessageDialog(null, "Owner not deleted");
                 }
             });
             cancelButton.setActionCommand("Cancel");

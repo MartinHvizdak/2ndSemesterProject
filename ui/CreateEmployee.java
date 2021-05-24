@@ -1,9 +1,7 @@
 package ui;
 
 import controller.EmployeeController;
-import controller.OrderController;
 import db.DBException;
-import model.Service;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -12,24 +10,15 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-
-import controller.ServiceController;
 
 public class CreateEmployee extends JDialog {
-    private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private EmployeeController employeeController =  new EmployeeController();
 
 
     public CreateEmployee() {
         super(null,"Create employee",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 800, 300);
+        setBounds(100, 100, 600, 400);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -61,7 +50,7 @@ public class CreateEmployee extends JDialog {
         generatedIncomeLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(generatedIncomeLbl);
 
-        JLabel ltdEmailLbl = new JLabel("LTD's email");
+        JLabel ltdEmailLbl = new JLabel("LTD's email (optional)");
         ltdEmailLbl.setBounds(30, 220, 200, 20);
         ltdEmailLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(ltdEmailLbl);
@@ -92,35 +81,40 @@ public class CreateEmployee extends JDialog {
         contentPanel.add(ltdEmailTxt);
 
 
-        // Section with OK and Cancel buttons:
+        // Section with Create and Cancel buttons:
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
         getContentPane().add(buttonPane, BorderLayout.SOUTH);
         {
-            JButton okButton = new JButton("Create");
-            okButton.addActionListener(new ActionListener() {
+            JButton createButton = new JButton("Create");
+            createButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (personalIDTxt.getText().equals("") || firstNameTxt.getText().equals("") || lastNameTxt.getText().equals("") ||
-                            salaryTxt.getText().equals("") || generatedIncomeTxt.getText().equals("") || ltdEmailTxt.getText().equals("")){
-                        JOptionPane.showMessageDialog(null, "Please Fill In All Fields");
+                    if (personalIDTxt.getText().trim().equals("") || firstNameTxt.getText().trim().equals("") || lastNameTxt.getText().trim().equals("") ||
+                            salaryTxt.getText().trim().equals("") || generatedIncomeTxt.getText().trim().equals("")){
+                        JOptionPane.showMessageDialog(null, "Please Fill In All Necessary Fields");
                     }else {
                         double salary = 0, generatedIncome = 0;
 
                         try {
-                            salary = Double.parseDouble(salaryTxt.getText());
+                            salary = Double.parseDouble(salaryTxt.getText().trim());
                         } catch (NumberFormatException ex){
                             JOptionPane.showMessageDialog(null, "Salary has to be a double");
                         }
 
                         try {
-                            generatedIncome = Double.parseDouble(salaryTxt.getText());
+                            generatedIncome = Double.parseDouble(salaryTxt.getText().trim());
                         } catch (NumberFormatException ex){
                             JOptionPane.showMessageDialog(null, "Generated income has to be a double");
                         }
 
+                        String ltdEmail = null;
+                        if (!ltdEmailTxt.getText().trim().equals("")){
+                            ltdEmail = ltdEmailTxt.getText().trim();
+                        }
+
                         try {
-                            employeeController.saveEmployeeWithUserInputInDB(personalIDTxt.getText(), firstNameTxt.getText(),
-                                    lastNameTxt.getText(), salary, generatedIncome, ltdEmailTxt.getText());
+                            employeeController.saveEmployeeWithUserInputInDB(personalIDTxt.getText().trim(), firstNameTxt.getText().trim(),
+                                    lastNameTxt.getText().trim(), salary, generatedIncome, ltdEmail);
                             dispose();
                             JOptionPane.showMessageDialog(null, "Employee created");
                         } catch (DBException ex) {
@@ -129,9 +123,9 @@ public class CreateEmployee extends JDialog {
                     }
                 }
             });
-            okButton.setActionCommand("OK");
-            buttonPane.add(okButton);
-            getRootPane().setDefaultButton(okButton);
+            createButton.setActionCommand("OK");
+            buttonPane.add(createButton);
+            getRootPane().setDefaultButton(createButton);
         }
         {
             JButton cancelButton = new JButton("Cancel");

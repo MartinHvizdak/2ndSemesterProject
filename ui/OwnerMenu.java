@@ -70,7 +70,7 @@ public class OwnerMenu {
 
         if (scanner.next().toLowerCase().equals("c")) {
             try {
-                ownerController.saveOwnerWithUserInputInDB(ownerPersonalID, ownerName, ownerRelation, ownerLtdEmails);
+                ownerController.saveOwnerWithUserInputInDB(ownerPersonalID, ownerFirstName, ownerSurname, ownerRelation, ownerLtdEmails);
             } catch (DBException e) {
                 System.out.println(e.getMessage());
                 return;
@@ -161,7 +161,7 @@ public class OwnerMenu {
 
         if (scanner.next().toLowerCase().equals("c")) {
             try {
-                ownerController.updateOwnerWithUserInputInDB(owner, newOwnerPersonalID, newOwnerName, newOwnerRelation, newOwnerLtdEmails);
+                ownerController.updateOwnerWithUserInputInDB(owner, newOwnerPersonalID, newOwnerFirstName, newOwnerSurname, newOwnerRelation, newOwnerLtdEmails);
             } catch (DBException e) {
                 System.out.println(e.getMessage());
                 return;

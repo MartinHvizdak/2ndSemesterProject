@@ -2,6 +2,7 @@ package ui;
 
 import controller.EmployeeController;
 
+import controller.ServiceController;
 import db.DBException;
 
 import java.awt.BorderLayout;
@@ -12,14 +13,14 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class DeleteEmployee extends JDialog {
+public class DeleteService extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
-    private EmployeeController employeeController =  new EmployeeController();
+    private ServiceController serviceController =  new ServiceController();
 
 
-    public DeleteEmployee() {
-        super(null,"Delete employee",ModalityType.APPLICATION_MODAL);
+    public DeleteService() {
+        super(null,"Delete service",ModalityType.APPLICATION_MODAL);
         setBounds(100, 100, 600, 200);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
@@ -27,15 +28,15 @@ public class DeleteEmployee extends JDialog {
         getContentPane().add(contentPanel, BorderLayout.CENTER);
 
         //Labels
-        JLabel personalIDLbl = new JLabel("Personal ID:");
-        personalIDLbl.setBounds(30, 20, 200, 20);
-        personalIDLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-        contentPanel.add(personalIDLbl);
+        JLabel idLbl = new JLabel("ID:");
+        idLbl.setBounds(30, 20, 200, 20);
+        idLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+        contentPanel.add(idLbl);
 
         //Fields
-        JTextField personalIDTxt = new JTextField("");
-        personalIDTxt.setBounds(240, 20, 200, 20);
-        contentPanel.add(personalIDTxt);
+        JTextField idTxt = new JTextField();
+        idTxt.setBounds(240, 20, 200, 20);
+        contentPanel.add(idTxt);
 
         // Section with Delete and Cancel buttons:
         JPanel buttonPane = new JPanel();
@@ -45,13 +46,20 @@ public class DeleteEmployee extends JDialog {
             JButton deleteButton = new JButton("Delete");
             deleteButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (personalIDTxt.getText().trim().equals("")){
-                        JOptionPane.showMessageDialog(null, "Please Enter Personal ID");
+                    if (idTxt.getText().trim().equals("")){
+                        JOptionPane.showMessageDialog(null, "Please Enter ID");
                     }else {
+                        int id = 0;
                         try {
-                            employeeController.deleteEmployeeByIDFromDB(personalIDTxt.getText().trim());
+                            id = Integer.parseInt(idTxt.getText().trim());
+                        } catch (NumberFormatException ex){
+                            JOptionPane.showMessageDialog(null, "ID has to be an integer");
+                        }
+
+                        try {
+                            serviceController.deleteServiceByIDFromDB(id);
                             dispose();
-                            JOptionPane.showMessageDialog(null, "Employee deleted");
+                            JOptionPane.showMessageDialog(null, "Service deleted");
                         } catch (DBException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage());
                         }
@@ -67,7 +75,7 @@ public class DeleteEmployee extends JDialog {
             cancelButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     dispose();
-                    JOptionPane.showMessageDialog(null, "Employee not deleted");
+                    JOptionPane.showMessageDialog(null, "Service not deleted");
                 }
             });
             cancelButton.setActionCommand("Cancel");
