@@ -46,13 +46,16 @@ class MenuExample
 
         dbConnectionIndicator =  new DBConnectionIndicator(mainWindow);
         Thread connectionIndicatorThread =  new Thread(dbConnectionIndicator);
-        connectionIndicatorThread.start();
+        //connectionIndicatorThread.start();
 
         serviceGeneralMenu =  new ServiceGeneralMenu(mainWindow);
         ownerGeneralMenu =  new OwnerGeneralMenu(mainWindow);
         employeeGeneralMenu =  new EmployeeGeneralMenu(mainWindow);
         orderGeneralMenu =  new OrderGeneralMenu(mainWindow);
         customerGeneralMenu =  new CustomerGeneralMenu(mainWindow);
+
+        orderGeneralMenu.showMenu();
+
         orderMenu = new JMenu("Order");
         createOrderMI = new JMenuItem("Create order");
         showOrderMI = new JMenuItem("Show order");

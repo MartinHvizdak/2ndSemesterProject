@@ -46,8 +46,6 @@ public class ServiceGeneralMenu extends JDialog {
         errorInfo.setHorizontalAlignment(SwingConstants.CENTER);
         errorInfo.setVerticalAlignment(SwingConstants.CENTER);
         serviceGeneralPanel.add(errorInfo);
-
-        updateData();
     }
 
     public void updateData(){

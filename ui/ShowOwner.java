@@ -20,7 +20,7 @@ public class ShowOwner extends JDialog {
 
     public ShowOwner() {
         super(null,"Show owner",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 600, 400);
+        setBounds(100, 100, 600, 600);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

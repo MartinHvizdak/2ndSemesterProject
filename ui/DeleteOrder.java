@@ -18,7 +18,7 @@ public class DeleteOrder extends JDialog {
 
     public DeleteOrder() {
         super(null,"Delete order",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 430, 200);
+        setBounds(100, 100, 500, 200);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -19,7 +19,7 @@ public class DeleteCustomer extends JDialog {
 
     public DeleteCustomer() {
         super(null,"Delete customer",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 600, 200);
+        setBounds(100, 100, 500, 200);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

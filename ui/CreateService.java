@@ -19,7 +19,7 @@ public class CreateService extends JDialog {
 
     public CreateService() {
         super(null,"Create service",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 800, 300);
+        setBounds(100, 100, 600, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

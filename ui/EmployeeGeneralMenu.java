@@ -48,8 +48,6 @@ public class EmployeeGeneralMenu extends JDialog {
         errorInfo.setHorizontalAlignment(SwingConstants.CENTER);
         errorInfo.setVerticalAlignment(SwingConstants.CENTER);
         employeeGeneralPanel.add(errorInfo);
-
-        updateData();
     }
 
     public void updateData(){

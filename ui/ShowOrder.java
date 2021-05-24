@@ -19,9 +19,9 @@ public class ShowOrder extends JDialog
     OrderController orderController;
 
     ShowOrder(){
-        super(null,"Show owner", Dialog.ModalityType.APPLICATION_MODAL);
+        super(null,"Show order", Dialog.ModalityType.APPLICATION_MODAL);
         contentPanel =  new JPanel();
-        setBounds(100, 100, 600, 400);
+        setBounds(100, 100, 600, 500);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

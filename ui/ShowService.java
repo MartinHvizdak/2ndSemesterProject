@@ -21,7 +21,7 @@ public class ShowService extends JDialog {
 
     public ShowService() {
         super(null,"Show service",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 800, 300);
+        setBounds(100, 100, 700, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -72,7 +72,7 @@ public class ShowService extends JDialog {
         contentPanel.add(priceDataLbl);
 
         JButton showButton = new JButton("Show");
-        showButton.setBounds(450,20,80, 30 );
+        showButton.setBounds(450,20,80, 20 );
         showButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (idTxt.getText().trim().equals("")) {
