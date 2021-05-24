@@ -37,6 +37,9 @@ public class DBConnectionIndicator implements Runnable {
                     //System.out.println(System.nanoTime()-start);
                     container.setBackground(Color.gray);
                     //start =  System.nanoTime();
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(100);
+                    } catch (InterruptedException e) { }
                 }else{
                     container.setBackground(Color.green);
                     System.out.println("GREEN!!!!!!!");

@@ -48,8 +48,6 @@ public class OrderGeneralMenu extends JDialog {
         errorInfo.setHorizontalAlignment(SwingConstants.CENTER);
         errorInfo.setVerticalAlignment(SwingConstants.CENTER);
         orderGeneralPanel.add(errorInfo);
-
-        updateData();
     }
 
     public void updateData(){

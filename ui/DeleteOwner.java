@@ -19,7 +19,7 @@ public class DeleteOwner extends JDialog {
 
     public DeleteOwner() {
         super(null,"Delete owner",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 430, 200);
+        setBounds(100, 100, 600, 200);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

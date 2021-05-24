@@ -28,7 +28,7 @@ public class CreateCustomer extends JDialog {
 
     public CreateCustomer() {
         super(null,"Create customer",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 800, 700);
+        setBounds(100, 100, 700, 700);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

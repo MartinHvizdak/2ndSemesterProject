@@ -47,8 +47,6 @@ public class OwnerGeneralMenu extends JDialog {
         errorInfo.setHorizontalAlignment(SwingConstants.CENTER);
         errorInfo.setVerticalAlignment(SwingConstants.CENTER);
         ownerGeneralPanel.add(errorInfo);
-
-        updateData();
     }
 
     public void updateData(){

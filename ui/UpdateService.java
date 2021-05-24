@@ -19,7 +19,7 @@ public class UpdateService extends JDialog {
 
     public UpdateService() {
         super(null,"Update service",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 800, 300);
+        setBounds(100, 100, 700, 300);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

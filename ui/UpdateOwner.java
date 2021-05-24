@@ -25,7 +25,7 @@ public class UpdateOwner extends JDialog {
 
     public UpdateOwner() {
         super(null,"Create employee",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 600, 400);
+        setBounds(100, 100, 700, 400);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -114,7 +114,7 @@ public class UpdateOwner extends JDialog {
 
         JButton addLTDBtn = new JButton();
         addLTDBtn.setText("Add");
-        addLTDBtn.setBounds(450, 220, 150, 20);
+        addLTDBtn.setBounds(450, 220, 80, 20);
         addLTDBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -132,7 +132,7 @@ public class UpdateOwner extends JDialog {
 
         JButton removeLTDBtn = new JButton();
         removeLTDBtn.setText("Remove");
-        removeLTDBtn.setBounds(450, 260, 150, 20);
+        removeLTDBtn.setBounds(450, 260, 80, 20);
         removeLTDBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

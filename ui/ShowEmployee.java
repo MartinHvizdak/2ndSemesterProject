@@ -94,7 +94,7 @@ public class ShowEmployee extends JDialog {
         contentPanel.add(ltdEmailDataLbl);
 
         JButton showButton = new JButton("Show");
-        showButton.setBounds(450,20,80, 30 );
+        showButton.setBounds(450,20,80, 20 );
         showButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (personalIDTxt.getText().trim().equals("")) {

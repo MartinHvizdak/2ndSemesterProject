@@ -21,7 +21,7 @@ public class ShowCustomer extends JDialog {
 
     public ShowCustomer() {
         super(null,"Show customer",ModalityType.APPLICATION_MODAL);
-        setBounds(100, 100, 800, 900);
+        setBounds(100, 100, 700, 1000);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setLayout(null);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
