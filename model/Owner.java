@@ -2,12 +2,14 @@ package model;
 
 public class Owner {
 	private String id;
-	private String name;
+	private String firstName;
+	private String surName;
 	private String relation;
 	
-	public Owner(String id, String name, String relation) {
+	public Owner(String id, String firstName, String surName, String relation) {
 		this.id = id;
-		this.name = name;
+		this.firstName = firstName;
+		this.surName =  surName;
 		this.relation = relation;
 	}
 
@@ -19,12 +21,16 @@ public class Owner {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() { return firstName; }
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getSurName() { return surName; }
+
+	public void setSurName(String surName) {
+		this.surName = surName;
 	}
 
 	public String getRelation() {
