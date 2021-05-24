@@ -17,8 +17,20 @@ public class CustomerController {
         return customer.getEmail();
     }
 
+    public ArrayList<Customer> getAllCustomersFromDB() throws DBException{
+        return dbCustomer.retrieveAllCustomers();
+    }
+
+    public ArrayList<String> getAllLTDEmailsFromDB() throws DBException {
+        return dbCustomer.retrieveAllLTDEmails();
+    }
+
     public Customer getCustomerByEmailFromDB(String customerEmail) throws DBException {
         return dbCustomer.retrieveCustomerByEmail(customerEmail);
+    }
+
+    public String getCustomerTypeByEmailFromDB(String customerEmail) throws DBException {
+        return dbCustomer.getCustomerType(customerEmail);
     }
 
     public LTD getLTDByEmailFromDB(String customerEmail) throws DBException {
@@ -50,10 +62,62 @@ public class CustomerController {
         return dbCustomer.saveSelfEmployedWithUserInputInDB(selfEmployed);
     }
 
-    public boolean saveLTDUserInputInDB(String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegisteredNumber, String marketNumber, boolean arePayers) throws DBException{
-        LTD ltd = new LTD(email, name, phoneNumber, city, zipCode, street, streetNumber, employees, owners, marketRegisteredNumber, marketNumber, arePayers);
+    public boolean saveLTDUserInputInDB(String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegistrationNumber, String marketNumber, boolean arePayers) throws DBException{
+        LTD ltd = new LTD(email, name, phoneNumber, city, zipCode, street, streetNumber, employees, owners, marketRegistrationNumber, marketNumber, arePayers);
 
 
         return dbCustomer.saveLTDUserInputInDB(ltd);
+    }
+
+    public boolean updatePrivateIndividual(PrivateIndividual privateIndividual, String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String ID, String VAT) throws DBException {
+        String oldEmail = privateIndividual.getEmail();
+        privateIndividual.setName(name);
+        privateIndividual.setCity(city);
+        privateIndividual.setStreet(street);
+        privateIndividual.setStreetNumber(streetNumber);
+        privateIndividual.setZipCode(zipCode);
+        privateIndividual.setEmail(email);
+        privateIndividual.setPhoneNumber(phoneNumber);
+        privateIndividual.setId(ID);
+        privateIndividual.setVat(VAT);
+
+        return dbCustomer.updatePrivateIndividual(oldEmail, privateIndividual);
+    }
+
+    public boolean updateSelfEmployed(SelfEmployed selfEmployed, String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String VAT, String marketNumber) throws DBException {
+        String oldEmail = selfEmployed.getEmail();
+        selfEmployed.setName(name);
+        selfEmployed.setCity(city);
+        selfEmployed.setStreet(street);
+        selfEmployed.setStreetNumber(streetNumber);
+        selfEmployed.setZipCode(zipCode);
+        selfEmployed.setEmail(email);
+        selfEmployed.setPhoneNumber(phoneNumber);
+        selfEmployed.setMarketNumber(marketNumber);
+        selfEmployed.setVat(VAT);
+
+        return dbCustomer.updateSelfEmployed(oldEmail, selfEmployed);
+    }
+
+    public boolean updateLTD(LTD ltd, String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegistrationNumber, String marketNumber, boolean arePayers) throws DBException {
+        String oldEmail = ltd.getEmail();
+        ltd.setName(name);
+        ltd.setCity(city);
+        ltd.setStreet(street);
+        ltd.setStreetNumber(streetNumber);
+        ltd.setZipCode(zipCode);
+        ltd.setEmail(email);
+        ltd.setPhoneNumber(phoneNumber);
+        ltd.setMarketNumber(marketNumber);
+        ltd.setArePayers(arePayers);
+        ltd.setMarketRegisterNumber(marketRegistrationNumber);
+        ltd.setEmployees(employees);
+        ltd.setOwners(owners);
+
+        return dbCustomer.updateLTD(oldEmail, ltd);
+    }
+
+    public boolean deleteEveryCustomerTypeByEmailFromDB(String email) throws DBException {
+        return dbCustomer.deleteEveryCustomerTypeByEmail(email);
     }
 }

@@ -48,6 +48,10 @@ public class OrderController {
 		dbOrder.deleteOrderByID(orderID);
 	}
 
+	public ArrayList<Order<Customer>> getAllOrdersFromDB() throws DBException {
+		return dbOrder.retrieveAllOrders();
+	}
+
 	public Order getOrderFromDB(int orderID) throws DBException {
 		return dbOrder.retrieveOrderByID(orderID);
 	}

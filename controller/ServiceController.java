@@ -29,24 +29,25 @@ public class ServiceController {
         return dbService.retrieveAllServices();
     }
 
-    public Service getServiceByNameFromDB(String serviceName) throws DBException {
-        return dbService.retrieveServiceByName(serviceName);
+    public Service getServiceByIDFromDB(int serviceID) throws DBException {
+        return dbService.retrieveServiceByID(serviceID);
     }
 
-    public boolean updateServiceWithUserInputInDB(Service service, String newServiceName, String newServiceDescription, double newServicePrice) throws DBException {
-        String oldName = service.getName();
+    public boolean updateServiceWithUserInputInDB(Service service, int newID, String newServiceName, String newServiceDescription, double newServicePrice) throws DBException {
+        int oldID = service.getID();
+        service.setID(newID);
         service.setName(newServiceName);
         service.setDescription(newServiceDescription);
         service.setPrice(newServicePrice);
-        return dbService.updateService(oldName, service);
+        return dbService.updateService(oldID, service);
     }
 
-    public boolean saveServiceWithUserInputInDB(String serviceName, String serviceDescription, double servicePrice) throws DBException {
-        Service service =  new Service(serviceName, serviceDescription,servicePrice);
+    public boolean saveServiceWithUserInputInDB(int serviceID , String serviceName, String serviceDescription, double servicePrice) throws DBException {
+        Service service =  new Service(serviceID, serviceName, serviceDescription,servicePrice);
         return dbService.saveService(service);
     }
 
-    public boolean deleteServiceByNameFromDB(String serviceName) throws DBException {
-        return dbService.deleteServiceByName(serviceName);
+    public boolean deleteServiceByIDFromDB(int serviceID) throws DBException {
+        return dbService.deleteServiceByID(serviceID);
     }
 }
