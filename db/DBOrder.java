@@ -3,7 +3,6 @@ package db;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import model.*;
 
@@ -15,9 +14,11 @@ public class DBOrder implements IDBOrder{
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Orders (id, customer_email, payday) values (?, ?, ?)";
-		String insert2 = "insert into Order_lines (order_id, service_name, quantity) values (?, ?, ?)";
+		String insert2 = "insert into Order_lines (order_id, service_id, quantity) values (?, ?, ?)";
 		
 		try {
+			DBConnection.getInstance().startTransaction();
+
 			PreparedStatement stmt = con.prepareStatement(insert1);
 
 			stmt.setInt(1, order.getId());
@@ -29,23 +30,34 @@ public class DBOrder implements IDBOrder{
 			for(OrderLine orderLine : order.getOrderLines()) {
 				stmt = con.prepareStatement(insert2);
 				stmt.setInt(1, order.getId());
-				stmt.setString(2, orderLine.getService().getName());
+				stmt.setInt(2, orderLine.getService().getID());
 				stmt.setInt(3, orderLine.getQuantity());
 				stmt.setQueryTimeout(5);
-				stmt.execute();
+				try {
+					stmt.execute();
+				} catch (SQLException ex){
+					throw new DBException("Service with id " + orderLine.getService().getID() + "does not exist in DB anymore");
+				}
 			}
 			
 			stmt.close();
-			
-		}catch (SQLException ex) {
+
+			DBConnection.getInstance().commitTransaction();
+		} catch (DBException ex) {
+			throw ex;
+		} catch (SQLException ex) {
+			try {
+				DBConnection.getInstance().rollbackTransaction();
+			} catch (SQLException e) {
+				throw new DBException("Error: transaction roll back problem while canceling transaction");
+			}
+
 			DBException de = null;
 			if(ex.getMessage().startsWith("Violation of PRIMARY KEY"))
-				de = new DBException("Error: Order with given new id already exists");
+				de = new DBException("Error: Order with given id already exists");
 			else
-				de = new DBException("Error retrieving data");
+				de = new DBException("Error saving data");
 			de.setStackTrace(ex.getStackTrace());
-			de.printStackTrace();
-			System.out.println(ex.getMessage());
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
@@ -53,7 +65,7 @@ public class DBOrder implements IDBOrder{
 			ex.printStackTrace();
 			throw de;
 		} catch (Exception ex) {
-			DBException de = new DBException("Data not inserted! Technical error");
+			DBException de = new DBException("Data not saved! Technical error");
 			de.setStackTrace(ex.getStackTrace());
 			throw de;
 		} finally {
@@ -62,6 +74,93 @@ public class DBOrder implements IDBOrder{
 
 		return true;
 	}
+
+	@Override
+	public ArrayList<Order<Customer>> retrieveAllOrders() throws DBException{
+		Connection con = DBConnection.getInstance().getDBcon();
+		ArrayList<Order<Customer>> orders = new ArrayList<>();
+
+		try {
+			DBConnection.getInstance().startTransaction();
+
+			String select1 =
+					"Select *\n" +
+							"from Orders \n" +
+							"inner join Customers on Orders.customer_email = Customers.email\n" +
+							"inner join Cities on Customers.zip_code = Cities.zip_code";
+
+			PreparedStatement stmt = con.prepareStatement(select1);
+			stmt.setQueryTimeout(5);
+			ResultSet rs = stmt.executeQuery();
+
+			while(rs.next()) {
+				int orderID = rs.getInt("id");
+				LocalDate orderPayday = rs.getDate("payday").toLocalDate();
+
+				String customerEmail = rs.getString("customer_email");
+				String customerCity = rs.getString("city");
+				String customerStreet = rs.getString("street");
+				String customerStreetNumber = rs.getString("street_number");
+				String customerName = rs.getString("name");
+				String customerPhoneNumber = rs.getString("phone_number");
+				String customerZipCode = rs.getString("zip_code");
+
+				Customer customer =  new Customer(customerEmail, customerName, customerPhoneNumber, customerCity, customerZipCode, customerStreet, customerStreetNumber);
+
+				String select2 = "Select *\n" +
+						"from Order_lines \n" +
+						"inner join Services on Order_lines.service_id= Services.id\n" +
+						"where Order_lines.order_id = ? \n";
+
+				PreparedStatement stmt2 = con.prepareStatement(select2);
+				stmt2.setInt(1, orderID);
+				stmt2.setQueryTimeout(5);
+				ResultSet rs2 = stmt2.executeQuery();
+
+				ArrayList<OrderLine> orderLines = new ArrayList<>();
+				while (rs2.next()) {
+					int serviceID = rs2.getInt("id");
+					String serviceName = rs2.getString("name");
+					String serviceDescription = rs2.getString("description");
+					double servicePrice = rs2.getDouble("price");
+					int serviceQuantity = rs2.getInt("quantity");
+					Service service = new Service(serviceID, serviceName, serviceDescription, servicePrice);
+					OrderLine orderLine = new OrderLine(service, serviceQuantity);
+					orderLines.add(orderLine);
+				}
+				orders.add(new Order<Customer>(customer, orderLines, orderPayday, orderID));
+			}
+
+			if(orders.isEmpty())
+				throw new DBException("There are not any orders in DB");
+
+			DBConnection.getInstance().commitTransaction();
+		} catch (DBException ex) {
+			throw ex;
+		} catch (SQLException ex) {
+			try {
+				DBConnection.getInstance().rollbackTransaction();
+			} catch (SQLException e) {
+				throw new DBException("Error: transaction roll back problem while canceling transaction");
+			}
+
+			DBException de = new DBException("Error retrieving data");
+			ex.printStackTrace();
+			throw de;
+		} catch (NullPointerException ex) {
+			DBException de = new DBException("Null pointer exception - possibly Connection object");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} catch (Exception ex) {
+			DBException de = new DBException("Data not retrieved! Technical error");
+			de.setStackTrace(ex.getStackTrace());
+			throw de;
+		} finally {
+			DBConnection.closeConnection();
+		}
+
+		return orders;
+	}
 	
 	@Override
 	public Order retrieveOrderByID(int id) throws DBException {
@@ -69,6 +168,8 @@ public class DBOrder implements IDBOrder{
 		Order order = null;
 		
 		try {
+			DBConnection.getInstance().startTransaction();
+
 			String select1 =
 					"Select *\n" +
 							"from Orders \n" +
@@ -98,7 +199,7 @@ public class DBOrder implements IDBOrder{
 
 			String select2 = "Select *\n" +
 					"from Order_lines \n" +
-					"inner join Services on Order_lines.service_name= Services.name\n" +
+					"inner join Services on Order_lines.service_id= Services.id\n" +
 					"where Order_lines.order_id = ? \n";
 
 			stmt = con.prepareStatement(select2);
@@ -108,11 +209,12 @@ public class DBOrder implements IDBOrder{
 
 			ArrayList<OrderLine> orderLines =  new ArrayList<>();
 			while(rs.next()) {
+				int serviceID = rs.getInt("id");
 				String serviceName = rs.getString("name");
 				String serviceDescription = rs.getString("description");
 				double servicePrice = rs.getDouble("price");
 				int serviceQuantity = rs.getInt("quantity");
-				Service service = new Service(serviceName, serviceDescription, servicePrice);
+				Service service = new Service(serviceID, serviceName, serviceDescription, servicePrice);
 				OrderLine orderLine =  new OrderLine(service, serviceQuantity);
 				orderLines.add(orderLine);
 			}
@@ -205,10 +307,11 @@ public class DBOrder implements IDBOrder{
 				ArrayList<Owner> owners = new ArrayList<>();
 				while(rs.next()) {
 					String ownerID = rs.getString("id");
-					String name = rs.getString("first_name") + " " + rs.getString("second_name");
+					String firstName = rs.getString("first_name");
+					String surName = rs.getString("second_name");
 					String relation = rs.getString("relation");
 
-					Owner owner = new Owner(ownerID, name,relation);
+					Owner owner = new Owner(ownerID, firstName, surName,relation);
 					owners.add(owner);
 				}
 
@@ -218,10 +321,16 @@ public class DBOrder implements IDBOrder{
 								marketRegistrationNumber, marketNumber, arePayers);
 				order =  new Order<LTD>(ltd, orderLines, orderPayday, orderID);
 			}
-
+			DBConnection.getInstance().commitTransaction();
 		} catch (DBException ex) {
 			throw ex;
 		} catch (SQLException ex) {
+			try {
+				DBConnection.getInstance().rollbackTransaction();
+			} catch (SQLException e) {
+				throw new DBException("Error: transaction roll back problem while canceling transaction");
+			}
+
 			DBException de = new DBException("Error retrieving data");
 			ex.printStackTrace();
 			throw de;
@@ -230,7 +339,7 @@ public class DBOrder implements IDBOrder{
 			de.setStackTrace(ex.getStackTrace());
 			throw de;
 		} catch (Exception ex) {
-			DBException de = new DBException("Data not inserted! Technical error");
+			DBException de = new DBException("Data not retrieved! Technical error");
 			de.setStackTrace(ex.getStackTrace());
 			throw de;
 		} finally {
@@ -247,16 +356,26 @@ public class DBOrder implements IDBOrder{
 		String delete = "delete from Orders where id=?";
 		
 		try {
+			DBConnection.getInstance().startTransaction();
+
 			PreparedStatement stmt = con.prepareStatement(delete);
 			stmt.setInt(1, id);
 			stmt.setQueryTimeout(5);
 			if(stmt.executeUpdate() == 0)
 				throw new DBException("Error: Order with this id does not exist");
 			stmt.close();
+
+			DBConnection.getInstance().commitTransaction();
 		} catch (DBException ex) {
 			throw ex;
 		} catch (SQLException ex) {
-			DBException de = new DBException("Error retrieving data");
+			try {
+				DBConnection.getInstance().rollbackTransaction();
+			} catch (SQLException e) {
+				throw new DBException("Error: transaction roll back problem while canceling transaction");
+			}
+
+			DBException de = new DBException("Error deleting data");
 			de.setStackTrace(ex.getStackTrace());
 			throw de;
 		} catch (NullPointerException ex) {
@@ -264,7 +383,7 @@ public class DBOrder implements IDBOrder{
 			de.setStackTrace(ex.getStackTrace());
 			throw de;
 		} catch (Exception ex) {
-			DBException de = new DBException("Data not inserted! Technical error");
+			DBException de = new DBException("Data not deleted! Technical error");
 			de.setStackTrace(ex.getStackTrace());
 			throw de;
 		} finally {
@@ -280,9 +399,11 @@ public class DBOrder implements IDBOrder{
 
 		String update = "update Orders set customer_email=?, payday=? where id=?";
 		String delete = "delete from Order_lines where order_id=?";
-		String insert = "insert into Order_lines (order_id, service_name, quantity) values (?, ?, ?)";
+		String insert = "insert into Order_lines (order_id, service_id, quantity) values (?, ?, ?)";
 
 		try {
+			DBConnection.getInstance().startTransaction();
+
 			PreparedStatement stmt = con.prepareStatement(update);
 			stmt.setString(1, order.getCustomer().getEmail());
 			stmt.setDate(2, Date.valueOf(order.getPayday()));
@@ -290,34 +411,44 @@ public class DBOrder implements IDBOrder{
 			stmt.setQueryTimeout(5);
 			if(stmt.executeUpdate() == 0)
 				throw new DBException("Error: Order with with this id does not exist");
-			stmt.close();
+
 
 			stmt = con.prepareStatement(delete);
 			stmt.setInt(1, order.getId());
 			stmt.setQueryTimeout(5);
 			stmt.executeUpdate();
-			stmt.close();
+
 
 
 			for(OrderLine orderLine : order.getOrderLines()) {
 				stmt = con.prepareStatement(insert);
 				stmt.setInt(1, order.getId());
-				stmt.setString(2, orderLine.getService().getName());
+				stmt.setInt(2, orderLine.getService().getID());
 				stmt.setInt(3, orderLine.getQuantity());
 				stmt.setQueryTimeout(5);
-				stmt.execute();
-				stmt.close();
+				try {
+					stmt.execute();
+				} catch (SQLException ex){
+					throw new DBException("Service with id " + orderLine.getService().getID() + "does not exist in DB anymore");
+				}
 			}
 
-
+			stmt.close();
+			DBConnection.getInstance().commitTransaction();
 		} catch (DBException ex) {
 			throw ex;
-		}catch (SQLException ex) {
+		} catch (SQLException ex) {
+			try {
+				DBConnection.getInstance().rollbackTransaction();
+			} catch (SQLException e) {
+				throw new DBException("Error: transaction roll back problem while canceling transaction");
+			}
+
 			DBException de = null;
 			if(ex.getMessage().startsWith("Violation of PRIMARY KEY"))
 				de = new DBException("Error: Order with with given new id already exists");
 			else
-				de = new DBException("Error retrieving data");
+				de = new DBException("Error updating data");
 			de.setStackTrace(ex.getStackTrace());
 			ex.printStackTrace();
 			System.out.println(ex.getMessage());
@@ -334,48 +465,6 @@ public class DBOrder implements IDBOrder{
 			DBConnection.closeConnection();
 		}
 		return true;
-	}
-
-	@Override
-	public List<Order> retrieveOrdersByEmailAndPeriod(String email, LocalDate startDate, LocalDate endDate)
-			throws DBException {
-		Connection con = DBConnection.getInstance().getDBcon();
-		Order order = null;
-		List<Order> orders = new ArrayList<Order>();
-		
-		String select = "select id from Orders where customer_email = ?";
-		
-		try {
-			
-			PreparedStatement stmt = con.prepareStatement(select);
-			stmt.setString(1, email);
-			ResultSet rs;
-			rs = stmt.executeQuery();
-			int id;
-			while(rs.next()) {
-				id = rs.getInt("id");
-				order = retrieveOrderByID(id);
-				if(startDate.compareTo(order.getPayday()) <= 0 & endDate.compareTo(order.getPayday()) >= 0) {
-					orders.add(order);
-				}
-			}
-			
-		} catch (SQLException ex) {
-			DBException de = new DBException("Error retrieving data");
-			de.setStackTrace(ex.getStackTrace());
-			throw de;
-		} catch (NullPointerException ex) {
-			DBException de = new DBException("Null pointer exception - possibly Connection object");
-			de.setStackTrace(ex.getStackTrace());
-			throw de;
-		} catch (Exception ex) {
-			DBException de = new DBException("Data not inserted! Technical error");
-			de.setStackTrace(ex.getStackTrace());
-			throw de;
-		} finally {
-			DBConnection.closeConnection();
-		}
-		return orders;
 	}
 
 }

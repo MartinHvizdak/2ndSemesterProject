@@ -8,11 +8,13 @@ import model.Owner;
 
 public interface IDBOwner {
 
-    boolean saveOwner(Owner owner, ArrayList<LTD> ltds) throws DBException;
+    boolean saveOwner(Owner owner, ArrayList<String> ltdEmails) throws DBException;
+
+    ArrayList<Owner> retrieveAllOwners() throws DBException;
 
     Owner retrieveOwnerByID(String ownerPersonalID) throws DBException;
 
-    boolean updateOwner( String oldPersonalID, Owner owner, ArrayList<LTD> ltds) throws DBException;
+    boolean updateOwner( String oldPersonalID, Owner owner, ArrayList<String> ltdEmails) throws DBException;
 
     boolean deleteOwnerByID(String ownerPersonalID) throws DBException;
 

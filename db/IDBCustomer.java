@@ -5,10 +5,18 @@ import model.LTD;
 import model.PrivateIndividual;
 import model.SelfEmployed;
 
+import java.util.ArrayList;
+
 public interface IDBCustomer {
     String getCustomerType(String customerEmail) throws DBException;
 
+    ArrayList<Customer> retrieveAllCustomers() throws DBException;
+
     Customer retrieveCustomerByEmail(String customerEmail) throws DBException;
+
+    ArrayList<LTD> retrieveAllLTDs() throws DBException;
+
+    ArrayList<String> retrieveAllLTDEmails() throws DBException;
 
     LTD retrieveLTDByEmail(String customerEmail) throws DBException;
 
@@ -16,9 +24,17 @@ public interface IDBCustomer {
 
     SelfEmployed retrieveSelfEmployedByEmail(String customerEmail) throws DBException;
 
-    public boolean savePrivateIndividualWithUserInputInDB(PrivateIndividual privateIndividual) throws DBException;
+    boolean savePrivateIndividualWithUserInputInDB(PrivateIndividual privateIndividual) throws DBException;
 
-    public boolean saveSelfEmployedWithUserInputInDB(SelfEmployed selfEmployed) throws DBException;
+    boolean saveSelfEmployedWithUserInputInDB(SelfEmployed selfEmployed) throws DBException;
 
     public boolean saveLTDUserInputInDB(LTD ltd) throws DBException;
+
+    boolean updatePrivateIndividual(String oldEmail, PrivateIndividual privateIndividual) throws DBException;
+
+    boolean updateSelfEmployed(String oldEmail, SelfEmployed selfEmployed) throws DBException;
+
+    boolean updateLTD(String oldEmail, LTD ltd) throws DBException;
+
+    boolean deleteEveryCustomerTypeByEmail(String email) throws DBException;
 }

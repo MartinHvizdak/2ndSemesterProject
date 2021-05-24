@@ -3,6 +3,7 @@ package db;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 
 public class DBConnection {
@@ -58,12 +59,13 @@ public class DBConnection {
             System.out.println("Error trying to close the database " +  e.getMessage());
          }
     }
-		
     
     public Connection getDBcon()
     {
        return con;
     }
+
+    public static DBConnection getInstanceWithoutInitializing(){return instance;}
     
     public static DBConnection getInstance()
     {
@@ -72,5 +74,19 @@ public class DBConnection {
           instance = new DBConnection();
         }
         return instance;
+    }
+
+    public void startTransaction() throws SQLException {
+        con.setAutoCommit(false);
+    }
+
+    public void commitTransaction() throws SQLException {
+        con.commit();
+        con.setAutoCommit(true);
+    }
+
+    public void rollbackTransaction() throws SQLException {
+        con.rollback();
+        con.setAutoCommit(true);
     }
 }
