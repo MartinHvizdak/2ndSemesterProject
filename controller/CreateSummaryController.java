@@ -19,14 +19,14 @@ public class CreateSummaryController {
 	DBCustomer dbCustomer;
 	DBOrder dbOrder;
 	Customer customer;
-	List<Order> orders;
+	ArrayList<Order> orders;
 	Service service;
-	List<String> services;
+	ArrayList<String> services;
 	ArrayList<OrderLine> orderLines;
-	List<Double> earningsPerService;
+	ArrayList<Double> earningsPerService;
 	double earnings;
 	int numberOfServices;
-	List<Integer> servicesPerType;
+	ArrayList<Integer> servicesPerType;
 	
 	public CreateSummaryController() {
 		
@@ -59,7 +59,7 @@ public class CreateSummaryController {
 		return orders.size();
 	}
 	
-	public List<String> getServices(){
+	public ArrayList<String> getServices(){
 		services = new ArrayList<>();
 		for(Order order: orders) {
 			orderLines = order.getOrderLines();
@@ -73,7 +73,7 @@ public class CreateSummaryController {
 		return services;
 	}
 	
-	public List<Integer> getNumberOfServicesPerType(){
+	public ArrayList<Integer> getNumberOfServicesPerType(){
 		servicesPerType = new ArrayList<>();
 		for(String service: services) {
 			numberOfServices = 0;
@@ -94,14 +94,14 @@ public class CreateSummaryController {
 	}
 	
 	
-	public List<Double> getEarningsPerService(){
+	public ArrayList<Double> getEarningsPerService(){
 		earningsPerService = new ArrayList<>();
 		for(String service: services) {
 			earnings = 0;
 			for(Order order: orders) {
 				orderLines = order.getOrderLines();
 				for(OrderLine orderLine: orderLines) {
-					//using 2 types of services - 1 is String and the other one is Service
+					//using 2 types of services - 1 is String and this. is a Service
 					this.service = orderLine.getService();
 					if(this.service.getName().equals(service)) {
 						earnings += this.service.getPrice() * orderLine.getQuantity();

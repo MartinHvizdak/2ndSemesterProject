@@ -3,6 +3,7 @@ package db;
 import model.Customer;
 import model.Order;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface IDBOrder {
@@ -16,4 +17,7 @@ public interface IDBOrder {
 	boolean deleteOrderByID(int id) throws DBException;
 
 	boolean updateOrder(Order<Customer> order) throws DBException;
+
+	ArrayList<Order> retrieveOrdersByEmailAndPeriod(String email, LocalDate startDate, LocalDate endDate)
+			throws DBException;
 }

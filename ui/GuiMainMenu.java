@@ -22,6 +22,7 @@ class MenuExample
     JMenuItem createOwnerMI, showOwnerMI, updateOwnerMI, deleteOwnerMI;
     JMenu employeeMenu;
     JMenuItem createEmployeeMI, showEmployeeMI, updateEmployeeMI, deleteEmployeeMI;
+    JMenu summaryMenu;
 
     JPanel showCustomerPanel, showServicePanel, showEmployeePanel, showOwnerPanel;
 
@@ -30,6 +31,7 @@ class MenuExample
     OrderGeneralMenu orderGeneralMenu;
     ServiceGeneralMenu serviceGeneralMenu;
     CustomerGeneralMenu customerGeneralMenu;
+    CreateSummaryMenu createSummaryMenu;
 
     DBConnectionIndicator dbConnectionIndicator;
 
@@ -47,12 +49,13 @@ class MenuExample
         dbConnectionIndicator =  new DBConnectionIndicator(mainWindow);
         Thread connectionIndicatorThread =  new Thread(dbConnectionIndicator);
         //connectionIndicatorThread.start();
-
+                
         serviceGeneralMenu =  new ServiceGeneralMenu(mainWindow);
         ownerGeneralMenu =  new OwnerGeneralMenu(mainWindow);
         employeeGeneralMenu =  new EmployeeGeneralMenu(mainWindow);
         orderGeneralMenu =  new OrderGeneralMenu(mainWindow);
         customerGeneralMenu =  new CustomerGeneralMenu(mainWindow);
+        createSummaryMenu = new CreateSummaryMenu(mainWindow);
 
         orderGeneralMenu.showMenu();
 
@@ -110,6 +113,10 @@ class MenuExample
         employeeMenu.add(updateEmployeeMI);
         employeeMenu.add(deleteEmployeeMI);
         menuBar.add(employeeMenu);
+        
+        createSummaryMenu = new CreateSummaryMenu(mainWindow);
+        summaryMenu = new JMenu("Create Summary");
+        menuBar.add(summaryMenu);
 
         mainWindow.setLayout(null);
         mainWindow.setVisible(true);
@@ -123,6 +130,7 @@ class MenuExample
                 serviceGeneralMenu.hideMenu();
                 ownerGeneralMenu.hideMenu();
                 employeeGeneralMenu.hideMenu();
+                createSummaryMenu.hideMenu();
                 orderGeneralMenu.showMenu();
             }
 
@@ -172,6 +180,7 @@ class MenuExample
                 serviceGeneralMenu.hideMenu();
                 ownerGeneralMenu.hideMenu();
                 orderGeneralMenu.hideMenu();
+                createSummaryMenu.hideMenu();
                 employeeGeneralMenu.showMenu();
             }
 
@@ -222,6 +231,7 @@ class MenuExample
                 serviceGeneralMenu.hideMenu();
                 orderGeneralMenu.hideMenu();
                 employeeGeneralMenu.hideMenu();
+                createSummaryMenu.hideMenu();
                 ownerGeneralMenu.showMenu();
             }
 
@@ -272,6 +282,7 @@ class MenuExample
                 orderGeneralMenu.hideMenu();
                 employeeGeneralMenu.hideMenu();
                 ownerGeneralMenu.hideMenu();
+                createSummaryMenu.hideMenu();
                 serviceGeneralMenu.showMenu();
             }
 
@@ -322,6 +333,7 @@ class MenuExample
                 employeeGeneralMenu.hideMenu();
                 ownerGeneralMenu.hideMenu();
                 serviceGeneralMenu.hideMenu();
+                createSummaryMenu.hideMenu();
                 customerGeneralMenu.showMenu();
             }
 
@@ -363,11 +375,37 @@ class MenuExample
                 new DeleteCustomer();
             }
         });
+        
+        summaryMenu.addMenuListener(new MenuListener() {
+
+			@Override
+			public void menuSelected(MenuEvent e) {
+				orderGeneralMenu.hideMenu();
+                employeeGeneralMenu.hideMenu();
+                ownerGeneralMenu.hideMenu();
+                serviceGeneralMenu.hideMenu();
+                customerGeneralMenu.hideMenu();
+                createSummaryMenu.showMenu();
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {				
+			}
+        	
+        });
 
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public static void main(String args[])
+    
+}
+
+class GuiMainMenu{
+	public static void main(String args[])
     {
         new MenuExample();
     }
