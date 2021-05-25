@@ -1,5 +1,3 @@
-
-
 insert into Cities
 values
 ('1000', 'Copenhagen'),
@@ -8,9 +6,11 @@ values
 
 insert into Customers
 values
-('customer1@gmail.com', 'Aalborg' , 'Hobrovej', '11', 'FisherMaster', '23452345', '1000', 'Private_individual'),
-('customer2@gmail.com', 'Aalborg' , 'Hobrovej', '3', 'FisherKokot', '87654321', '2200', 'Self_employed'),
-('customer3@gmail.com', 'Aalborg' , 'Hobrovej', '2', 'FisherNoob', '33445566', '9000', 'LTD')
+('customer1@gmail.com', 'Hobrovej', '11', 'FisherMaster', '23452345', '1000', 'Private_individual'),
+('customer2@gmail.com', 'Hobrovej', '3', 'FisherKokot', '87654321', '2200', 'Self_employed'),
+('customer3@gmail.com', 'Hobrovej', '2', 'FisherNoob', '33445566', '9000', 'LTD'),
+('customer4@gmail.com', 'Hobrovej', '2', 'FisherNoob', '33445566', '9000', 'LTD'),
+('customer5@gmail.com', 'Hobrovej', '2', 'FisherNoob', '33445566', '9000', 'LTD')
 
 insert into Orders
 values
@@ -20,49 +20,43 @@ values
 
 insert into Services
 values
-('a', 'service a', '101'),
-('b', 'service b', '202'),
-('c', 'service c', '303')
+(7, 'a', 'service a', '101'),
+(8, 'b', 'service b', '202'),
+(9, 'c', 'service c', '303')
 
 insert into Order_lines
 values
-('111', 'a', '1'),
-('222', 'a', '1'),
-('222', 'b', '2'),
-('333', 'a', '1'),
-('333', 'b', '2'),
-('333', 'c', '3')
+('111', 7, '1'),
+('222', 7, '1'),
+('222', 8, '2'),
+('333', 7, '1'),
+('333', 8, '2'),
+('333', 9, '3')
 
 insert into Private_individuals
 values
 ('customer1@gmail.com', '1234', '23DG')
 
-insert into Self_employed
+insert into Self_employeed
 values
 ('customer2@gmail.com', '5678', '67JR')
 
 insert into LTDs
 values
-('customer3@gmail.com', '9087', '5275', 'True')
+('customer3@gmail.com', '9087', '5275', 'True'),
+('customer4@gmail.com', '9087', '5275', 'True'),
+('customer5@gmail.com', '9087', '5275', 'True')
 
 insert into LTD_employees
 values
-('1', 'Lorence', 'Kokot', '2143', '133700', 'customer3@gmail.com')
+('1', 'Lorence', 'Kokot', '2143', '133700', 'customer3@gmail.com'),
+('2', '2', '2', '2', '2', 'customer3@gmail.com')
 
 insert into LTD_owners
 values
-('123', 'Jordan', 'Jordon', 'Unhappy marriage')
+('123', 'Jordan', 'Jordon', 'Unhappy marriage'),
+('2', '2', '2', '2')
 
 insert into LTD_ownerships
 values
 ('customer3@gmail.com', '123')
-
-select * from Customers order by Customers.customer_type;
-
-select * from Orders;
-
-select * from LTD_owners;
-
-select * from LTD_employees;
-
-select * from LTDs;
