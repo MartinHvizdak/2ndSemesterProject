@@ -17,10 +17,6 @@ public class OwnerController {
         return owner.getFirstName();
     }
 
-    public String getRelation(Owner owner){
-        return owner.getRelation();
-    }
-
     public ArrayList<Owner> getAllOwnersFromDB() throws DBException {
         return dbOwner.retrieveAllOwners();
     }

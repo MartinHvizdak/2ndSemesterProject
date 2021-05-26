@@ -1,9 +1,7 @@
 package controller;
 
-import db.DBCustomer;
 import db.DBCustomerEmployee;
 import db.DBException;
-import model.Customer;
 import model.CustomerEmployee;
 import model.LTD;
 
@@ -18,13 +16,7 @@ public class EmployeeController {
         dbCustomerEmployee =  new DBCustomerEmployee();
     }
 
-    public String getID(CustomerEmployee employee){return employee.getId();}
-
     public String getFirstName(CustomerEmployee employee){return employee.getFirstName();}
-
-    public double getSalary(CustomerEmployee employee){return employee.getSalary();}
-
-    public double getGeneratedIncome(CustomerEmployee employee){return employee.getIncome();}
 
     public boolean saveEmployeeWithUserInputInDB(String employeePersonalID, String employeeFirstName, String employeeLastName, double employeeSalary, double employeeGeneratedIncome, String employeeLtdEmail) throws DBException {
         CustomerEmployee employee =  new CustomerEmployee(employeePersonalID, employeeFirstName, employeeLastName, employeeSalary, employeeGeneratedIncome);

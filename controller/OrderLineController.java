@@ -7,8 +7,6 @@ public class OrderLineController {
 
     public OrderLineController(){}
 
-    public int getQuantity(OrderLine orderLine) { return orderLine.getQuantity(); }
-
     public Service getService(OrderLine orderLine){
         return orderLine.getService();
     }

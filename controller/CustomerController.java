@@ -13,10 +13,6 @@ public class CustomerController {
         dbCustomer = new DBCustomer();
     }
 
-    public String getEmail(Customer customer){
-        return customer.getEmail();
-    }
-
     public ArrayList<Customer> getAllCustomersFromDB() throws DBException{
         return dbCustomer.retrieveAllCustomers();
     }

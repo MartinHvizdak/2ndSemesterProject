@@ -17,14 +17,6 @@ public class ServiceController {
         return service.getName();
     }
 
-    public String getDescription(Service service){
-        return service.getDescription();
-    }
-
-    public double getPrice(Service service){
-        return service.getPrice();
-    }
-
     public ArrayList<Service> getAllServicesFromDB() throws DBException {
         return dbService.retrieveAllServices();
     }

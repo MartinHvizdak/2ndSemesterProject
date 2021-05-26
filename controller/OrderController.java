@@ -15,34 +15,12 @@ public class OrderController {
 	private DBOrder dbOrder;
 	private CustomerController customerController;
 	private OrderLineController orderLineController;
-	private ServiceController serviceController;
 	
 	public OrderController () {
 		dbOrder = new DBOrder();
 		customerController =  new CustomerController();
 		orderLineController = new OrderLineController();
-		serviceController =  new ServiceController();
 	}
-	
-	public Customer getCustomer(Order order) {
-		return order.getCustomer();
-	}
-
-	public ArrayList<OrderLine> getOrderLines(Order order) {
-		return order.getOrderLines();
-	}
-
-	public LocalDate getPayday(Order order) {
-		return order.getPayday();
-	}
-
-	public void setCustomer(Order order, Customer customer) { order.setCustomer(customer); }
-
-	public void setOrderLines(Order order, ArrayList<OrderLine> orderLines) {
-		order.setOrderLines(orderLines);
-	}
-
-	public void setPayday(Order order, LocalDate payDay) { order.setPayday(payDay); }
 
 	public void deleteOrderFromDBByID(int orderID) throws DBException {
 		dbOrder.deleteOrderByID(orderID);
