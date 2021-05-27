@@ -1,45 +1,43 @@
 package controller;
 
-import db.DBCustomerEmployee;
+import db.DBEmployee;
 import db.DBException;
-import model.CustomerEmployee;
+import model.Employee;
 import model.LTD;
 
 import java.util.ArrayList;
 
 public class EmployeeController {
     private CustomerController customerController;
-    private DBCustomerEmployee dbCustomerEmployee;
+    private DBEmployee dbEmployee;
 
     public EmployeeController(){
         customerController =  new CustomerController();
-        dbCustomerEmployee =  new DBCustomerEmployee();
+        dbEmployee =  new DBEmployee();
     }
 
-    public String getFirstName(CustomerEmployee employee){return employee.getFirstName();}
-
     public boolean saveEmployeeWithUserInputInDB(String employeePersonalID, String employeeFirstName, String employeeLastName, double employeeSalary, double employeeGeneratedIncome, String employeeLtdEmail) throws DBException {
-        CustomerEmployee employee =  new CustomerEmployee(employeePersonalID, employeeFirstName, employeeLastName, employeeSalary, employeeGeneratedIncome);
+        Employee employee =  new Employee(employeePersonalID, employeeFirstName, employeeLastName, employeeSalary, employeeGeneratedIncome);
         LTD ltd =  null;
         if (employeeLtdEmail != null){
             ltd = customerController.getLTDByEmailFromDB(employeeLtdEmail);
         }
-        return dbCustomerEmployee.saveEmployee(employee, ltd);
+        return dbEmployee.saveEmployee(employee, ltd);
     }
 
-    public ArrayList<CustomerEmployee> getAllEmployeesFromDB() throws DBException {
-        return dbCustomerEmployee.retrieveAllEmployees();
+    public ArrayList<Employee> getAllEmployeesFromDB() throws DBException {
+        return dbEmployee.retrieveAllEmployees();
     }
 
-    public CustomerEmployee getEmployeeByIDFromDB(String employeePersonalID) throws DBException {
-        return dbCustomerEmployee.retrieveEmployeeByID(employeePersonalID);
+    public Employee getEmployeeByIDFromDB(String employeePersonalID) throws DBException {
+        return dbEmployee.retrieveEmployeeByID(employeePersonalID);
     }
 
     public String getEmployeeLTDEmailByID(String employeePersonalID) throws DBException {
-        return dbCustomerEmployee.retrieveEmployeeLTDEmail(employeePersonalID);
+        return dbEmployee.retrieveEmployeeLTDEmail(employeePersonalID);
     }
 
-    public boolean updateEmployeeWithUserInputInDB(CustomerEmployee employee, String newEmployeePersonalID, String newEmployeeFirstName, String newEmployeeLastName, double newEmployeeSalary, double newEmployeeGeneratedIncome, String newEmployeeLtdEmail) throws DBException {
+    public boolean updateEmployeeWithUserInputInDB(Employee employee, String newEmployeePersonalID, String newEmployeeFirstName, String newEmployeeLastName, double newEmployeeSalary, double newEmployeeGeneratedIncome, String newEmployeeLtdEmail) throws DBException {
         String oldPersonalID = employee.getId();
         employee.setId(newEmployeePersonalID);
         employee.setFirstName(newEmployeeFirstName);
@@ -50,10 +48,10 @@ public class EmployeeController {
         if (newEmployeeLtdEmail != null){
             ltd = customerController.getLTDByEmailFromDB(newEmployeeLtdEmail);
         }
-        return dbCustomerEmployee.updateEmployee(oldPersonalID, employee, ltd);
+        return dbEmployee.updateEmployee(oldPersonalID, employee, ltd);
     }
 
     public boolean deleteEmployeeByIDFromDB(String employeePersonalID) throws DBException {
-        return dbCustomerEmployee.deleteEmployeeByID(employeePersonalID);
+        return dbEmployee.deleteEmployeeByID(employeePersonalID);
     }
 }

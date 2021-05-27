@@ -13,10 +13,6 @@ public class OwnerController {
         dbOwner =  new DBOwner();
     }
 
-    public String getName(Owner owner){
-        return owner.getFirstName();
-    }
-
     public ArrayList<Owner> getAllOwnersFromDB() throws DBException {
         return dbOwner.retrieveAllOwners();
     }

@@ -13,10 +13,6 @@ public class ServiceController {
         dbService = new DBService();
     }
 
-    public String getName(Service service){
-        return service.getName();
-    }
-
     public ArrayList<Service> getAllServicesFromDB() throws DBException {
         return dbService.retrieveAllServices();
     }
