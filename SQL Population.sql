@@ -6,11 +6,11 @@ values
 
 insert into Customers
 values
-('customer1@gmail.com', 'Hobrovej', '11', 'FisherMaster', '23452345', '1000', 'Private_individual'),
-('customer2@gmail.com', 'Hobrovej', '3', 'FisherKokot', '87654321', '2200', 'Self_employed'),
-('customer3@gmail.com', 'Hobrovej', '2', 'FisherNoob', '33445566', '9000', 'LTD'),
-('customer4@gmail.com', 'Hobrovej', '2', 'FisherNoob', '33445566', '9000', 'LTD'),
-('customer5@gmail.com', 'Hobrovej', '2', 'FisherNoob', '33445566', '9000', 'LTD')
+('customer1@gmail.com', 'Hobrovej', '11', '23452345', '1000', 'Private_individual'),
+('customer2@gmail.com', 'Hobrovej', '3', '87654321', '2200', 'Self_employed'),
+('customer3@gmail.com', 'Hobrovej', '2', '33445566', '9000', 'LTD'),
+('customer4@gmail.com', 'Hobrovej', '2', '33445566', '9000', 'LTD'),
+('customer5@gmail.com', 'Hobrovej', '2', '33445566', '9000', 'LTD')
 
 insert into Orders
 values
@@ -35,17 +35,17 @@ values
 
 insert into Private_individuals
 values
-('customer1@gmail.com', '1234', '23DG')
+('customer1@gmail.com', '1234', '23DG', 'Fisher', 'Master')
 
 insert into Self_employeed
 values
-('customer2@gmail.com', '5678', '67JR')
+('customer2@gmail.com', '5678', '67JR', 'first', 'second')
 
 insert into LTDs
 values
-('customer3@gmail.com', '9087', '5275', 'True'),
-('customer4@gmail.com', '9087', '5275', 'True'),
-('customer5@gmail.com', '9087', '5275', 'True')
+('customer3@gmail.com', '9087', '5275', 'True', 'thatsthename'),
+('customer4@gmail.com', '9087', '5275', 'True', 'thatsthename'),
+('customer5@gmail.com', '9087', '5275', 'True', 'thatsthename')
 
 insert into LTD_employees
 values
