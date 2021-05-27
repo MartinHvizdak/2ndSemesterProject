@@ -62,7 +62,6 @@ public class DBOrder implements IDBOrder{
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (Exception ex) {
 			DBException de = new DBException("Data not saved! Technical error");
@@ -284,7 +283,7 @@ public class DBOrder implements IDBOrder{
 				stmt.setQueryTimeout(5);
 				rs = stmt.executeQuery();
 
-				ArrayList<CustomerEmployee> employees = new ArrayList<>();
+				ArrayList<Employee> employees = new ArrayList<>();
 				while(rs.next()) {
 					String employeeID = rs.getString("id");
 					String firstName = rs.getString("first_name");
@@ -292,8 +291,8 @@ public class DBOrder implements IDBOrder{
 					double salary = rs.getDouble("salary");
 					double generatedIncome = rs.getDouble("generated_income");
 
-					CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, firstName, lastName, salary, generatedIncome);
-					employees.add(customerEmployee);
+					Employee employee = new Employee(employeeID, firstName, lastName, salary, generatedIncome);
+					employees.add(employee);
 				}
 
 
@@ -453,8 +452,6 @@ public class DBOrder implements IDBOrder{
 			else
 				de = new DBException("Error updating data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
-			System.out.println(ex.getMessage());
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
@@ -609,7 +606,7 @@ public class DBOrder implements IDBOrder{
 						stmt.setQueryTimeout(5);
 						rs = stmt.executeQuery();
 
-						ArrayList<CustomerEmployee> employees = new ArrayList<>();
+						ArrayList<Employee> employees = new ArrayList<>();
 						while(rs.next()) {
 							String employeeID = rs.getString("id");
 							String firstName = rs.getString("first_name");
@@ -617,8 +614,8 @@ public class DBOrder implements IDBOrder{
 							double salary = rs.getDouble("salary");
 							double generatedIncome = rs.getDouble("generated_income");
 
-							CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, firstName, lastName, salary, generatedIncome);
-							employees.add(customerEmployee);
+							Employee employee = new Employee(employeeID, firstName, lastName, salary, generatedIncome);
+							employees.add(employee);
 						}
 
 

@@ -180,7 +180,7 @@ public class DBCustomer implements IDBCustomer {
 				stmt.setQueryTimeout(5);
 				rs2 = stmt.executeQuery();
 
-				ArrayList<CustomerEmployee> employees = new ArrayList<>();
+				ArrayList<Employee> employees = new ArrayList<>();
 				while (rs2.next()) {
 					String employeeID = rs2.getString("id");
 					String firstName = rs2.getString("first_name");
@@ -188,8 +188,8 @@ public class DBCustomer implements IDBCustomer {
 					double salary = rs2.getDouble("salary");
 					double generatedIncome = rs2.getDouble("generated_income");
 
-					CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, firstName, lastName, salary, generatedIncome);
-					employees.add(customerEmployee);
+					Employee employee = new Employee(employeeID, firstName, lastName, salary, generatedIncome);
+					employees.add(employee);
 				}
 
 
@@ -229,7 +229,6 @@ public class DBCustomer implements IDBCustomer {
 			ltds = null;
 			DBException de = new DBException("Error retrieving data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
 			ltds = null;
@@ -283,7 +282,6 @@ public class DBCustomer implements IDBCustomer {
 
 			DBException de = new DBException("Error retrieving data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
@@ -424,7 +422,7 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setQueryTimeout(5);
 			rs = stmt.executeQuery();
 
-			ArrayList<CustomerEmployee> employees = new ArrayList<>();
+			ArrayList<Employee> employees = new ArrayList<>();
 			while(rs.next()) {
 				String employeeID = rs.getString("id");
 				String firstName = rs.getString("first_name");
@@ -432,8 +430,8 @@ public class DBCustomer implements IDBCustomer {
 				double salary = rs.getDouble("salary");
 				double generatedIncome = rs.getDouble("generated_income");
 
-				CustomerEmployee customerEmployee = new CustomerEmployee(employeeID, firstName, lastName, salary, generatedIncome);
-				employees.add(customerEmployee);
+				Employee employee = new Employee(employeeID, firstName, lastName, salary, generatedIncome);
+				employees.add(employee);
 			}
 
 
@@ -474,7 +472,6 @@ public class DBCustomer implements IDBCustomer {
 			ltd = null;
 			DBException de = new DBException("Error retrieving data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
 			ltd = null;
@@ -557,7 +554,6 @@ public class DBCustomer implements IDBCustomer {
 			privateIndividual = null;
 			DBException de = new DBException("Error retrieving data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
 			privateIndividual = null;
@@ -640,7 +636,6 @@ public class DBCustomer implements IDBCustomer {
 			selfEmployed = null;
 			DBException de = new DBException("Error retrieving data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
 			selfEmployed = null;
@@ -717,13 +712,10 @@ public class DBCustomer implements IDBCustomer {
 			else
 				de = new DBException("Error saving data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
-			System.out.println(ex.getMessage());
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (Exception ex) {
 			DBException de = new DBException("Data not inserted! Technical error");
@@ -791,8 +783,6 @@ public class DBCustomer implements IDBCustomer {
 			else
 				de = new DBException("Error saving data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
-			System.out.println(ex.getMessage());
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
@@ -852,13 +842,13 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
-			for(CustomerEmployee customerEmployee : ltd.getEmployees()) {
+			for(Employee employee : ltd.getEmployees()) {
 				stmt = con.prepareStatement(insert4);
 				stmt.setString(1, ltd.getEmail());
-				stmt.setString(2, customerEmployee.getId());
+				stmt.setString(2, employee.getId());
 				stmt.setQueryTimeout(5);
 				if(stmt.executeUpdate() == 0){
-					throw new DBException("Employee with id " + customerEmployee.getId() + " does not exist in DB anymore");
+					throw new DBException("Employee with id " + employee.getId() + " does not exist in DB anymore");
 				}
 			}
 
@@ -893,13 +883,10 @@ public class DBCustomer implements IDBCustomer {
 			else
 				de = new DBException("Error saving data");
 			de.setStackTrace(ex.getStackTrace());
-			System.out.println(ex.getMessage());
-			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (Exception ex) {
 			DBException de = new DBException("Data not inserted! Technical error");
@@ -976,7 +963,6 @@ public class DBCustomer implements IDBCustomer {
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (Exception ex) {
 			DBException de = new DBException("Data not inserted! Technical error");
@@ -1054,7 +1040,6 @@ public class DBCustomer implements IDBCustomer {
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (Exception ex) {
 			DBException de = new DBException("Data not inserted! Technical error");
@@ -1122,13 +1107,13 @@ public class DBCustomer implements IDBCustomer {
 			stmt.execute();
 
 
-			for(CustomerEmployee customerEmployee : ltd.getEmployees()) {
+			for(Employee employee : ltd.getEmployees()) {
 				stmt = con.prepareStatement(insert5);
 				stmt.setString(1, ltd.getEmail());
-				stmt.setString(2, customerEmployee.getId());
+				stmt.setString(2, employee.getId());
 				stmt.setQueryTimeout(5);
 				if(stmt.executeUpdate() == 0){
-					throw new DBException("Employee with id " + customerEmployee.getId() + " does not exist in DB anymore");
+					throw new DBException("Employee with id " + employee.getId() + " does not exist in DB anymore");
 				}
 			}
 
@@ -1211,12 +1196,10 @@ public class DBCustomer implements IDBCustomer {
 
 			DBException de = new DBException("Error deleting data");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
 			de.setStackTrace(ex.getStackTrace());
-			ex.printStackTrace();
 			throw de;
 		} catch (Exception ex) {
 			DBException de = new DBException("Data not inserted! Technical error");

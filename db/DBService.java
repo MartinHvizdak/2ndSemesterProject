@@ -46,7 +46,6 @@ public class DBService implements IDBService{
 
             DBException de = new DBException("Error retrieving data");
             de.setStackTrace(ex.getStackTrace());
-            ex.printStackTrace();
             throw de;
         } catch (NullPointerException ex) {
             DBException de = new DBException("Null pointer exception - possibly Connection object");

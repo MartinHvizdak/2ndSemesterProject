@@ -1,50 +1,42 @@
 package db;
 
+import model.Employee;
+import model.LTD;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import model.LTD;
-import model.Owner;
-
-public class DBOwner implements IDBOwner{
+public class DBEmployee implements IDBCustomerEmployee{
     @Override
-    public boolean saveOwner(Owner owner, ArrayList<String> ltdEmails) throws DBException {
+    public boolean saveEmployee(Employee employee, LTD ltd) throws DBException {
         Connection con = DBConnection.getInstance().getDBcon();
 
-        String insert1 = "insert into LTD_owners (id, first_name, second_name, relation) values (?, ?, ?, ?)";
-        String insert2 = "insert into LTD_ownerships (LTD_email ,owner_id) values (?, ?)";
+        String select = "insert into LTD_employees (id, first_name, second_name, salary, generated_income, LTD_email) values (?, ?, ?, ?, ?, ?)";
 
         try {
             DBConnection.getInstance().startTransaction();
 
-            PreparedStatement stmt = con.prepareStatement(insert1);
-            stmt.setString(1, owner.getId());
-            stmt.setString(2, owner.getFirstName());
-            stmt.setString(3, owner.getSurName());
-            stmt.setString(4, owner.getRelation());
-            stmt.setQueryTimeout(5);
-            stmt.execute();
-
-            for(String email : ltdEmails) {
-                stmt = con.prepareStatement(insert2);
-                stmt.setString(1, email);
-                stmt.setString(2, owner.getId());
-                stmt.setQueryTimeout(5);
-                try {
-                    stmt.execute();
-                } catch (SQLException ex){
-                    throw new DBException("LTD with email " + email + "does not exist in DB anymore");
-                }
+            String email = null;
+            if (ltd != null){
+                email =  ltd.getEmail();
             }
 
+            PreparedStatement stmt = con.prepareStatement(select);
+            stmt.setString(1, employee.getId());
+            stmt.setString(2, employee.getFirstName());
+            stmt.setString(3, employee.getSurName());
+            stmt.setDouble(4, employee.getSalary());
+            stmt.setDouble(5, employee.getIncome());
+            stmt.setString(6, email);
+            stmt.setQueryTimeout(5);
+            stmt.executeUpdate();
+
+            stmt.close();
 
             DBConnection.getInstance().commitTransaction();
-            stmt.close();
-        } catch (DBException ex) {
-            throw ex;
         } catch (SQLException ex) {
             try {
                 DBConnection.getInstance().rollbackTransaction();
@@ -54,9 +46,9 @@ public class DBOwner implements IDBOwner{
 
             DBException de = null;
             if(ex.getMessage().startsWith("Violation of PRIMARY KEY"))
-                de = new DBException("Error: Owner with this id already exists");
+                de = new DBException("Error: Employee with this id already exists");
             else
-                de = new DBException("Error inserting data");
+                de = new DBException("Error saving data");
             de.setStackTrace(ex.getStackTrace());
             throw de;
         } catch (NullPointerException ex) {
@@ -64,7 +56,7 @@ public class DBOwner implements IDBOwner{
             de.setStackTrace(ex.getStackTrace());
             throw de;
         } catch (Exception ex) {
-            DBException de = new DBException("Data not inserted! Technical error");
+            DBException de = new DBException("Data not saved! Technical error");
             de.setStackTrace(ex.getStackTrace());
             throw de;
         } finally {
@@ -74,11 +66,11 @@ public class DBOwner implements IDBOwner{
     }
 
     @Override
-    public ArrayList<Owner> retrieveAllOwners() throws DBException{
+    public ArrayList<Employee> retrieveAllEmployees() throws DBException{
         Connection con = DBConnection.getInstance().getDBcon();
-        ArrayList<Owner> owners =  new ArrayList<>();
+        ArrayList<Employee> employees =  new ArrayList<>();
 
-        String select = "select * from LTD_owners";
+        String select = "select * from LTD_employees";
 
         try {
             DBConnection.getInstance().startTransaction();
@@ -87,20 +79,22 @@ public class DBOwner implements IDBOwner{
             stmt.setQueryTimeout(5);
             ResultSet rs = stmt.executeQuery();
 
-            while(rs.next()) {
-                String ownerPersonalID = rs.getString("id");
-                String ownerFirstName = rs.getString("first_name");
-                String ownerSurname = rs.getString("second_name");
-                String ownerRelation = rs.getString("relation");
-                owners.add(new Owner(ownerPersonalID, ownerFirstName, ownerSurname, ownerRelation));
+
+            while (rs.next()) {
+                String employeePersonalID = rs.getString("id");
+                String employeeFirstName = rs.getString("first_name");
+                String employeeSecondName = rs.getString("second_name");
+                double employeeSalary = rs.getDouble("salary");
+                double employeeGeneratedIncome = rs.getDouble("generated_income");
+                employees.add(new Employee(employeePersonalID, employeeFirstName, employeeSecondName, employeeSalary, employeeGeneratedIncome));
             }
 
-            if(owners.isEmpty())
-                throw new DBException("There are not any owners in DB");
+            if(employees.isEmpty())
+                throw new DBException("There are not any employees in DB");
 
+            stmt.close();
 
             DBConnection.getInstance().commitTransaction();
-            stmt.close();
         } catch (DBException ex) {
             throw ex;
         }catch (SQLException ex) {
@@ -124,37 +118,40 @@ public class DBOwner implements IDBOwner{
         } finally {
             DBConnection.closeConnection();
         }
-        return owners;
+        return employees;
     }
 
     @Override
-    public Owner retrieveOwnerByID(String ownerPersonalID) throws DBException {
+    public Employee retrieveEmployeeByID(String employeePersonalID) throws DBException {
         Connection con = DBConnection.getInstance().getDBcon();
-        Owner owner;
+        Employee employee;
 
-        String select = "select * from LTD_owners where LTD_owners.id = ?";
+        String select = "select * from LTD_employees where id = ?";
 
         try {
             DBConnection.getInstance().startTransaction();
 
             PreparedStatement stmt = con.prepareStatement(select);
-            stmt.setString(1, ownerPersonalID);
+            stmt.setString(1, employeePersonalID);
             stmt.setQueryTimeout(5);
             ResultSet rs = stmt.executeQuery();
+
             if(!rs.next())
-                throw new DBException("Owner with this id does not exist");
-            String ownerFirstName =  rs.getString("first_name");
-            String ownerSurname = rs.getString("second_name");
-            String ownerRelation =  rs.getString("relation");
+                throw new DBException("Error: Employee with this id does not exist");
 
-            owner =  new Owner(ownerPersonalID, ownerFirstName, ownerSurname, ownerRelation);
+            String employeeFirstName =  rs.getString("first_name");
+            String employeeSecondName =  rs.getString("second_name");
+            double employeeSalary =  rs.getDouble("salary");
+            double employeeGeneratedIncome =  rs.getDouble("generated_income");
 
+            employee =  new Employee(employeePersonalID, employeeFirstName, employeeSecondName, employeeSalary, employeeGeneratedIncome);
+
+            stmt.close();
 
             DBConnection.getInstance().commitTransaction();
-            stmt.close();
         } catch (DBException ex) {
             throw ex;
-        } catch (SQLException ex) {
+        }catch (SQLException ex) {
             try {
                 DBConnection.getInstance().rollbackTransaction();
             } catch (SQLException e) {
@@ -175,54 +172,89 @@ public class DBOwner implements IDBOwner{
         } finally {
             DBConnection.closeConnection();
         }
-        return owner;
+        return employee;
     }
 
     @Override
-    public boolean updateOwner(String oldPersonalID, Owner owner, ArrayList<String> ltdEmails) throws DBException {
+    public String retrieveEmployeeLTDEmail(String employeePersonalID) throws DBException{
         Connection con = DBConnection.getInstance().getDBcon();
+        String email;
 
-        String update1 = "update LTD_owners set id=?, first_name=?, second_name=?, relation=? where id=?";
-        String delete = "delete from LTD_ownerships where owner_id = ?";
-        String insert = "insert into LTD_ownerships (LTD_email ,owner_id) values (?, ?)";
-
+        String select = "select * from LTD_employees where id=?";
 
         try {
             DBConnection.getInstance().startTransaction();
 
-            PreparedStatement stmt = con.prepareStatement(update1);
-            stmt.setString(1, owner.getId());
-            stmt.setString(2, owner.getFirstName());
-            stmt.setString(3, owner.getSurName());
-            stmt.setString(4, owner.getRelation());
-            stmt.setString(5, oldPersonalID);
+            PreparedStatement stmt = con.prepareStatement(select);
+            stmt.setString(1, employeePersonalID);
             stmt.setQueryTimeout(5);
-            if(stmt.executeUpdate() == 0)
-                throw new DBException("Owner with this id does not exist");
+            ResultSet rs = stmt.executeQuery();
 
-            stmt = con.prepareStatement(delete);
-            stmt.setString(1, owner.getId());
-            stmt.setQueryTimeout(5);
-            stmt.executeUpdate();
+            if(!rs.next())
+                throw new DBException("Error: Employee with this id does not exist");
 
-            for(String email : ltdEmails) {
-                stmt = con.prepareStatement(insert);
-                stmt.setString(1, email);
-                stmt.setString(2, owner.getId());
-                stmt.setQueryTimeout(5);
-                try {
-                    stmt.execute();
-                } catch (SQLException ex){
-                    throw new DBException("LTD with email " + email + "does not exist in DB anymore");
-                }
-            }
+            email =  rs.getString("ltd_email");
 
+            stmt.close();
 
             DBConnection.getInstance().commitTransaction();
-            stmt.close();
         } catch (DBException ex) {
             throw ex;
-        } catch (SQLException ex) {
+        }catch (SQLException ex) {
+            try {
+                DBConnection.getInstance().rollbackTransaction();
+            } catch (SQLException e) {
+                throw new DBException("Error: Transaction roll back problem while canceling transaction");
+            }
+
+            DBException de = new DBException("Error retrieving data");
+            de.setStackTrace(ex.getStackTrace());
+            throw de;
+        } catch (NullPointerException ex) {
+            DBException de = new DBException("Null pointer exception - possibly Connection object");
+            de.setStackTrace(ex.getStackTrace());
+            throw de;
+        } catch (Exception ex) {
+            DBException de = new DBException("Data not updated! Technical error");
+            de.setStackTrace(ex.getStackTrace());
+            throw de;
+        } finally {
+            DBConnection.closeConnection();
+        }
+        return email;
+    }
+
+    @Override
+    public boolean updateEmployee(String oldPersonalID, Employee employee, LTD ltd) throws DBException {
+        Connection con = DBConnection.getInstance().getDBcon();
+
+        String select = "update LTD_employees set id=?, first_name=?, second_name=?, salary=?, generated_income=?, LTD_email=? where id=?";
+
+        try {
+            DBConnection.getInstance().startTransaction();
+
+            String email = null;
+            if (ltd != null){
+                email =  ltd.getEmail();
+            }
+
+            PreparedStatement stmt = con.prepareStatement(select);
+            stmt.setString(1, employee.getId());
+            stmt.setString(2, employee.getFirstName());
+            stmt.setString(3, employee.getSurName());
+            stmt.setDouble(4, employee.getSalary());
+            stmt.setDouble(5, employee.getIncome());
+            stmt.setString(6, email);
+            stmt.setString(7, oldPersonalID);
+            stmt.setQueryTimeout(5);
+            if(stmt.executeUpdate() == 0)
+                throw new DBException("Error: Employee with this id does not exist");
+            stmt.close();
+
+            DBConnection.getInstance().commitTransaction();
+        } catch (DBException ex) {
+            throw ex;
+        }catch (SQLException ex) {
             try {
                 DBConnection.getInstance().rollbackTransaction();
             } catch (SQLException e) {
@@ -231,7 +263,7 @@ public class DBOwner implements IDBOwner{
 
             DBException de = null;
             if(ex.getMessage().startsWith("Violation of PRIMARY KEY"))
-                de = new DBException("Error: Owner with given new id already exists");
+                de = new DBException("Error: Employee with given new id already exists");
             else
                 de = new DBException("Error retrieving data");
             de.setStackTrace(ex.getStackTrace());
@@ -251,22 +283,22 @@ public class DBOwner implements IDBOwner{
     }
 
     @Override
-    public boolean deleteOwnerByID(String ownerPersonalID) throws DBException {
+    public boolean deleteEmployeeByID(String employeePersonalID) throws DBException {
         Connection con = DBConnection.getInstance().getDBcon();
 
-        String select = "delete from LTD_owners where id = ?";
+        String select = "delete from LTD_employees where id = ?";
 
         try {
             DBConnection.getInstance().startTransaction();
 
             PreparedStatement stmt = con.prepareStatement(select);
-            stmt.setString(1, ownerPersonalID);
+            stmt.setString(1, employeePersonalID);
             stmt.setQueryTimeout(5);
             if(stmt.executeUpdate() == 0)
-                throw new DBException("Owner with with id does not exist");
+                throw new DBException("Error: Employee with this id does not exist");
+            stmt.close();
 
             DBConnection.getInstance().commitTransaction();
-            stmt.close();
         } catch (DBException ex) {
             throw ex;
         }catch (SQLException ex) {
@@ -278,7 +310,6 @@ public class DBOwner implements IDBOwner{
 
             DBException de = new DBException("Error deleting data");
             de.setStackTrace(ex.getStackTrace());
-            ex.printStackTrace();
             throw de;
         } catch (NullPointerException ex) {
             DBException de = new DBException("Null pointer exception - possibly Connection object");
@@ -292,52 +323,5 @@ public class DBOwner implements IDBOwner{
             DBConnection.closeConnection();
         }
         return false;
-    }
-
-    public ArrayList<String> getOwnerLTDEmailsByID(String ownerPersonalID) throws  DBException{
-        Connection con = DBConnection.getInstance().getDBcon();
-       ArrayList<String> ltdEmails =  new ArrayList<>();
-
-        String select = "select LTD_email \n" +
-                "from LTD_owners \n" +
-                "inner join LTD_ownerships on LTD_ownerships.owner_id=LTD_owners.id\n" +
-                "where LTD_owners.id = ?";
-
-        try {
-            DBConnection.getInstance().startTransaction();
-
-            PreparedStatement stmt = con.prepareStatement(select);
-            stmt.setString(1, ownerPersonalID);
-            stmt.setQueryTimeout(5);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                String ownerLTDEmail = rs.getString("LTD_email");
-                ltdEmails.add(ownerLTDEmail);
-            }
-
-            DBConnection.getInstance().commitTransaction();
-            stmt.close();
-        } catch (SQLException ex) {
-            try {
-                DBConnection.getInstance().rollbackTransaction();
-            } catch (SQLException e) {
-                throw new DBException("Error: Transaction roll back problem while canceling transaction");
-            }
-
-            DBException de = new DBException("Error retrieving data");
-            de.setStackTrace(ex.getStackTrace());
-            throw de;
-        } catch (NullPointerException ex) {
-            DBException de = new DBException("Null pointer exception - possibly Connection object");
-            de.setStackTrace(ex.getStackTrace());
-            throw de;
-        } catch (Exception ex) {
-            DBException de = new DBException("Data not retrieved! Technical error");
-            de.setStackTrace(ex.getStackTrace());
-            throw de;
-        } finally {
-            DBConnection.closeConnection();
-        }
-        return ltdEmails;
     }
 }
