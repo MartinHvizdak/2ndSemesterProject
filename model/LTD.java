@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class LTD extends Customer{
- private ArrayList<CustomerEmployee> employees;
+ private ArrayList<Employee> employees;
  private ArrayList<Owner> owners;
  private String marketRegisterNumber;
  private String marketNumber;
@@ -11,8 +11,8 @@ public class LTD extends Customer{
  private boolean arePayers;
  
 public LTD(String email, String company_name, String phoneNumber, String city, String zipCode, String street, String streetNumber,
-		   ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegisterNumber,
-		   String marketNumber, boolean arePayers) {
+           ArrayList<Employee> employees, ArrayList<Owner> owners, String marketRegisterNumber,
+           String marketNumber, boolean arePayers) {
 	super(email, phoneNumber, city, zipCode, street, streetNumber);
 	this.companyName = company_name;
 	this.employees = employees;
@@ -26,11 +26,11 @@ public String getCompanyName(){return companyName;}
 
 public void setCompanyName(String companyName){this.companyName = companyName;}
 
-public ArrayList<CustomerEmployee> getEmployees() {
+public ArrayList<Employee> getEmployees() {
 	return employees;
 }
 
-public void setEmployees(ArrayList<CustomerEmployee> employees) {
+public void setEmployees(ArrayList<Employee> employees) {
 	this.employees = employees;
 }
 
