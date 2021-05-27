@@ -24,7 +24,6 @@ create table Customers(
 email varchar(100) NOT NULL,
 street varchar(50) NOT NULL,
 street_number varchar(10) NOT NULL,
-name varchar(50) NOT NULL,
 phone_number varchar(20) NOT NULL,
 zip_code varchar(10) NOT NULL,
 customer_type varchar(100) NOT NULL,
@@ -41,6 +40,8 @@ create table Private_individuals(
 customer_email varchar(100) NOT NULL,
 id varchar(10) NOT NULL,
 vat_identificator varchar(30) NOT NULL,
+first_name varchar(50) NOT NULL,
+second_name varchar(50) NOT NULL,
 primary key(customer_email)
 );
 
@@ -48,6 +49,8 @@ create table Self_employeed(
 customer_email varchar(100) NOT NULL,
 market_number varchar(15) NOT NULL,
 vat_identificator varchar(30) NOT NULL,
+first_name varchar(50) NOT NULL,
+second_name varchar(50) NOT NULL,
 primary key(customer_email)
 );
 
@@ -56,6 +59,7 @@ customer_email varchar(100) NOT NULL,
 market_registration_number varchar(15) NOT NULL,
 market_number varchar(15) NOT NULL,
 are_payers bit NOT NULL,
+company_name varchar(50) NOT NULL,
 primary key(customer_email)
 );
 
