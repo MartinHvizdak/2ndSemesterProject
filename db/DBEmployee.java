@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DBEmployee implements IDBCustomerEmployee{
+public class DBEmployee implements IDBEmployee{
     @Override
     public boolean saveEmployee(Employee employee, LTD ltd) throws DBException {
         Connection con = DBConnection.getInstance().getDBcon();

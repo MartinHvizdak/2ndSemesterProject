@@ -23,6 +23,7 @@ class GuiMainMenu
     JMenu employeeMenu;
     JMenuItem createEmployeeMI, showEmployeeMI, updateEmployeeMI, deleteEmployeeMI;
     JMenu summaryMenu;
+    JMenu contractsMenu;
 
     OwnerGeneralMenu ownerGeneralMenu;
     EmployeeGeneralMenu employeeGeneralMenu;
@@ -118,7 +119,8 @@ class GuiMainMenu
         summaryMenu = new JMenu("Create Summary");
         menuBar.add(summaryMenu);
 		
-		contractsMenu = new JMenu("Create Contracts");
+        createContractsMenu = new CreateContractsMenu(mainWindow);
+        contractsMenu = new JMenu("Create Contracts");
        	menuBar.add(contractsMenu);
 
         mainWindow.setLayout(null);
