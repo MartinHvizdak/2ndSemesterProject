@@ -45,29 +45,30 @@ public class CustomerController {
         return new Customer();
     }
 
-    public boolean savePrivateIndividualWithUserInputInDB(String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String ID, String VAT) throws DBException {
-        PrivateIndividual privateIndividual = new PrivateIndividual(email, name, phoneNumber, city, zipCode, street, streetNumber, ID, VAT);
+    public boolean savePrivateIndividualWithUserInputInDB(String firstName, String secondName, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String ID, String VAT) throws DBException {
+        PrivateIndividual privateIndividual = new PrivateIndividual(email, firstName, secondName, phoneNumber, city, zipCode, street, streetNumber, ID, VAT);
 
         return dbCustomer.savePrivateIndividualWithUserInputInDB(privateIndividual);
     }
 
-    public boolean saveSelfEmployedWithUserInputInDB(String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String VAT, String marketNumber) throws DBException{
-        SelfEmployed selfEmployed = new SelfEmployed(email, name, phoneNumber, city, zipCode, street, streetNumber, VAT, marketNumber);
+    public boolean saveSelfEmployedWithUserInputInDB(String firstName, String secondName, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String VAT, String marketNumber) throws DBException{
+        SelfEmployed selfEmployed = new SelfEmployed(email, firstName, secondName, phoneNumber, city, zipCode, street, streetNumber, VAT, marketNumber);
 
 
         return dbCustomer.saveSelfEmployedWithUserInputInDB(selfEmployed);
     }
 
-    public boolean saveLTDUserInputInDB(String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegistrationNumber, String marketNumber, boolean arePayers) throws DBException{
-        LTD ltd = new LTD(email, name, phoneNumber, city, zipCode, street, streetNumber, employees, owners, marketRegistrationNumber, marketNumber, arePayers);
+    public boolean saveLTDUserInputInDB(String companyName, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegistrationNumber, String marketNumber, boolean arePayers) throws DBException{
+        LTD ltd = new LTD(email, companyName, phoneNumber, city, zipCode, street, streetNumber, employees, owners, marketRegistrationNumber, marketNumber, arePayers);
 
 
         return dbCustomer.saveLTDUserInputInDB(ltd);
     }
 
-    public boolean updatePrivateIndividual(PrivateIndividual privateIndividual, String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String ID, String VAT) throws DBException {
+    public boolean updatePrivateIndividual(PrivateIndividual privateIndividual, String firstName, String secondName, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String ID, String VAT) throws DBException {
         String oldEmail = privateIndividual.getEmail();
-        privateIndividual.setName(name);
+        privateIndividual.setFirstName(firstName);
+        privateIndividual.setSecondName(secondName);
         privateIndividual.setCity(city);
         privateIndividual.setStreet(street);
         privateIndividual.setStreetNumber(streetNumber);
@@ -80,9 +81,10 @@ public class CustomerController {
         return dbCustomer.updatePrivateIndividual(oldEmail, privateIndividual);
     }
 
-    public boolean updateSelfEmployed(SelfEmployed selfEmployed, String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String VAT, String marketNumber) throws DBException {
+    public boolean updateSelfEmployed(SelfEmployed selfEmployed, String firstName, String secondName, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, String VAT, String marketNumber) throws DBException {
         String oldEmail = selfEmployed.getEmail();
-        selfEmployed.setName(name);
+        selfEmployed.setFirstName(firstName);
+        selfEmployed.setSecondName(secondName);
         selfEmployed.setCity(city);
         selfEmployed.setStreet(street);
         selfEmployed.setStreetNumber(streetNumber);
@@ -95,9 +97,9 @@ public class CustomerController {
         return dbCustomer.updateSelfEmployed(oldEmail, selfEmployed);
     }
 
-    public boolean updateLTD(LTD ltd, String name, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegistrationNumber, String marketNumber, boolean arePayers) throws DBException {
+    public boolean updateLTD(LTD ltd, String companyName, String city, String street, String streetNumber, String zipCode, String email, String phoneNumber, ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegistrationNumber, String marketNumber, boolean arePayers) throws DBException {
         String oldEmail = ltd.getEmail();
-        ltd.setName(name);
+        ltd.setCompanyName(companyName);
         ltd.setCity(city);
         ltd.setStreet(street);
         ltd.setStreetNumber(streetNumber);
