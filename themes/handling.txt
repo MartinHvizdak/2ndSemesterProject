@@ -1,0 +1,121 @@
+Contract regarding handling accounting
+
+By § 269 section 2 of business law no. 513/9
+
+Cooperating sides:
+
+Business name: BH – Profit SK, s.r.o.
+
+Residence: {$residence}
+
+Further only “Provider”
+
+and
+
+Business name: {$businessName}
+
+Represented by: {$businessRepresentative}
+
+VAT: {$vatNumber}
+
+Further only ”Customer”
+
+Have agreed to this contract:
+
+Part I: Subject of the contract
+
+1/
+
+The provider handles the wage agenda of the customer in regards to the accounting law and other laws within the regulations of Slovak republic. The process of accounting will include services, described the second segment of this part. The price and the type of payment are described in the third segment of this part.
+
+.
+
+2/
+
+Handling of the wage agenda is going to consist mainly of these responsibilities:
+
+a) Payroll processing
+
+b) Keeping track of wage lists and payrolls
+
+c) Creating the recapitulation of payrolls for calendar month and year
+
+d) Creating reports for social and health insurance companies and the labor office
+
+e) Filling applications and deregistrations for social and health insurance companies and the labor office
+
+f) Filling year quarter overviews regarding decreased and averted advances for income tax from the depended activities and yearly reports of tax accounting.
+
+g) Presenting confirmations about the paid salary and decreased advances for all the employees for that taxing period and creating the yearly accounting for advances from the tax from payrolls from the depending activity regarding the income tax law as well as year counting and confirmation for ending a work relationship.
+
+h) Counting the mandatory share for social fund.
+
+Customer will guarantee in their own term the following actions:
+
+Management of the register,
+
+Connection to the bank,
+
+Payments by transfer orders,
+
+Personal agenda.
+
+Part II: The time of fulfillment
+
+1. Services in this contract will be offered from {Start of the contract} for an undefined period.
+
+Part III: Price of the offered services
+
+1. The price of the offered services is to be issued on {Price per month} Euro/person per month, {Price for service monthly} Euro/reports from social and health insurance companies per month, {Price for overview for quarter}/overview about decreased advances/year quarter. Other prices by the latest valid pricelist of BH - Profit, s.r.o.
+
+2. This price will be payable based on the invoice, displayed by the provider on the 5th day, the next month at latest for the period of the last month with a maturity of 7 days.
+
+Part IV: Offering information
+
+1. For the correct handling of salaries, the customer will offer to the provider all needed documents and information about the company.
+
+2. The customer will offer all relevant documents regarding the accounting agenda to the provider on the 5th of every month at latest.
+
+Part V: The rights and responsibilities of affected parties
+
+1. The provider is required to offer the described services in agreement with the relevant legislation correctly and on time, while their competition depends on the fulfillment of responsibilities in customer’s side, most importantly handling needed documents and information on time.
+
+2. The responsibility of the provider is to handle every received information as discreet and ensure, so this information will be represented to a third part only with the instruction from the customer or in accordance with the relevant legislation.
+
+3. The provider is bonded not to leak any information about the customer to a third party apart from third parties that are necessary for the provider’s responsibilities. The provider and its employees are bound to keep these information quiet. This responsibility also lasts after the contract is disbanded. The provider is agreeing with this to make an agreement with its customers and cooperating subjects regarding secrecy.
+
+4. The responsibility of the provider is to keep secrecy about all the information stated in this contract even after the end of the cooperation.
+
+5. The responsibility of the provider is to finish accounting for the term of this contract and present the complete agenda.
+
+6. In case of the customer’s delay in handing in the accounting documents, provider is not responsible for any damage made due to the delay.
+
+7. Final responsibility on the side of law has the customer regarding tracking payrolls.
+
+8. If the provider warns the customer for the need of consultation with a tax advisor, customer handles this consultation with their own costs.
+
+9. Provider is responsible on their own costs to handle office supplies and computing technology including software subscription, literature, law norms, and regulations including courses for all its employees.
+
+Part VI: Contract validation
+
+1. The contract is valid from the day of signature on both sides.
+
+2. The contract is signed for an unknown period of time.
+
+3. The contract relationship can be cancelled by an agreement of both sides or termination. The notice period is monthly and starts from the first day of the next month, after signing this contract.
+
+Part VII: Final provisions
+
+1. The person responsible for carrying work and ensuring the cooperation with the customer in fulfilling this contract is: {The responsible employee}.
+
+2. Subjects, responsible for carrying out the work tasks and the safety of mutual success in fulfilling this contract are: {The responsible employees}
+
+3. All relationships, that are not mentioned within this contract are to be behaving in regards to the commercial code in full text.
+
+In {$signatureCity},
+
+Date: {$signatureDate}
+
+Provider: {$providerName}
+
+Customer: {$customerName}
