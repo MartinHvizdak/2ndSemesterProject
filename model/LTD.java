@@ -7,18 +7,24 @@ public class LTD extends Customer{
  private ArrayList<Owner> owners;
  private String marketRegisterNumber;
  private String marketNumber;
+ private String companyName;
  private boolean arePayers;
  
-public LTD(String email, String name, String phoneNumber, String city, String zipCode, String street, String streetNumber,
+public LTD(String email, String company_name, String phoneNumber, String city, String zipCode, String street, String streetNumber,
 		   ArrayList<CustomerEmployee> employees, ArrayList<Owner> owners, String marketRegisterNumber,
 		   String marketNumber, boolean arePayers) {
-	super(email, name, phoneNumber, city, zipCode, street, streetNumber);
+	super(email, phoneNumber, city, zipCode, street, streetNumber);
+	this.companyName = company_name;
 	this.employees = employees;
 	this.owners = owners;
 	this.marketRegisterNumber = marketRegisterNumber;
 	this.marketNumber = marketNumber;
 	this.arePayers = arePayers;
 }
+
+public String getCompanyName(){return companyName;}
+
+public void setCompanyName(String companyName){this.companyName = companyName;}
 
 public ArrayList<CustomerEmployee> getEmployees() {
 	return employees;

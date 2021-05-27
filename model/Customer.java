@@ -1,7 +1,6 @@
 package model;
 
 public class Customer {
-	private String name;
 	private String city;
 	private String street;
 	private String streetNumber;
@@ -12,8 +11,7 @@ public class Customer {
 	public Customer() {
 		
 	}
-	public Customer(String email, String name, String phoneNumber, String city, String zipCode, String street, String streetNumber) {
-		this.name = name;
+	public Customer(String email, String phoneNumber, String city, String zipCode, String street, String streetNumber) {
 		this.phoneNumber = phoneNumber;
 		this.street = street;
 		this.streetNumber = streetNumber;
@@ -22,13 +20,6 @@ public class Customer {
 		this.city = city;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public void setCity(String city) {this.city = city;}
 
