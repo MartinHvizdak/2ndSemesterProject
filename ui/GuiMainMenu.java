@@ -30,6 +30,7 @@ class GuiMainMenu
     ServiceGeneralMenu serviceGeneralMenu;
     CustomerGeneralMenu customerGeneralMenu;
     CreateSummaryMenu createSummaryMenu;
+	CreateContractsMenu createContractsMenu;
 
     ConnectionIndicator dbConnectionIndicator;
 
@@ -54,6 +55,7 @@ class GuiMainMenu
         orderGeneralMenu =  new OrderGeneralMenu(mainWindow);
         customerGeneralMenu =  new CustomerGeneralMenu(mainWindow);
         createSummaryMenu = new CreateSummaryMenu(mainWindow);
+		createContractsMenu = new CreateContractsMenu(mainWindow);
 
         orderGeneralMenu.showMenu();
 
@@ -115,6 +117,9 @@ class GuiMainMenu
         createSummaryMenu = new CreateSummaryMenu(mainWindow);
         summaryMenu = new JMenu("Create Summary");
         menuBar.add(summaryMenu);
+		
+		contractsMenu = new JMenu("Create Contracts");
+       	menuBar.add(contractsMenu);
 
         mainWindow.setLayout(null);
         mainWindow.setVisible(true);
@@ -396,6 +401,30 @@ class GuiMainMenu
 			}
         	
         });
+		
+		contractsMenu.addMenuListener(new MenuListener() {
+
+			@Override
+			public void menuSelected(MenuEvent e) {
+				orderGeneralMenu.hideMenu();
+                employeeGeneralMenu.hideMenu();
+                ownerGeneralMenu.hideMenu();
+                serviceGeneralMenu.hideMenu();
+                customerGeneralMenu.hideMenu();
+                createSummaryMenu.hideMenu();
+                createContractsMenu.showMenu();
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent e) {
+			}
+
+			@Override
+			public void menuCanceled(MenuEvent e) {				
+			}
+        	
+        });
+
 
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
