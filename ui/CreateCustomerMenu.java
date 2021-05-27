@@ -4,7 +4,7 @@ import controller.CustomerController;
 import controller.EmployeeController;
 import controller.OwnerController;
 import db.DBException;
-import model.CustomerEmployee;
+import model.Employee;
 import model.Owner;
 
 import java.awt.BorderLayout;
@@ -24,7 +24,7 @@ public class CreateCustomerMenu extends JDialog {
     private EmployeeController employeeController =  new EmployeeController();
     private CustomerController customerController =  new CustomerController();
     private ArrayList<Owner> ownersInDB = null;
-    private ArrayList<CustomerEmployee> employeesInDB =  null;
+    private ArrayList<Employee> employeesInDB =  null;
 
     public CreateCustomerMenu() {
         super(null,"Create customer",ModalityType.APPLICATION_MODAL);
@@ -40,76 +40,97 @@ public class CreateCustomerMenu extends JDialog {
         emailLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(emailLbl);
 
-        JLabel nameLbl = new JLabel("Name:");
-        nameLbl.setBounds(30, 60, 200, 20);
-        nameLbl.setHorizontalAlignment(SwingConstants.RIGHT);
-        contentPanel.add(nameLbl);
-
         JLabel zipcodeLbl = new JLabel("Zipcode:");
-        zipcodeLbl.setBounds(30, 100, 200, 20);
+        zipcodeLbl.setBounds(30, 60, 200, 20);
         zipcodeLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(zipcodeLbl);
 
         JLabel cityLbl = new JLabel("City:");
-        cityLbl.setBounds(30, 140, 200, 20);
+        cityLbl.setBounds(30, 100, 200, 20);
         cityLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(cityLbl);
 
         JLabel streetLbl = new JLabel("Street:");
-        streetLbl.setBounds(30, 180, 200, 20);
+        streetLbl.setBounds(30, 140, 200, 20);
         streetLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(streetLbl);
 
         JLabel streetNumberLbl = new JLabel("Street number:");
-        streetNumberLbl.setBounds(30, 220, 200, 20);
+        streetNumberLbl.setBounds(30, 180, 200, 20);
         streetNumberLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(streetNumberLbl);
 
         JLabel phoneNumberLbl = new JLabel("Phone number:");
-        phoneNumberLbl.setBounds(30, 260, 200, 20);
+        phoneNumberLbl.setBounds(30, 220, 200, 20);
         phoneNumberLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(phoneNumberLbl);
 
         JLabel customerTypeLbl = new JLabel("Customer type:");
-        customerTypeLbl.setBounds(30, 300, 200, 20);
+        customerTypeLbl.setBounds(30, 260, 200, 20);
         customerTypeLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(customerTypeLbl);
 
         JLabel individualIDLbl = new JLabel("ID:");
-        individualIDLbl.setBounds(30, 340, 200, 20);
+        individualIDLbl.setBounds(30, 300, 200, 20);
         individualIDLbl.setVisible(true);
         individualIDLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(individualIDLbl);
 
         JLabel individualVATLbl = new JLabel("VAT number:");
-        individualVATLbl.setBounds(30, 380, 200, 20);
+        individualVATLbl.setBounds(30, 340, 200, 20);
         individualVATLbl.setVisible(true);
         individualVATLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(individualVATLbl);
 
+        JLabel individualFirstNameLbl = new JLabel("First name:");
+        individualFirstNameLbl.setBounds(30, 380, 200, 20);
+        individualFirstNameLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+        contentPanel.add(individualFirstNameLbl);
+
+        JLabel individualSecondNameLbl = new JLabel("Second name:");
+        individualSecondNameLbl.setBounds(30, 420, 200, 20);
+        individualSecondNameLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+        contentPanel.add(individualSecondNameLbl);
+
         JLabel selfMarketNumberLbl = new JLabel("Market number:");
-        selfMarketNumberLbl.setBounds(30, 340, 200, 20);
+        selfMarketNumberLbl.setBounds(30, 300, 200, 20);
         selfMarketNumberLbl.setVisible(false);
         selfMarketNumberLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(selfMarketNumberLbl);
 
         JLabel selfVATLbl = new JLabel("VAT number:");
-        selfVATLbl.setBounds(30, 380, 200, 20);
+        selfVATLbl.setBounds(30, 340, 200, 20);
         selfVATLbl.setVisible(false);
         selfVATLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(selfVATLbl);
 
+        JLabel selfFirstNameLbl = new JLabel("First name:");
+        selfFirstNameLbl.setBounds(30, 380, 200, 20);
+        selfFirstNameLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+        contentPanel.add(selfFirstNameLbl);
+
+        JLabel selfSecondNameLbl = new JLabel("Second name:");
+        selfSecondNameLbl.setBounds(30, 420, 200, 20);
+        selfSecondNameLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+        contentPanel.add(selfSecondNameLbl);
+
         JLabel ltdRegistrationNumberLbl = new JLabel("Market registration number:");
-        ltdRegistrationNumberLbl.setBounds(30, 340, 200, 20);
+        ltdRegistrationNumberLbl.setBounds(30, 300, 200, 20);
         ltdRegistrationNumberLbl.setVisible(false);
         ltdRegistrationNumberLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(ltdRegistrationNumberLbl);
 
         JLabel ltdMarketNumberLbl = new JLabel("Market number:");
-        ltdMarketNumberLbl.setBounds(30, 380, 200, 20);
+        ltdMarketNumberLbl.setBounds(30, 340, 200, 20);
         ltdMarketNumberLbl.setVisible(false);
         ltdMarketNumberLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(ltdMarketNumberLbl);
+
+        JLabel ltdCompanyNameLbl = new JLabel("Company name:");
+        ltdCompanyNameLbl.setBounds(30, 380, 200, 20);
+        ltdCompanyNameLbl.setVisible(false);
+        ltdCompanyNameLbl.setHorizontalAlignment(SwingConstants.RIGHT);
+        contentPanel.add(ltdCompanyNameLbl);
 
         JLabel ltdArePayersLbl = new JLabel("Are payers ");
         ltdArePayersLbl.setBounds(30, 420, 200, 20);
@@ -147,59 +168,80 @@ public class CreateCustomerMenu extends JDialog {
         emailTxt.setBounds(240, 20, 200, 20);
         contentPanel.add(emailTxt);
 
-        JTextField nameTxt = new JTextField();
-        nameTxt.setBounds(240, 60, 200, 20);
-        contentPanel.add(nameTxt);
-
         JTextField zipcodeTxt = new JTextField();
-        zipcodeTxt.setBounds(240, 100, 200, 20);
+        zipcodeTxt.setBounds(240, 60, 200, 20);
         contentPanel.add(zipcodeTxt);
 
         JTextField cityTxt = new JTextField();
-        cityTxt.setBounds(240, 140, 200, 20);
+        cityTxt.setBounds(240, 100, 200, 20);
         contentPanel.add(cityTxt);
 
         JTextField streetTxt = new JTextField();
-        streetTxt.setBounds(240, 180, 200, 20);
+        streetTxt.setBounds(240, 140, 200, 20);
         contentPanel.add(streetTxt);
 
         JTextField streetNumberTxt = new JTextField();
-        streetNumberTxt.setBounds(240, 220, 200, 20);
+        streetNumberTxt.setBounds(240, 180, 200, 20);
         contentPanel.add(streetNumberTxt);
 
         JTextField phoneNumberTxt = new JTextField();
-        phoneNumberTxt.setBounds(240, 260, 200, 20);
+        phoneNumberTxt.setBounds(240, 220, 200, 20);
         contentPanel.add(phoneNumberTxt);
 
         JTextField individualIDTxt = new JTextField();
-        individualIDTxt.setBounds(240, 340, 200, 20);
+        individualIDTxt.setBounds(240, 300, 200, 20);
         individualIDTxt.setVisible(true);
         contentPanel.add(individualIDTxt);
 
         JTextField individualVATTxt = new JTextField();
-        individualVATTxt.setBounds(240, 380, 200, 20);
+        individualVATTxt.setBounds(240, 340, 200, 20);
         individualVATTxt.setVisible(true);
         contentPanel.add(individualVATTxt);
 
+        JTextField individualFirstNameTxt = new JTextField();
+        individualFirstNameTxt.setBounds(240, 380, 200, 20);
+        individualFirstNameTxt.setVisible(true);
+        contentPanel.add(individualFirstNameTxt);
+
+        JTextField individualSecondNameTxt = new JTextField();
+        individualSecondNameTxt.setBounds(240, 420, 200, 20);
+        individualSecondNameTxt.setVisible(true);
+        contentPanel.add(individualSecondNameTxt);
+
         JTextField selfVATTxt = new JTextField();
-        selfVATTxt.setBounds(240, 340, 200, 20);
+        selfVATTxt.setBounds(240, 300, 200, 20);
         selfVATTxt.setVisible(false);
         contentPanel.add(selfVATTxt);
 
         JTextField selfMarketNumberTxt = new JTextField();
-        selfMarketNumberTxt.setBounds(240, 380, 200, 20);
+        selfMarketNumberTxt.setBounds(240, 340, 200, 20);
         selfMarketNumberTxt.setVisible(false);
         contentPanel.add(selfMarketNumberTxt);
 
+        JTextField selfFirstNameTxt = new JTextField();
+        selfFirstNameTxt.setBounds(240, 380, 200, 20);
+        selfFirstNameTxt.setVisible(true);
+        contentPanel.add(selfFirstNameTxt);
+
+        JTextField selfSecondNameTxt = new JTextField();
+        selfSecondNameTxt.setBounds(240, 420, 200, 20);
+        selfSecondNameTxt.setVisible(true);
+        contentPanel.add(selfSecondNameTxt);
+
         JTextField ltdRegistrationNumberTxt = new JTextField();
-        ltdRegistrationNumberTxt.setBounds(240, 340, 200, 20);
+        ltdRegistrationNumberTxt.setBounds(240, 300, 200, 20);
         ltdRegistrationNumberTxt.setVisible(false);
         contentPanel.add(ltdRegistrationNumberTxt);
 
         JTextField ltdMarketNumberTxt = new JTextField();
-        ltdMarketNumberTxt.setBounds(240, 380, 200, 20);
+        ltdMarketNumberTxt.setBounds(240, 340, 200, 20);
         ltdMarketNumberTxt.setVisible(false);
         contentPanel.add(ltdMarketNumberTxt);
+
+        JTextField ltdCompanyNameTxt = new JTextField();
+        ltdCompanyNameTxt.setBounds(240, 380, 200, 20);
+        ltdCompanyNameTxt.setVisible(true);
+        contentPanel.add(ltdCompanyNameTxt);
 
         JCheckBox ltdArePayersCheckBox = new JCheckBox();
         ltdArePayersCheckBox.setBounds(240, 420, 200, 20);
@@ -229,7 +271,7 @@ public class CreateCustomerMenu extends JDialog {
         contentPanel.add(addedOwnersBox);
 
         JComboBox<String> employeesInDBBox = new JComboBox<>();
-        for (CustomerEmployee employee : employeesInDB){
+        for (Employee employee : employeesInDB){
             employeesInDBBox.addItem(employee.getFirstName() + " " + employee.getSurName() + " (" + employee.getId() + ")");
         }
         employeesInDBBox.setBounds(240, 540, 200, 20);
@@ -285,7 +327,7 @@ public class CreateCustomerMenu extends JDialog {
         });
         contentPanel.add(removeOwnerBtn);
 
-        ArrayList<CustomerEmployee> addedEmployees =  new ArrayList<>();
+        ArrayList<Employee> addedEmployees =  new ArrayList<>();
 
         JButton addEmployeeBtn = new JButton();
         addEmployeeBtn.setText("Add employee");
@@ -298,7 +340,7 @@ public class CreateCustomerMenu extends JDialog {
                     addedEmployees.add(employeesInDB.get(employeesInDBBox.getSelectedIndex()));
 
                     addedEmployeesBox.removeAllItems();
-                    for (CustomerEmployee employee : employeesInDB) {
+                    for (Employee employee : employeesInDB) {
                         addedEmployeesBox.addItem(employee.getFirstName() + " " + employee.getSurName() + " (" + employee.getId() + ")");
                     }
                 }
@@ -314,14 +356,14 @@ public class CreateCustomerMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (addedEmployeesBox.getItemCount() > 0) {
-                    for (CustomerEmployee employee : employeesInDB) {
+                    for (Employee employee : employeesInDB) {
                         if (addedEmployeesBox.getSelectedItem().toString().endsWith("(" + employee.getId() + ")")) {
                             addedEmployees.remove(employee);
                         }
                     }
 
                     addedEmployeesBox.removeAllItems();
-                    for (CustomerEmployee employee : addedEmployees) {
+                    for (Employee employee : addedEmployees) {
                         addedEmployeesBox.addItem(employee.getFirstName() + " " + employee.getSurName() + " (" + employee.getId() + ")");
                     }
                 }
@@ -330,7 +372,7 @@ public class CreateCustomerMenu extends JDialog {
         contentPanel.add(removeEmployeeBtn);
 
         JComboBox<String> customerTypeBox = new JComboBox<>();
-        customerTypeBox.setBounds(240, 300, 200, 20);
+        customerTypeBox.setBounds(240, 260, 200, 20);
         customerTypeBox.addItem("Private individual");
         customerTypeBox.addItem("Self employed");
         customerTypeBox.addItem("LTD");
@@ -344,11 +386,17 @@ public class CreateCustomerMenu extends JDialog {
                     individualIDTxt.setVisible(true);
                     individualVATLbl.setVisible(true);
                     individualVATTxt.setVisible(true);
+                    individualFirstNameLbl.setVisible(true);
+                    individualFirstNameTxt.setVisible(true);
+                    individualSecondNameLbl.setVisible(true);
+                    individualSecondNameTxt.setVisible(true);
 
                     ltdMarketNumberLbl.setVisible(false);
                     ltdMarketNumberTxt.setVisible(false);
                     ltdRegistrationNumberLbl.setVisible(false);
                     ltdRegistrationNumberTxt.setVisible(false);
+                    ltdCompanyNameLbl.setVisible(false);
+                    ltdCompanyNameTxt.setVisible(false);
                     ltdArePayersLbl.setVisible(false);
                     ltdArePayersCheckBox.setVisible(false);
                     ownersInDBLbl.setVisible(false);
@@ -368,16 +416,26 @@ public class CreateCustomerMenu extends JDialog {
                     selfVATTxt.setVisible(false);
                     selfMarketNumberLbl.setVisible(false);
                     selfMarketNumberTxt.setVisible(false);
+                    selfFirstNameLbl.setVisible(false);
+                    selfFirstNameTxt.setVisible(false);
+                    selfSecondNameLbl.setVisible(false);
+                    selfSecondNameTxt.setVisible(false);
                 }else if (e.getItem().toString().equals("Self employed")){
                     selfVATLbl.setVisible(true);
                     selfVATTxt.setVisible(true);
                     selfMarketNumberLbl.setVisible(true);
                     selfMarketNumberTxt.setVisible(true);
+                    selfFirstNameLbl.setVisible(true);
+                    selfFirstNameTxt.setVisible(true);
+                    selfSecondNameLbl.setVisible(true);
+                    selfSecondNameTxt.setVisible(true);
 
                     ltdMarketNumberLbl.setVisible(false);
                     ltdMarketNumberTxt.setVisible(false);
                     ltdRegistrationNumberLbl.setVisible(false);
                     ltdRegistrationNumberTxt.setVisible(false);
+                    ltdCompanyNameLbl.setVisible(false);
+                    ltdCompanyNameTxt.setVisible(false);
                     ltdArePayersLbl.setVisible(false);
                     ltdArePayersCheckBox.setVisible(false);
                     ownersInDBLbl.setVisible(false);
@@ -397,11 +455,17 @@ public class CreateCustomerMenu extends JDialog {
                     individualIDTxt.setVisible(false);
                     individualVATLbl.setVisible(false);
                     individualVATTxt.setVisible(false);
+                    individualFirstNameLbl.setVisible(false);
+                    individualFirstNameTxt.setVisible(false);
+                    individualSecondNameLbl.setVisible(false);
+                    individualSecondNameTxt.setVisible(false);
                 }else if(e.getItem().toString().equals("LTD")){
                     ltdMarketNumberLbl.setVisible(true);
                     ltdMarketNumberTxt.setVisible(true);
                     ltdRegistrationNumberLbl.setVisible(true);
                     ltdRegistrationNumberTxt.setVisible(true);
+                    ltdCompanyNameLbl.setVisible(true);
+                    ltdCompanyNameTxt.setVisible(true);
                     ltdArePayersLbl.setVisible(true);
                     ltdArePayersCheckBox.setVisible(true);
                     ownersInDBLbl.setVisible(true);
@@ -421,11 +485,19 @@ public class CreateCustomerMenu extends JDialog {
                     individualIDTxt.setVisible(false);
                     individualVATLbl.setVisible(false);
                     individualVATTxt.setVisible(false);
+                    individualFirstNameLbl.setVisible(false);
+                    individualFirstNameTxt.setVisible(false);
 
                     selfVATLbl.setVisible(false);
                     selfVATTxt.setVisible(false);
                     selfMarketNumberLbl.setVisible(false);
                     selfMarketNumberTxt.setVisible(false);
+                    individualSecondNameLbl.setVisible(false);
+                    individualSecondNameTxt.setVisible(false);
+                    selfFirstNameLbl.setVisible(false);
+                    selfFirstNameTxt.setVisible(false);
+                    selfSecondNameLbl.setVisible(false);
+                    selfSecondNameTxt.setVisible(false);
                 }
             }
         });
@@ -438,14 +510,13 @@ public class CreateCustomerMenu extends JDialog {
             JButton createButton = new JButton("Create");
             createButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    if (emailTxt.getText().trim().equals("") || nameTxt.getText().trim().equals("") ||
+                    if (emailTxt.getText().trim().equals("") ||
                             zipcodeTxt.getText().trim().equals("") || cityTxt.getText().trim().equals("") ||
                             streetTxt.getText().trim().equals("") || streetNumberTxt.getText().trim().equals("") ||
                             phoneNumberTxt.getText().trim().equals("")){
                         JOptionPane.showMessageDialog(null, "Please Fill In All Necessary Fields");
                     }else {
                         String email =  emailTxt.getText().trim();
-                        String name = nameTxt.getText().trim();
                         String zipcode = zipcodeTxt.getText().trim();
                         String city = cityTxt.getText().trim();
                         String street = streetTxt.getText().trim();
@@ -453,11 +524,13 @@ public class CreateCustomerMenu extends JDialog {
                         String phoneNumber = phoneNumberTxt.getText().trim();
 
                         if (customerTypeBox.getSelectedItem().toString().equals("Private individual")) {
-                            if (individualIDTxt.getText().trim().equals("") || individualVATTxt.getText().trim().equals("")) {
+                            if (individualIDTxt.getText().trim().equals("") || individualVATTxt.getText().trim().equals("")
+                                    || individualFirstNameTxt.getText().trim().equals("") || individualSecondNameTxt.getText().trim().equals("")) {
                                 JOptionPane.showMessageDialog(null, "Please Fill In All Necessary Fields");
                             } else {
                                 try {
-                                    customerController.savePrivateIndividualWithUserInputInDB(name, city, street,
+                                    customerController.savePrivateIndividualWithUserInputInDB(individualFirstNameTxt.getText().trim(),
+                                            individualSecondNameTxt.getText().trim(), city, street,
                                             streetNumber, zipcode, email, phoneNumber, individualIDTxt.getText().trim(),
                                             individualVATTxt.getText().trim());
                                     dispose();
@@ -467,11 +540,13 @@ public class CreateCustomerMenu extends JDialog {
                                 }
                             }
                         } else if (customerTypeBox.getSelectedItem().toString().equals("Self employed")) {
-                            if (selfVATTxt.getText().trim().equals("") || selfMarketNumberTxt.getText().trim().equals("")) {
+                            if (selfVATTxt.getText().trim().equals("") || selfMarketNumberTxt.getText().trim().equals("")
+                                    || selfFirstNameTxt.getText().trim().equals("") || selfSecondNameTxt.getText().trim().equals("")) {
                                 JOptionPane.showMessageDialog(null, "Please Fill In All Necessary Fields");
                             } else {
                                 try {
-                                    customerController.saveSelfEmployedWithUserInputInDB(name, city, street,
+                                    customerController.saveSelfEmployedWithUserInputInDB(selfFirstNameTxt.getText().trim(),
+                                            selfSecondNameTxt.getText().trim(), city, street,
                                             streetNumber, zipcode, email, phoneNumber, selfVATTxt.getText().trim(),
                                             selfMarketNumberTxt.getText().trim());
                                     dispose();
@@ -481,12 +556,12 @@ public class CreateCustomerMenu extends JDialog {
                                 }
                             }
                         } else if (customerTypeBox.getSelectedItem().toString().equals("LTD")) {
-                            if (ltdRegistrationNumberTxt.getText().trim().equals("") || ltdMarketNumberTxt.getText().trim().equals("") ||
-                                addedOwners.size() == 0) {
+                            if (ltdRegistrationNumberTxt.getText().trim().equals("") || ltdMarketNumberTxt.getText().trim().equals("")
+                                    || ltdCompanyNameTxt.getText().trim().equals("") || addedOwners.size() == 0) {
                                 JOptionPane.showMessageDialog(null, "Please Fill In All Necessary Fields");
                             } else {
                                 try {
-                                    customerController.saveLTDUserInputInDB(name, city, street,
+                                    customerController.saveLTDUserInputInDB(ltdCompanyNameTxt.getText().trim(), city, street,
                                             streetNumber, zipcode, email, phoneNumber, addedEmployees, addedOwners, ltdRegistrationNumberTxt.getText().trim(),
                                             ltdMarketNumberTxt.getText().trim(), ltdArePayersCheckBox.isSelected());
                                     dispose();
@@ -509,7 +584,7 @@ public class CreateCustomerMenu extends JDialog {
                                             addedOwnersBox.removeAllItems();
 
                                             employeesInDBBox.removeAllItems();
-                                            for (CustomerEmployee employee : employeesInDB){
+                                            for (Employee employee : employeesInDB){
                                                 employeesInDBBox.addItem(employee.getFirstName() + " " + employee.getSurName() + " (" + employee.getId() + ")");
                                             }
                                             addedEmployeesBox.removeAllItems();

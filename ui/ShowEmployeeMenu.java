@@ -2,7 +2,7 @@ package ui;
 
 import controller.EmployeeController;
 import db.DBException;
-import model.CustomerEmployee;
+import model.Employee;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -101,7 +101,7 @@ public class ShowEmployeeMenu extends JDialog {
                     JOptionPane.showMessageDialog(null, "Please Enter Personal ID");
                 } else {
                     try {
-                        CustomerEmployee employee = employeeController.getEmployeeByIDFromDB(personalIDTxt.getText().trim());
+                        Employee employee = employeeController.getEmployeeByIDFromDB(personalIDTxt.getText().trim());
                         String ltdEmail = employeeController.getEmployeeLTDEmailByID(personalIDTxt.getText().trim());
                         personalIDTxt.setText(employee.getId());
                         firstNameDataLbl.setText(employee.getFirstName());

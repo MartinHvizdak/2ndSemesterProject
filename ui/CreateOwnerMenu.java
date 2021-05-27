@@ -3,10 +3,6 @@ package ui;
 import controller.CustomerController;
 import controller.OwnerController;
 import db.DBException;
-import model.CustomerEmployee;
-import model.LTD;
-import model.Owner;
-import model.Service;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

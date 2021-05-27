@@ -50,7 +50,7 @@ public class UpdateOrderMenu extends JDialog {
         emailLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(emailLbl);
 
-        JLabel dateLbl = new JLabel("Payday (dd-mm-yyy):");
+        JLabel dateLbl = new JLabel("Payday (yyyy-mm-dd):");
         dateLbl.setBounds(30, 100, 200, 20);
         dateLbl.setHorizontalAlignment(SwingConstants.RIGHT);
         contentPanel.add(dateLbl);
@@ -118,10 +118,9 @@ public class UpdateOrderMenu extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (addedServicesWithQuantityBox.getItemCount() > 0) {
-                    for (Service service : addedServicesAndQuantity.keySet()) {
+                    ArrayList<Service> temp =  new ArrayList<>(addedServicesAndQuantity.keySet());
+                    for (Service service : temp) {
                         if (addedServicesWithQuantityBox.getSelectedItem().toString().startsWith(service.getName())) {
-                            System.out.println(addedServicesWithQuantityBox.getSelectedItem().toString() + "  " + service.getName());
-                            System.out.println(service.getName());
                             addedServicesAndQuantity.remove(service);
                         }
                     }
@@ -130,8 +129,6 @@ public class UpdateOrderMenu extends JDialog {
                     for (Service service : addedServicesAndQuantity.keySet()) {
                         addedServicesWithQuantityBox.addItem(service.getName() + " x" + addedServicesAndQuantity.get(service));
                     }
-                    System.out.println(addedServicesWithQuantityBox.getItemCount());
-                    System.out.println(addedServicesAndQuantity.size());
                 }
             }
         });
@@ -198,7 +195,7 @@ public class UpdateOrderMenu extends JDialog {
                     if (customerEmail.getText().trim().equals("") || paydayTxt.getText().trim().equals("") || addedServicesWithQuantityBox.getItemCount() == 0){
                         JOptionPane.showMessageDialog(null, "Please Fill In All Necessary Fields");
                     }else {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         formatter = formatter.withLocale(Locale.UK);
                         try {
                             LocalDate payday = LocalDate.parse(paydayTxt.getText().trim(), formatter);

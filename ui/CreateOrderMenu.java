@@ -2,8 +2,6 @@ package ui;
 
 import controller.OrderController;
 import db.DBException;
-import model.CustomerEmployee;
-import model.Owner;
 import model.Service;
 
 import java.awt.BorderLayout;
@@ -44,7 +42,7 @@ public class CreateOrderMenu extends JDialog {
             emailLbl.setHorizontalAlignment(SwingConstants.RIGHT);
             contentPanel.add(emailLbl);
 
-            JLabel dateLbl = new JLabel("Payday (dd-mm-yyy):");
+            JLabel dateLbl = new JLabel("Payday (yyyy-mm-dd):");
             dateLbl.setBounds(30, 60, 200, 20);
             dateLbl.setHorizontalAlignment(SwingConstants.RIGHT);
             contentPanel.add(dateLbl);
@@ -109,7 +107,6 @@ public class CreateOrderMenu extends JDialog {
                     if (addedServicesWithQuantityBox.getItemCount() > 0) {
                         for (Service service : servicesInDB) {
                             if (addedServicesWithQuantityBox.getSelectedItem().toString().startsWith(service.getName())) {
-                                System.out.println(addedServicesWithQuantityBox.getSelectedItem().toString() + "  " + service.getName());
                                 addedServicesAndQuantity.remove(service);
                             }
                         }
@@ -153,7 +150,7 @@ public class CreateOrderMenu extends JDialog {
                         if (customerEmailTxt.getText().trim().equals("") || dateTxt.getText().trim().equals("") || addedServicesWithQuantityBox.getItemCount() == 0){
                             JOptionPane.showMessageDialog(null, "Please Fill In All Necessary Fields");
                         }else {
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                             formatter = formatter.withLocale(Locale.UK);
                             try {
                                 LocalDate payday = LocalDate.parse(dateTxt.getText().trim(), formatter);

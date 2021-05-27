@@ -3,7 +3,6 @@ package ui;
 import controller.CustomerController;
 import controller.OwnerController;
 import db.DBException;
-import model.CustomerEmployee;
 import model.Owner;
 
 import java.awt.BorderLayout;

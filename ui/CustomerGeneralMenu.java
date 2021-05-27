@@ -36,7 +36,6 @@ public class CustomerGeneralMenu extends JDialog {
 
         tableModel=  new DefaultTableModel();
         tableModel.addColumn("Email");
-        tableModel.addColumn("Name");
         tableModel.addColumn("Address");
         tableModel.addColumn("Phone number");
         tableModel.addColumn("Type");
@@ -91,7 +90,7 @@ public class CustomerGeneralMenu extends JDialog {
             for (Customer customer : customers){
                 String customerType = customerController.getCustomerTypeByEmailFromDB(customer.getEmail());
                 String customerAddress = customer.getZipCode() + ", " + customer.getCity() + ", " + customer.getStreet() + " " + customer.getStreetNumber();
-                tableModel.addRow(new Object[]{customer.getEmail(), customer.getName(), customerAddress, customer.getPhoneNumber(), customerType});
+                tableModel.addRow(new Object[]{customer.getEmail(), customerAddress, customer.getPhoneNumber(), customerType});
             }
             tableModel.fireTableDataChanged();
 

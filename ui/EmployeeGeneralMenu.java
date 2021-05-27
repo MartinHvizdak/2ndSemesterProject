@@ -2,7 +2,7 @@ package ui;
 
 import controller.EmployeeController;
 import db.DBException;
-import model.CustomerEmployee;
+import model.Employee;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -88,8 +88,8 @@ public class EmployeeGeneralMenu extends JDialog {
         }
 
         try {
-            ArrayList<CustomerEmployee> employees = employeeController.getAllEmployeesFromDB();
-            for (CustomerEmployee employee : employees){
+            ArrayList<Employee> employees = employeeController.getAllEmployeesFromDB();
+            for (Employee employee : employees){
                 String email = employeeController.getEmployeeLTDEmailByID(employee.getId());
                 tableModel.addRow(new Object[]{employee.getId(), employee.getFirstName(), employee.getSurName(), employee.getSalary(), employee.getIncome(), email});
             }

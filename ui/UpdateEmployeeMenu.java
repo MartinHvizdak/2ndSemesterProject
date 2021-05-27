@@ -2,7 +2,7 @@ package ui;
 
 import controller.EmployeeController;
 import db.DBException;
-import model.CustomerEmployee;
+import model.Employee;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -102,7 +102,7 @@ public class UpdateEmployeeMenu extends JDialog {
                     JOptionPane.showMessageDialog(null, "Please Enter Personal ID");
                 }else {
                     try {
-                        CustomerEmployee employee = employeeController.getEmployeeByIDFromDB(oldPersonalIDTxt.getText());
+                        Employee employee = employeeController.getEmployeeByIDFromDB(oldPersonalIDTxt.getText());
                         String ltdEmail = employeeController.getEmployeeLTDEmailByID(oldPersonalIDTxt.getText());
                         newPersonalIDTxt.setText(employee.getId());
                         firstNameTxt.setText(employee.getFirstName());
@@ -150,7 +150,7 @@ public class UpdateEmployeeMenu extends JDialog {
                         }
 
                         try {
-                            CustomerEmployee employee = employeeController.getEmployeeByIDFromDB(oldPersonalIDTxt.getText());
+                            Employee employee = employeeController.getEmployeeByIDFromDB(oldPersonalIDTxt.getText());
                             employeeController.updateEmployeeWithUserInputInDB(employee , newPersonalIDTxt.getText(), firstNameTxt.getText(),
                                     lastNameTxt.getText(), salary, generatedIncome, ltdEmail);
                             dispose();

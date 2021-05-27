@@ -1,9 +1,7 @@
 package ui;
 
-import controller.EmployeeController;
 import controller.ServiceController;
 import db.DBException;
-import model.CustomerEmployee;
 import model.Service;
 
 import java.awt.BorderLayout;
