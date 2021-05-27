@@ -77,6 +77,7 @@ public class DBConnection {
     }
 
     public void startTransaction() throws SQLException {
+        con.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
         con.setAutoCommit(false);
     }
 

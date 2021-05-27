@@ -101,11 +101,10 @@ public class DBOrder implements IDBOrder{
 				String customerCity = rs.getString("city");
 				String customerStreet = rs.getString("street");
 				String customerStreetNumber = rs.getString("street_number");
-				String customerName = rs.getString("name");
 				String customerPhoneNumber = rs.getString("phone_number");
 				String customerZipCode = rs.getString("zip_code");
 
-				Customer customer =  new Customer(customerEmail, customerName, customerPhoneNumber, customerCity, customerZipCode, customerStreet, customerStreetNumber);
+				Customer customer =  new Customer(customerEmail, customerPhoneNumber, customerCity, customerZipCode, customerStreet, customerStreetNumber);
 
 				String select2 = "Select *\n" +
 						"from Order_lines \n" +
@@ -191,7 +190,6 @@ public class DBOrder implements IDBOrder{
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
 			String customerStreetNumber = rs.getString("street_number");
-			String customerName = rs.getString("name");
 			String customerPhoneNumber = rs.getString("phone_number");
 			String customerZipCode = rs.getString("zip_code");
 
@@ -233,9 +231,11 @@ public class DBOrder implements IDBOrder{
 
 				String individualID = rs.getString("id");
 				String individualVAT = rs.getString("vat_identificator");
+				String firstName = rs.getString("first_name");
+				String secondName = rs.getString("second_name");
 
 				PrivateIndividual privateIndividual =
-						new PrivateIndividual(customerEmail, customerName, customerPhoneNumber, customerCity,
+						new PrivateIndividual(customerEmail, firstName, secondName, customerPhoneNumber, customerCity,
 								customerZipCode, customerStreet, customerStreetNumber, individualID, individualVAT);
 				return  new Order<PrivateIndividual>(privateIndividual, orderLines, orderPayday, orderID);
 
@@ -252,9 +252,11 @@ public class DBOrder implements IDBOrder{
 
 				String marketNumber = rs.getString("market_number");
 				String vat = rs.getString("vat_identificator");
+				String firstName = rs.getString("first_name");
+				String secondName = rs.getString("second_name");
 
 				SelfEmployed selfEmployeed =
-						new SelfEmployed(customerEmail, customerName, customerPhoneNumber, customerCity,
+						new SelfEmployed(customerEmail, firstName, secondName, customerPhoneNumber, customerCity,
 								customerZipCode, customerStreet, customerStreetNumber, marketNumber, vat);
 				return  new Order<SelfEmployed>(selfEmployeed, orderLines, orderPayday, orderID);
 			}else if(customerType.equals("LTD")){
@@ -271,6 +273,7 @@ public class DBOrder implements IDBOrder{
 				String marketRegistrationNumber = rs.getString("market_registration_number");
 				String marketNumber = rs.getString("market_number");
 				boolean arePayers = rs.getBoolean("are_payers");
+				String companyName = rs.getString("company_name");
 
 				String select4 = "Select *\n" +
 						"from LTD_employees\n" +
@@ -316,7 +319,7 @@ public class DBOrder implements IDBOrder{
 				}
 
 				LTD ltd =
-						new LTD(customerEmail, customerName, customerPhoneNumber, customerCity,
+						new LTD(customerEmail, companyName, customerPhoneNumber, customerCity,
 								customerZipCode, customerStreet, customerStreetNumber, employees, owners,
 								marketRegistrationNumber, marketNumber, arePayers);
 				order =  new Order<LTD>(ltd, orderLines, orderPayday, orderID);
@@ -509,7 +512,6 @@ public class DBOrder implements IDBOrder{
 					String customerCity = rs.getString("city");
 					String customerStreet = rs.getString("street");
 					String customerStreetNumber = rs.getString("street_number");
-					String customerName = rs.getString("name");
 					String customerPhoneNumber = rs.getString("phone_number");
 					String customerZipCode = rs.getString("zip_code");
 
@@ -551,9 +553,11 @@ public class DBOrder implements IDBOrder{
 
 						String individualID = rs.getString("id");
 						String individualVAT = rs.getString("vat_identificator");
+						String firstName = rs.getString("first_name");
+						String secondName = rs.getString("second_name");
 
 						PrivateIndividual privateIndividual =
-								new PrivateIndividual(customerEmail, customerName, customerPhoneNumber, customerCity,
+								new PrivateIndividual(customerEmail, firstName, secondName, customerPhoneNumber, customerCity,
 										customerZipCode, customerStreet, customerStreetNumber, individualID, individualVAT);
 						order = new Order<PrivateIndividual>(privateIndividual, orderLines, orderPayday, orderID);
 						orders.add(order);
@@ -571,9 +575,11 @@ public class DBOrder implements IDBOrder{
 
 						String marketNumber = rs.getString("market_number");
 						String vat = rs.getString("vat_identificator");
+						String firstName = rs.getString("first_name");
+						String secondName = rs.getString("second_name");
 
 						SelfEmployed selfEmployeed =
-								new SelfEmployed(customerEmail, customerName, customerPhoneNumber, customerCity,
+								new SelfEmployed(customerEmail, firstName, secondName, customerPhoneNumber, customerCity,
 										customerZipCode, customerStreet, customerStreetNumber, marketNumber, vat);
 						order = new Order<SelfEmployed>(selfEmployeed, orderLines, orderPayday, orderID);
 						orders.add(order);
@@ -592,6 +598,7 @@ public class DBOrder implements IDBOrder{
 						String marketRegistrationNumber = rs.getString("market_registration_number");
 						String marketNumber = rs.getString("market_number");
 						boolean arePayers = rs.getBoolean("are_payers");
+						String companyName = rs.getString("company_name");
 
 						String select4 = "Select *\n" +
 								"from LTD_employees\n" +
@@ -638,7 +645,7 @@ public class DBOrder implements IDBOrder{
 						}
 
 						LTD ltd =
-								new LTD(customerEmail, customerName, customerPhoneNumber, customerCity,
+								new LTD(customerEmail, companyName, customerPhoneNumber, customerCity,
 										customerZipCode, customerStreet, customerStreetNumber, employees, owners,
 										marketRegistrationNumber, marketNumber, arePayers);
 						order =  new Order<LTD>(ltd, orderLines, orderPayday, orderID);

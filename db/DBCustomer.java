@@ -79,11 +79,10 @@ public class DBCustomer implements IDBCustomer {
 				String customerCity = rs.getString("city");
 				String customerStreet = rs.getString("street");
 				String customerStreetNumber = rs.getString("street_number");
-				String customerName = rs.getString("name");
 				String customerPhoneNumber = rs.getString("phone_number");
 				String customerZipCode = rs.getString("zip_code");
 
-				customers.add(new Customer(customerEmail, customerName, customerPhoneNumber, customerCity, customerZipCode, customerStreet, customerStreetNumber));
+				customers.add(new Customer(customerEmail, customerPhoneNumber, customerCity, customerZipCode, customerStreet, customerStreetNumber));
 			}
 
 			if(customers.isEmpty())
@@ -162,7 +161,6 @@ public class DBCustomer implements IDBCustomer {
 				String customerCity = rs1.getString("city");
 				String customerStreet = rs1.getString("street");
 				String customerStreetNumber = rs1.getString("street_number");
-				String customerName = rs1.getString("name");
 				String customerPhoneNumber = rs1.getString("phone_number");
 				String customerZipCode = rs1.getString("zip_code");
 
@@ -175,7 +173,7 @@ public class DBCustomer implements IDBCustomer {
 				String marketRegistrationNumber = rs2.getString("market_registration_number");
 				String marketNumber = rs2.getString("market_number");
 				boolean arePayers = rs2.getBoolean("are_payers");
-
+				String companyName = rs2.getString("company_name");
 
 				stmt = con.prepareStatement(select3);
 				stmt.setString(1, customerEmail);
@@ -211,7 +209,7 @@ public class DBCustomer implements IDBCustomer {
 					owners.add(owner);
 				}
 
-				ltds.add(new LTD(customerEmail, customerName, customerPhoneNumber, customerCity,
+				ltds.add(new LTD(customerEmail, companyName, customerPhoneNumber, customerCity,
 								customerZipCode, customerStreet, customerStreetNumber, employees, owners,
 								marketRegistrationNumber, marketNumber, arePayers));
 
@@ -328,11 +326,10 @@ public class DBCustomer implements IDBCustomer {
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
 			String customerStreetNumber = rs.getString("street_number");
-			String customerName = rs.getString("name");
 			String customerPhoneNumber = rs.getString("phone_number");
 			String customerZipCode = rs.getString("zip_code");
 
-			customer = new Customer(customerEmail, customerName, customerPhoneNumber, customerCity, customerZipCode, customerStreet, customerStreetNumber);
+			customer = new Customer(customerEmail, customerPhoneNumber, customerCity, customerZipCode, customerStreet, customerStreetNumber);
 
 			stmt.close();
 
@@ -405,7 +402,6 @@ public class DBCustomer implements IDBCustomer {
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
 			String customerStreetNumber = rs.getString("street_number");
-			String customerName = rs.getString("name");
 			String customerPhoneNumber = rs.getString("phone_number");
 			String customerZipCode = rs.getString("zip_code");
 
@@ -420,6 +416,7 @@ public class DBCustomer implements IDBCustomer {
 			String marketRegistrationNumber = rs.getString("market_registration_number");
 			String marketNumber = rs.getString("market_number");
 			boolean arePayers = rs.getBoolean("are_payers");
+			String companyName = rs.getString("company_name");
 
 
 			stmt = con.prepareStatement(select3);
@@ -457,7 +454,7 @@ public class DBCustomer implements IDBCustomer {
 			}
 
 				ltd =
-					new LTD(customerEmail, customerName, customerPhoneNumber, customerCity,
+					new LTD(customerEmail, companyName, customerPhoneNumber, customerCity,
 							customerZipCode, customerStreet, customerStreetNumber, employees, owners,
 							marketRegistrationNumber, marketNumber, arePayers);
 
@@ -526,7 +523,6 @@ public class DBCustomer implements IDBCustomer {
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
 			String customerStreetNumber = rs.getString("street_number");
-			String customerName = rs.getString("name");
 			String customerPhoneNumber = rs.getString("phone_number");
 			String customerZipCode = rs.getString("zip_code");
 
@@ -539,9 +535,11 @@ public class DBCustomer implements IDBCustomer {
 
 			String individualID = rs.getString("id");
 			String individualVAT = rs.getString("vat_identificator");
+			String firstName = rs.getString("first_name");
+			String secondName = rs.getString("second_name");
 
 			privateIndividual =
-					new PrivateIndividual(customerEmail, customerName, customerPhoneNumber, customerCity,
+					new PrivateIndividual(customerEmail, firstName, secondName, customerPhoneNumber, customerCity,
 							customerZipCode, customerStreet, customerStreetNumber, individualID, individualVAT);
 
 			stmt.close();
@@ -608,7 +606,6 @@ public class DBCustomer implements IDBCustomer {
 			String customerCity = rs.getString("city");
 			String customerStreet = rs.getString("street");
 			String customerStreetNumber = rs.getString("street_number");
-			String customerName = rs.getString("name");
 			String customerPhoneNumber = rs.getString("phone_number");
 			String customerZipCode = rs.getString("zip_code");
 
@@ -621,9 +618,11 @@ public class DBCustomer implements IDBCustomer {
 
 			String marketNumber = rs.getString("market_number");
 			String vat = rs.getString("vat_identificator");
+			String firstName = rs.getString("first_name");
+			String secondName = rs.getString("second_name");
 
 			selfEmployed =
-					new SelfEmployed(customerEmail, customerName, customerPhoneNumber, customerCity,
+					new SelfEmployed(customerEmail, firstName, secondName, customerPhoneNumber, customerCity,
 							customerZipCode, customerStreet, customerStreetNumber, marketNumber, vat);
 
 			stmt.close();
@@ -666,8 +665,8 @@ public class DBCustomer implements IDBCustomer {
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Cities values(?,?)";
-		String insert2 = "insert into Customers (email, street, street_number, name, phone_number, zip_code, customer_type) values (?, ?, ?, ?, ?, ?, ?)";
-		String insert3 = "insert into Private_individuals (customer_email, id, vat_identificator) values (?, ?, ?)";
+		String insert2 = "insert into Customers (email, street, street_number, phone_number, zip_code, customer_type) values (?, ?, ?, ?, ?, ?)";
+		String insert3 = "insert into Private_individuals (customer_email, id, vat_identificator, first_name, second_name) values (?, ?, ?, ?, ?)";
 
 
 		try {
@@ -686,10 +685,9 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(1, privateIndividual.getEmail());
 			stmt.setString(2, privateIndividual.getStreet());
 			stmt.setString(3, privateIndividual.getStreetNumber());
-			stmt.setString(4, privateIndividual.getName());
-			stmt.setString(5, privateIndividual.getPhoneNumber());
-			stmt.setString(6, privateIndividual.getZipCode());
-			stmt.setString(7, "Private_individual");
+			stmt.setString(4, privateIndividual.getPhoneNumber());
+			stmt.setString(5, privateIndividual.getZipCode());
+			stmt.setString(6, "Private_individual");
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
@@ -698,6 +696,8 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(1, privateIndividual.getEmail());
 			stmt.setString(2, privateIndividual.getId());
 			stmt.setString(3, privateIndividual.getVat());
+			stmt.setString(4, privateIndividual.getFirstName());
+			stmt.setString(5, privateIndividual.getSecondName());
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
@@ -717,6 +717,8 @@ public class DBCustomer implements IDBCustomer {
 			else
 				de = new DBException("Error saving data");
 			de.setStackTrace(ex.getStackTrace());
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
@@ -740,8 +742,8 @@ public class DBCustomer implements IDBCustomer {
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Cities values(?,?)";
-		String insert2 = "insert into Customers (email, street, street_number, name, phone_number, zip_code, customer_type) values (?, ?, ?, ?, ?, ?, ?)";
-		String insert3 = "insert into Self_employeed (customer_email, market_number, vat_identificator) values (?, ?, ?)";
+		String insert2 = "insert into Customers (email, street, street_number, phone_number, zip_code, customer_type) values (?, ?, ?, ?, ?, ?)";
+		String insert3 = "insert into Self_employeed (customer_email, market_number, vat_identificator, first_name, second_name) values (?, ?, ?, ?, ?)";
 
 		try {
 			DBConnection.getInstance().startTransaction();
@@ -759,10 +761,9 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(1, selfEmployed.getEmail());
 			stmt.setString(2, selfEmployed.getStreet());
 			stmt.setString(3, selfEmployed.getStreetNumber());
-			stmt.setString(4, selfEmployed.getName());
-			stmt.setString(5, selfEmployed.getPhoneNumber());
-			stmt.setString(6, selfEmployed.getZipCode());
-			stmt.setString(7, "Self_employed");
+			stmt.setString(4, selfEmployed.getPhoneNumber());
+			stmt.setString(5, selfEmployed.getZipCode());
+			stmt.setString(6, "Self_employed");
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
@@ -770,6 +771,8 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(1, selfEmployed.getEmail());
 			stmt.setString(2, selfEmployed.getMarketNumber());
 			stmt.setString(3, selfEmployed.getVat());
+			stmt.setString(4, selfEmployed.getFirstName());
+			stmt.setString(5, selfEmployed.getSecondName());
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 			stmt.close();
@@ -788,6 +791,8 @@ public class DBCustomer implements IDBCustomer {
 			else
 				de = new DBException("Error saving data");
 			de.setStackTrace(ex.getStackTrace());
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
 			throw de;
 		} catch (NullPointerException ex) {
 			DBException de = new DBException("Null pointer exception - possibly Connection object");
@@ -811,8 +816,8 @@ public class DBCustomer implements IDBCustomer {
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Cities values(?,?)";
-		String insert2 = "insert into Customers (email, street, street_number, name, phone_number, zip_code, customer_type) values (?, ?, ?, ?, ?, ?, ?)";
-		String insert3 = "insert into LTDs (customer_email, market_registration_number, market_number, are_payers) values (?, ?, ?, ?)";
+		String insert2 = "insert into Customers (email, street, street_number, phone_number, zip_code, customer_type) values (?, ?, ?, ?, ?, ?)";
+		String insert3 = "insert into LTDs (customer_email, market_registration_number, market_number, are_payers, company_name) values (?, ?, ?, ?, ?)";
 		String insert4 = "update LTD_employees set LTD_email=? where id=?";
 		String insert5 = "insert into LTD_ownerships values(?,?)";
 
@@ -832,10 +837,9 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(1, ltd.getEmail());
 			stmt.setString(2, ltd.getStreet());
 			stmt.setString(3, ltd.getStreetNumber());
-			stmt.setString(4, ltd.getName());
-			stmt.setString(5, ltd.getPhoneNumber());
-			stmt.setString(6, ltd.getZipCode());
-			stmt.setString(7, "LTD");
+			stmt.setString(4, ltd.getPhoneNumber());
+			stmt.setString(5, ltd.getZipCode());
+			stmt.setString(6, "LTD");
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
@@ -844,6 +848,7 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(2, ltd.getMarketRegistrationNumber());
 			stmt.setString(3, ltd.getMarketNumber());
 			stmt.setBoolean(4, ltd.arePayers());
+			stmt.setString(5, ltd.getCompanyName());
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
@@ -912,8 +917,8 @@ public class DBCustomer implements IDBCustomer {
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Cities values(?,?)";
-		String insert2 = "update Customers set email=?, street=?, street_number=?, name=?, phone_number=?, zip_code=?, customer_type=? where email=?";
-		String insert3 = "update Private_individuals set customer_email=?, id=?, vat_identificator=? where customer_email=?";
+		String insert2 = "update Customers set email=?, street=?, street_number=?, phone_number=?, zip_code=?, customer_type=? where email=?";
+		String insert3 = "update Private_individuals set customer_email=?, first_name=?, second_name=?, id=?, vat_identificator=? where customer_email=?";
 
 
 		try {
@@ -932,11 +937,10 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(1, privateIndividual.getEmail());
 			stmt.setString(2, privateIndividual.getStreet());
 			stmt.setString(3, privateIndividual.getStreetNumber());
-			stmt.setString(4, privateIndividual.getName());
-			stmt.setString(5, privateIndividual.getPhoneNumber());
-			stmt.setString(6, privateIndividual.getZipCode());
-			stmt.setString(7, "Private_individual");
-			stmt.setString(8, oldEmail);
+			stmt.setString(4, privateIndividual.getPhoneNumber());
+			stmt.setString(5, privateIndividual.getZipCode());
+			stmt.setString(6, "Private_individual");
+			stmt.setString(7, oldEmail);
 			stmt.setQueryTimeout(5);
 			if(stmt.executeUpdate() == 0){
 				throw new DBException("Customer with given email does not exist");
@@ -945,9 +949,11 @@ public class DBCustomer implements IDBCustomer {
 
 			stmt = con.prepareStatement(insert3);
 			stmt.setString(1, privateIndividual.getEmail());
-			stmt.setString(2, privateIndividual.getId());
-			stmt.setString(3, privateIndividual.getVat());
-			stmt.setString(4, privateIndividual.getEmail());
+			stmt.setString(2, privateIndividual.getFirstName());
+			stmt.setString(3, privateIndividual.getSecondName());
+			stmt.setString(4, privateIndividual.getId());
+			stmt.setString(5, privateIndividual.getVat());
+			stmt.setString(6, privateIndividual.getEmail());
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
@@ -989,8 +995,8 @@ public class DBCustomer implements IDBCustomer {
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Cities values(?,?)";
-		String insert2 = "update Customers set email=?, street=?, street_number=?, name=?, phone_number=?, zip_code=?, customer_type=? where email=?";
-		String insert3 = "update Self_employeed set customer_email=?, market_number=?, vat_identificator=? where customer_email=?";
+		String insert2 = "update Customers set email=?, street=?, street_number=?, phone_number=?, zip_code=?, customer_type=? where email=?";
+		String insert3 = "update Self_employeed set customer_email=?, first_name=?, second_name=?, market_number=?, vat_identificator=? where customer_email=?";
 
 		try {
 			DBConnection.getInstance().startTransaction();
@@ -1010,11 +1016,10 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(1, selfEmployed.getEmail());
 			stmt.setString(2, selfEmployed.getStreet());
 			stmt.setString(3, selfEmployed.getStreetNumber());
-			stmt.setString(4, selfEmployed.getName());
-			stmt.setString(5, selfEmployed.getPhoneNumber());
-			stmt.setString(6, selfEmployed.getZipCode());
-			stmt.setString(7, "Self_employed");
-			stmt.setString(8, oldEmail);
+			stmt.setString(4, selfEmployed.getPhoneNumber());
+			stmt.setString(5, selfEmployed.getZipCode());
+			stmt.setString(6, "Self_employed");
+			stmt.setString(7, oldEmail);
 			stmt.setQueryTimeout(5);
 			if(stmt.executeUpdate() == 0){
 				throw new DBException("Customer with given email does not exist");
@@ -1022,9 +1027,11 @@ public class DBCustomer implements IDBCustomer {
 
 			stmt = con.prepareStatement(insert3);
 			stmt.setString(1, selfEmployed.getEmail());
-			stmt.setString(2, selfEmployed.getMarketNumber());
-			stmt.setString(3, selfEmployed.getVat());
-			stmt.setString(4, selfEmployed.getEmail());
+			stmt.setString(2, selfEmployed.getFirstName());
+			stmt.setString(3, selfEmployed.getSecondName());
+			stmt.setString(4, selfEmployed.getMarketNumber());
+			stmt.setString(5, selfEmployed.getVat());
+			stmt.setString(6, selfEmployed.getEmail());
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
@@ -1066,8 +1073,8 @@ public class DBCustomer implements IDBCustomer {
 		Connection con = DBConnection.getInstance().getDBcon();
 
 		String insert1 = "insert into Cities values(?,?)";
-		String insert2 = "update Customers set email=?, street=?, street_number=?, name=?, phone_number=?, zip_code=?, customer_type=? where email=?";
-		String insert3 = "update LTDs set customer_email=?, market_registration_number=?, market_number=?, are_payers=? where customer_email=?";
+		String insert2 = "update Customers set email=?, street=?, street_number=?, phone_number=?, zip_code=?, customer_type=? where email=?";
+		String insert3 = "update LTDs set customer_email=?, company_name=?, market_registration_number=?, market_number=?, are_payers=? where customer_email=?";
 		String insert4 = "update LTD_employees set LTD_email=? where LTD_email=?";
 		String insert5 = "update LTD_employees set LTD_email=? where id=?";
 		String insert6 = "delete from LTD_ownerships where LTD_email=?";
@@ -1089,11 +1096,10 @@ public class DBCustomer implements IDBCustomer {
 			stmt.setString(1, ltd.getEmail());
 			stmt.setString(2, ltd.getStreet());
 			stmt.setString(3, ltd.getStreetNumber());
-			stmt.setString(4, ltd.getName());
-			stmt.setString(5, ltd.getPhoneNumber());
-			stmt.setString(6, ltd.getZipCode());
-			stmt.setString(7, "LTD");
-			stmt.setString(8, oldEmail);
+			stmt.setString(4, ltd.getPhoneNumber());
+			stmt.setString(5, ltd.getZipCode());
+			stmt.setString(6, "LTD");
+			stmt.setString(7, oldEmail);
 			stmt.setQueryTimeout(5);
 			if(stmt.executeUpdate() == 0){
 				throw new DBException("Customer with given email does not exist");
@@ -1101,10 +1107,11 @@ public class DBCustomer implements IDBCustomer {
 
 			stmt = con.prepareStatement(insert3);
 			stmt.setString(1, ltd.getEmail());
-			stmt.setString(2, ltd.getMarketRegistrationNumber());
-			stmt.setString(3, ltd.getMarketNumber());
-			stmt.setBoolean(4, ltd.arePayers());
-			stmt.setString(5, ltd.getEmail());
+			stmt.setString(2, ltd.getCompanyName());
+			stmt.setString(3, ltd.getMarketRegistrationNumber());
+			stmt.setString(4, ltd.getMarketNumber());
+			stmt.setBoolean(5, ltd.arePayers());
+			stmt.setString(6, ltd.getEmail());
 			stmt.setQueryTimeout(5);
 			stmt.execute();
 
